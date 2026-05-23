@@ -20,7 +20,7 @@ import {
   Phone,
   Award,
 } from "lucide-react";
-import FloatBookButton from "../components/floatBookButton";
+import FloatBookButton from "../components/FloatBookButton";
 import Footer from "../components/Footer";
 import Navbar from "./navbar";
 import Explore from "./explore";
