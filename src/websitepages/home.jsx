@@ -16,8 +16,6 @@ import {
   Smartphone,
   MessageCircle,
   CheckCircle2,
-  Shield,
-  Phone,
   Award,
 } from "lucide-react";
 import FloatBookButton from "../components/FloatBookButton";
@@ -29,7 +27,8 @@ const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body { font-family:'Jost',sans-serif; background:#182318; color:#f4efe5; overflow-x:hidden; cursor:none; }
+  html, body { overflow-x:hidden; max-width:100%; }
+  body { font-family:'Jost',sans-serif; background:#182318; color:#f4efe5; cursor:none; }
   ::-webkit-scrollbar { width:3px; }
   ::-webkit-scrollbar-track { background:#182318; }
   ::-webkit-scrollbar-thumb { background:#c8a96a; }
@@ -123,6 +122,13 @@ const STYLES = `
   .kha-filter-btn:hover { background:#e0c88a !important; transform:translateY(-1px); }
   .kha-filter-clear:hover { color:#c8a96a !important; border-color:#c8a96a !important; }
 
+  .kha-cred-block { padding:.75rem 1.2rem; background:rgba(24,35,24,.55); border:1px solid rgba(200,169,106,.2); backdrop-filter:blur(8px); margin-bottom:1.1rem; }
+  .kha-cred-title { font-size:13px; font-weight:600; color:#e0c88a; text-align:center; margin-bottom:12px; line-height:1.4; }
+  .kha-cred-logos { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+  .kha-cred-logos img { height:55px; width:auto; object-fit:contain; flex-shrink:0; }
+  @media(max-width:768px){ .kha-cred-logos img { height:44px; } .kha-cred-title { font-size:12px; } }
+  @media(max-width:480px){ .kha-cred-logos img { height:36px; gap:10px; } .kha-cred-block { padding:.6rem .8rem; } .kha-cred-title { font-size:11px; } }
+
   .kha-auth-banner { position:relative; overflow:hidden; }
   .kha-auth-banner::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,transparent,#c8a96a,transparent); }
   .kha-lic-card { position:relative; transition:border-color .3s,transform .3s; cursor:default; }
@@ -160,7 +166,11 @@ const STYLES = `
     .kha-cards-grid { grid-template-columns:1fr !important; }
     .kha-steps { grid-template-columns:1fr 1fr !important; }
     .kha-footer-grid { grid-template-columns:1fr 1fr !important; }
-    .kha-filter-bar { flex-direction:column !important; }
+    .kha-filter-bar { flex-direction:column !important; padding:1rem !important; gap:.75rem !important; width:100% !important; box-sizing:border-box !important; }
+    .kha-filter-item { min-width:100% !important; flex:1 1 100% !important; }
+    .kha-filter-sep { display:none !important; }
+    .kha-filter-btn { width:100% !important; }
+    .kha-filter-clear { width:100% !important; }
     .kha-stats-inner { grid-template-columns:1fr 1fr !important; }
     .kha-dp-body { padding:2rem 1.5rem 5rem !important; }
     .kha-dp-grid { grid-template-columns:1fr !important; }
@@ -176,15 +186,20 @@ const STYLES = `
     .kha-police-sep { display:none !important; }
     .kha-safety-grid { grid-template-columns:1fr 1fr !important; }
     .kha-float-book { bottom:1.2rem !important; right:1.2rem !important; padding:.7rem 1.3rem !important; font-size:.7rem !important; }
-    .kha-hero { margin-top:0 !important; }
-    .kha-hero-card { position:absolute !important; bottom:8% !important; left:5% !important; right:5% !important; maxWidth:none !important; }
+    #khaFloatBook { display:none !important; }
+    .kha-hero { margin-top:0 !important; padding-top:90px; box-sizing:border-box; height:auto !important; min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; }
+    .kha-hero-card { position:relative !important; bottom:auto !important; left:auto !important; right:auto !important; max-width:none !important; margin:auto 1rem 2.5rem !important; padding:1.4rem !important; }
+    .kha-hero-book-btn { display:none !important; }
+    .kha-hero-cta { display:none !important; }
   }
 
   @media(max-width:768px){
     body { cursor:auto !important; }
     .kha-cur, .kha-cuf { display:none !important; }
     .px-16 { padding-left:1.5rem !important; padding-right:1.5rem !important; }
-    .kha-hero-card { bottom:5% !important; left:3% !important; right:3% !important; padding:1.5rem !important; }
+    .kha-browse-section { padding-left:1rem !important; padding-right:1rem !important; }
+    .kha-filter-bar { padding:.9rem .8rem !important; }
+    .kha-hero-card { margin:.8rem .8rem 2rem !important; padding:1.2rem !important; }
     .kha-hero-card h1 { fontSize:clamp(1.6rem,3.5vw,2.2rem) !important; lineHeight:1.2 !important; marginBottom:.5rem !important; }
     .kha-hero-eyebrow { fontSize:.65rem !important; }
     .kha-hero-cta { fontSize:.68rem !important; }
@@ -204,7 +219,7 @@ const STYLES = `
     .kha-cur, .kha-cuf { display:none !important; }
     .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
     .px-8 { padding-left:.5rem !important; padding-right:.5rem !important; }
-    .kha-hero-card { bottom:3% !important; left:2% !important; right:2% !important; padding:1rem !important; maxWidth:none !important; }
+    .kha-hero-card { margin:.5rem .6rem 1.5rem !important; padding:.9rem !important; }
     .kha-hero-card h1 { fontSize:clamp(1.2rem,2.5vw,1.8rem) !important; marginBottom:.3rem !important; }
     .kha-hero-eyebrow { fontSize:.6rem !important; marginBottom:.5rem !important; }
     .kha-hero p { fontSize:.85rem !important; }
@@ -2426,7 +2441,7 @@ const Home = () => {
       <section
         className="kha-hero relative w-full h-screen overflow-hidden"
         id="hero"
-        style={{ marginTop: "85px" }}
+        style={{ marginTop: "90px" }}
       >
         <div className="absolute inset-0 w-full h-full overflow-hidden">
           <video
@@ -2475,88 +2490,19 @@ const Home = () => {
             <br />
             Homestays — One Place
           </h1>
-          <div
-            className="flex items-center gap-[.8rem] flex-wrap px-8 py-4 mb-[1.1rem]"
-            style={{
-              background: "#ffffff",
-              border: "1px solid rgba(200,169,106,.2)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "15px",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  color: "#000",
-                  textAlign: "center",
-                }}
-              >
-                "Department of Tourism,- Government of Karnataka Approved
-                Homestays"
-              </span>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "start",
-                  justifyContent: "center",
-                  gap: "20px",
-                }}
-              >
-                <img
-                  src="/gov-logo.png"
-                  alt="Karnataka Tourism"
-                  style={{
-                    height: "65px",
-                    width: "auto",
-                    objectFit: "contain",
-                  }}
-                />
-                <img
-                  src="/mha.jpg"
-                  alt="Association Logo"
-                  style={{
-                    height: "70px",
-                    width: "auto",
-                    objectFit: "contain",
-                  }}
-                />
-                <img
-                  src="/image.png"
-                  alt="Association Logo"
-                  style={{
-                    height: "70px",
-                    width: "auto",
-                    objectFit: "contain",
-                  }}
-                />
-              </div>
+          <div className="kha-cred-block">
+            <p className="kha-cred-title">
+              "Department of Tourism — Government of Karnataka Approved
+              Homestays"
+            </p>
+            <div className="kha-cred-logos">
+              <img src="/gov-logo.png" alt="Karnataka Tourism" />
+              <img src="/mha.jpg" alt="MDHOA Logo" />
+              <img src="/image.png" alt="Government of Karnataka" />
             </div>
-            <div
-              style={{
-                width: "1px",
-                height: "14px",
-                background: "rgba(200,169,106,.3)",
-              }}
-            ></div>
-            <div
-              className="flex items-center gap-[.45rem]"
-              style={{
-                fontSize: ".68rem",
-                letterSpacing: ".12em",
-                textTransform: "uppercase",
-                color: "rgba(244,239,229,.72)",
-              }}
-            ></div>
           </div>
           <p
+            className="kha-hero-para"
             style={{
               fontSize: ".95rem",
               fontWeight: 300,
@@ -2866,7 +2812,10 @@ const Home = () => {
       </div>
 
       {/* ════ BROWSE ════ */}
-      <section className="px-16 py-[6rem] bg-[#182318]" id="browse">
+      <section
+        className="kha-browse-section px-16 py-[6rem] bg-[#182318]"
+        id="browse"
+      >
         <div className="kha-reveal max-w-[1300px] mx-auto mb-10 flex justify-between items-end flex-wrap gap-6">
           <div>
             <span className="kha-eyebrow">Explore</span>
@@ -2997,7 +2946,7 @@ const Home = () => {
             },
           ].map(({ lbl, el }, i, arr) => (
             <React.Fragment key={lbl}>
-              <div className="flex flex-col gap-[.35rem] flex-1 min-w-[140px]">
+              <div className="kha-filter-item flex flex-col gap-[.35rem] flex-1 min-w-[140px]">
                 <label
                   style={{
                     fontSize: ".68rem",
@@ -3013,6 +2962,7 @@ const Home = () => {
               </div>
               {i < arr.length - 1 && (
                 <div
+                  className="kha-filter-sep"
                   style={{
                     width: "1px",
                     height: "44px",

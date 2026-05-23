@@ -15,7 +15,6 @@ import {
   MessageCircle,
   Award,
   Globe,
-  Utensils,
   Smartphone,
 } from "lucide-react";
 import FloatBookButton from "../components/FloatBookButton";
@@ -116,20 +115,33 @@ const STYLES = `
 
   .kha-footer-link:hover { color:#c8a96a !important; }
 
+  .kha-exp-card-grid { grid-template-columns:repeat(3,1fr); }
+
   @media(max-width:1200px){ .kha-ex-hero-content { padding:0 2rem 3rem; } }
   @media(max-width:900px){
     body { cursor:auto; } .kha-cur { display:none; } .kha-cuf { display:none; }
+    #khaFloatBook { display:none !important; }
     .kha-ex-hero-content { padding:0 1.5rem 2.5rem; flex-direction:column; align-items:flex-start; }
     .kha-region-grid { grid-template-columns:1fr 1fr !important; grid-template-rows:auto !important; }
     .kha-reg-first { grid-row:auto !important; grid-column:1/3 !important; }
-    .kha-filter-bar { flex-direction:column !important; }
+    .kha-filter-bar { flex-direction:column !important; padding:1rem !important; gap:.75rem !important; width:100% !important; box-sizing:border-box !important; }
+    .kha-filter-item { min-width:100% !important; flex:1 1 100% !important; }
+    .kha-filter-sep { display:none !important; }
+    .kha-filter-btn { width:100% !important; }
+    .kha-filter-clear { width:100% !important; }
+    .kha-exp-card-grid { grid-template-columns:1fr 1fr !important; gap:1rem !important; }
     .kha-grid-list .kha-card { grid-template-columns:1fr !important; }
     .kha-dp-body { padding:2rem 1.5rem 5rem !important; }
     .kha-dp-grid { grid-template-columns:1fr !important; }
     .kha-dp-gallery { height:240px !important; }
     .kha-dp-amen-grid { grid-template-columns:1fr 1fr !important; }
     .kha-promo-inner { grid-template-columns:1fr !important; }
-    .kha-footer-grid { grid-template-columns:1fr 1fr !important; }
+    .kha-footer-grid { grid-template-columns:1fr 1fr !important; gap:2rem !important; }
+    .kha-footer-outer { padding:3rem 1.5rem !important; }
+    .kha-footer-bottom { flex-direction:column !important; gap:.5rem !important; align-items:center !important; text-align:center !important; }
+  }
+  @media(max-width:600px){
+    .kha-exp-card-grid { grid-template-columns:1fr !important; }
   }
   @media(max-width:768px){
     .kha-ex-hero-content { padding:0 1rem 2rem; }
@@ -137,29 +149,24 @@ const STYLES = `
     .kha-fade-4 { flex-direction:column !important; gap:1.5rem !important; }
     .kha-region-grid { grid-template-columns:1fr !important; gap:0.6rem !important; }
     .kha-reg-first { grid-row:auto !important; grid-column:1 !important; }
-    .kha-filter-bar { padding:0.8rem 1rem !important; gap:0.8rem !important; }
-    .kha-filter-bar > div { min-width:120px !important; }
+    .kha-filter-bar { padding:.9rem .8rem !important; gap:.75rem !important; }
     .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
-    .py-20 { padding-top:1.5rem !important; padding-bottom:1.5rem !important; }
-    .py-16 { padding-top:1.2rem !important; padding-bottom:1.2rem !important; }
-    .py-14 { padding-top:1.2rem !important; padding-bottom:1.2rem !important; }
-    section { padding:1.5rem !important; }
     .kha-card { margin-bottom:0.5rem; }
     .kha-grid-list .kha-card { grid-template-columns:1fr !important; }
     .kha-grid-list .kha-card-body { padding:1.5rem !important; }
     .kha-dp-body { padding:1rem !important; }
+    .kha-footer-grid { grid-template-columns:1fr !important; }
   }
   @media(max-width:480px){
     .kha-ex-hero-content h1 { font-size:clamp(1.5rem,3vw,2rem) !important; }
     .kha-eyebrow { font-size:.65rem !important; }
-    .kha-fade-4 { gap:1rem !important; }
+    .kha-fade-4 { display:none !important; }
     .kha-filter-bar { padding:0.6rem 0.8rem !important; }
     .kha-filter-bar label { font-size:.6rem !important; }
     .kha-filter-select, .kha-filter-input { font-size:.8rem !important; }
     .kha-filter-btn { padding:0.5rem 1rem !important; font-size:.65rem !important; }
     .kha-filter-clear { padding:0.5rem 0.8rem !important; font-size:.65rem !important; }
     .kha-rtab { padding:.35rem 0.8rem !important; font-size:.7rem !important; }
-    .max-w-[1300px] { padding:0 0.8rem !important; }
     .kha-col-pill { padding:0.4rem 1rem !important; font-size:.65rem !important; }
     .kha-grid-list .kha-card { grid-template-columns:1fr !important; }
     .kha-grid-list .kha-card-name { font-size:1.2rem !important; }
@@ -2347,7 +2354,7 @@ const Explore = () => {
       {/* ════ EXPLORE HERO ════ */}
       <div
         className="relative overflow-hidden flex items-end"
-        style={{ marginTop: "85px", height: "72vh", minHeight: "520px" }}
+        style={{ marginTop: "90px", height: "72vh", minHeight: "520px" }}
       >
         <div
           className="kha-ex-hero-bg absolute inset-0 bg-cover bg-center"
@@ -2628,7 +2635,10 @@ const Explore = () => {
       </div>
 
       {/* ════ BROWSE ════ */}
-      <section className="px-16 pb-20 bg-[#182318]" id="khaExpBrowse">
+      <section
+        className="kha-browse-section px-16 pb-20 bg-[#182318]"
+        id="khaExpBrowse"
+      >
         {/* Filter bar */}
         <div
           className="z-[100] py-6 bg-[#182318]"
@@ -2779,7 +2789,7 @@ const Explore = () => {
               },
             ].map(({ lbl, el }, i, arr) => (
               <React.Fragment key={lbl}>
-                <div className="flex flex-col gap-[.35rem] flex-1 min-w-[130px]">
+                <div className="kha-filter-item flex flex-col gap-[.35rem] flex-1 min-w-[130px]">
                   <label
                     style={{
                       fontSize: ".68rem",
@@ -2795,6 +2805,7 @@ const Explore = () => {
                 </div>
                 {i < arr.length - 1 && (
                   <div
+                    className="kha-filter-sep"
                     style={{
                       width: "1px",
                       height: "44px",
@@ -2982,10 +2993,9 @@ const Explore = () => {
           </div>
         ) : (
           <div
-            className={`max-w-[1300px] mx-auto grid gap-6${currentView === "list" ? " kha-grid-list" : ""}`}
+            className={`max-w-[1300px] mx-auto grid gap-6${currentView === "list" ? " kha-grid-list" : " kha-exp-card-grid"}`}
             style={{
-              gridTemplateColumns:
-                currentView === "list" ? "1fr" : "repeat(3,1fr)",
+              gridTemplateColumns: currentView === "list" ? "1fr" : undefined,
             }}
           >
             {visible.map((h) => (

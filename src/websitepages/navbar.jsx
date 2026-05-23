@@ -94,7 +94,7 @@ const Navbar = () => {
           background: rgba(24,35,24,.98);
           backdrop-filter: blur(28px);
           border-left: 1px solid rgba(200,169,106,.15);
-          z-index: 999;
+          z-index: 1001;
           display: flex;
           flex-direction: column;
           padding: 0;
@@ -111,7 +111,7 @@ const Navbar = () => {
           position: fixed;
           inset: 0;
           background: rgba(0,0,0,.55);
-          z-index: 998;
+          z-index: 1000;
           opacity: 0;
           pointer-events: none;
           transition: opacity .4s ease;
@@ -157,6 +157,10 @@ const Navbar = () => {
           .kha-burger { display: flex; }
           .kha-desktop-nav { display: none !important; }
           .kha-desktop-cta { display: none !important; }
+          .kha-nav-inner { padding: 0 1.2rem !important; }
+          .kha-logo-img { width: 48px !important; height: 48px !important; }
+          .kha-logo-title { font-size: 1.3rem !important; }
+          .kha-logo-subtitle { display: none !important; }
         }
       `}</style>
 
@@ -284,17 +288,17 @@ const Navbar = () => {
             <img
               src="/mha.jpg"
               alt="MHA Logo"
-              className="w-[65px] h-[65px] object-contain shrink-0"
+              className="kha-logo-img w-[65px] h-[65px] object-contain shrink-0"
             />
             <div className="flex flex-col">
               <span
-                className="text-[#e0c88a] leading-none font-normal tracking-[.1em]"
+                className="kha-logo-title text-[#e0c88a] leading-none font-normal tracking-[.1em]"
                 style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "1.7rem" }}
               >
                 MDHOA
               </span>
               <span
-                className="text-[#7a9e6e] uppercase tracking-[.3em] mt-[3px]"
+                className="kha-logo-subtitle text-[#7a9e6e] uppercase tracking-[.3em] mt-[3px]"
                 style={{ fontSize: ".65rem" }}
               >
                 Mysore District Homestay Owners Association(R)

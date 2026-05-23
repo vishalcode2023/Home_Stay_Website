@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const STYLES = `
 
@@ -111,6 +111,10 @@ const STYLES = `
     border:1px solid rgba(200,169,106,.25); 
     pointer-events:none; 
     animation:ringPulse 3s ease-in-out infinite .6s; 
+  }
+
+  @media(max-width:900px){
+    #khaFloatBook { display:none !important; }
   }
 
   /* How it works CTA button */
