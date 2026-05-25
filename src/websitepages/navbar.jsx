@@ -310,7 +310,7 @@ const Navbar = () => {
           <ul className="kha-desktop-nav flex items-center list-none m-0 p-0 max-[100px]:hidden">
             {[
               ["/", "Home"],
-              ["/explore", "Explore Homestays"],
+              ["/explore", "Homestays In Mysuru"],
               ["/about", "About Association"],
               ["/contact", "Contact"],
             ].map(([href, label]) => (
