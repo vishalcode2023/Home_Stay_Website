@@ -717,9 +717,9 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: 2500,
-    rating: 4.5,
-    reviews: 40,
+    price: 999,
+    rating: 4.9,
+    reviews: 83,
     amenities: ["Meals Included", "Private Garden", "Nature Trails", "Bonfire"],
     hasWebsite: false,
     phone: "9480100001",
@@ -735,11 +735,11 @@ const HS = [
 
     ],
     type: "Family Homestay",
-    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
+    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
     host: {
-      name: "Kukkeshree Family",
-      since: "Host since 2018",
-      avatar: "/images/kuke1.png",
+      name: "Mr. N Nagendra",
+      since: "Hosting since 2022",
+      avatar: "/images/kukeprofile.png",
       desc: "A gracious Mysuru family who take pride in offering guests an authentic local experience. They are happy to guide you to nearby temples, markets and sightseeing spots.",
     },
     guestReviews: [
@@ -1201,7 +1201,7 @@ const HS = [
       since: "Host since 2012",
       avatar:
         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
-      desc: "The Bopanna family has farmed this riverside land for generations. Grandfather Chinnappa still tends the paddy fields each morning. Their home-cooked meals — especially the bamboo shoot curry — are legendary among KHA guests.",
+      desc: "The Bopanna family has farmed this riverside land for generations. Grandfather Chinnappa still tends the paddy fields each morning. Their home-cooked meals — especially the bamboo shoot curry — are legendary among MDHOA guests.",
     },
     guestReviews: [
       {
@@ -1644,7 +1644,7 @@ const HS = [
       since: "Host since 2020",
       avatar:
         "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&q=80",
-      desc: "The Bhat family has farmed areca and paddy in Sirsi for generations. Their Havyaka cooking — particularly the jackfruit dishes — has already earned a loyal following among KHA guests.",
+      desc: "The Bhat family has farmed areca and paddy in Sirsi for generations. Their Havyaka cooking — particularly the jackfruit dishes — has already earned a loyal following among MDHOA guests.",
     },
     guestReviews: [
       {
@@ -3104,7 +3104,7 @@ const Explore = () => {
               {
                 icon: <Award size={24} />,
                 title: "Personal Verification",
-                desc: "Every property physically inspected and approved by KHA before listing.",
+                desc: "Every property physically inspected and approved by MDHOA before listing.",
               },
               {
                 icon: <Smartphone size={24} />,
@@ -3114,7 +3114,7 @@ const Explore = () => {
               {
                 icon: <Leaf size={24} />,
                 title: "Sustainability Committed",
-                desc: "All KHA members follow responsible and eco-conscious tourism practices.",
+                desc: "All MDHOA members follow responsible and eco-conscious tourism practices.",
               },
             ].map((f) => (
               <div
@@ -3329,7 +3329,7 @@ const Explore = () => {
                             color: "#7a9e6e",
                           }}
                         >
-                          ✓ KHA Verified Member
+                          ✓ MDHOA Verified Member
                         </div>
                       </div>
 
@@ -3910,7 +3910,7 @@ const Explore = () => {
                                 marginBottom: ".15rem",
                               }}
                             >
-                              KHA Certified
+                              MDHOA Certified
                             </strong>
                             This homestay is a verified member of MHA and meets
                             all our quality standards.
