@@ -197,7 +197,7 @@ const Navbar = () => {
               color: "#7a9e6e",
               display: "block",
               marginTop: "3px",
-            }}>Mysore Homestays</span>
+            }}>Mysuru Homestays</span>
           </div>
           <button
             onClick={() => setMobileOpen(false)}
@@ -267,7 +267,7 @@ const Navbar = () => {
             marginTop: ".9rem",
             letterSpacing: ".08em",
             lineHeight: 1.6,
-          }}>Mysore Homestays Association · Est. 2010</p>
+          }}>Mysuru Homestays Association · Est. 2010</p>
         </div>
       </div>
 
@@ -301,7 +301,7 @@ const Navbar = () => {
                 className="kha-logo-subtitle text-[#7a9e6e] uppercase tracking-[.3em] mt-[3px]"
                 style={{ fontSize: ".65rem" }}
               >
-                Mysore District Homestay Owners Association(R)
+                Mysuru District Homestay Owners Association(R)
               </span>
             </div>
           </a>
