@@ -2764,7 +2764,7 @@ const Home = () => {
         </div>
 
         {/* ── FILTER BAR ── */}
-        <div
+        {/* <div
           className="kha-filter-bar kha-reveal kha-d1 max-w-[1300px] mx-auto mb-[1.2rem] flex items-end gap-[1.2rem] flex-wrap px-8 py-6"
           style={{
             background: "rgba(31,46,31,.72)",
@@ -2918,9 +2918,9 @@ const Home = () => {
           >
             Clear
           </button>
-        </div>
+        </div> */}
 
-        {/* ── Active place banner ── */}
+        {/* ── Active place banner ──
         {fPlace &&
           (() => {
             const place = TOURIST_PLACES.find((p) => p.key === fPlace);
@@ -2962,7 +2962,7 @@ const Home = () => {
             );
           })()}
 
-        {/* ── Region tabs ── */}
+        ── Region tabs ──
         <div className="kha-reveal kha-d2 max-w-[1300px] mx-auto flex gap-2 flex-wrap mb-8">
           {REGIONS.map((r) => (
             <button
@@ -2975,7 +2975,7 @@ const Home = () => {
           ))}
         </div>
 
-        {/* ── Results count + sort ── */}
+        ── Results count + sort ──
         <div className="kha-reveal kha-d2 max-w-[1300px] mx-auto flex justify-between items-center mb-6">
           <div
             style={{
@@ -3009,7 +3009,7 @@ const Home = () => {
             <option value="price-desc">Price: High to Low</option>
             <option value="rating">Highest Rated</option>
           </select>
-        </div>
+        </div> */}
 
         {/* ── Cards grid ── */}
         {filtered.length === 0 ? (
