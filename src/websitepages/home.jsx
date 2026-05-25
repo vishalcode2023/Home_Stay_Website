@@ -2511,10 +2511,10 @@ const Home = () => {
               marginBottom: "1.3rem",
             }}
           >
-            One trusted association platform connecting verified homestays,
-            direct WhatsApp enquiries, and responsible tourism throughout the
-            district.Approved by the Department of Tourism, Government of
-            Karnataka, and managed by the registered Mysore District Homestay
+            One Trusted Association Platform Connecting Verified Homestays,
+            direct WhatsApp Enquiries, And Responsible Tourism Throughout The
+            district. Approved by the Department of Tourism, Government of
+            Karnataka, And Managed by The Registered Mysuru District Homestay
             Owners Association(R).
           </p>
           <a
