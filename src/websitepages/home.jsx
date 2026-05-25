@@ -2748,19 +2748,6 @@ const Home = () => {
               </em>
             </h2>
           </div>
-          <p
-            style={{
-              fontSize: ".9rem",
-              color: "rgba(244,239,229,.48)",
-              maxWidth: "320px",
-              textAlign: "right",
-              fontWeight: 300,
-              lineHeight: 1.7,
-            }}
-          >
-            Filter by district, taluk, price or amenities — then book via the
-            homestay's website or WhatsApp.
-          </p>
         </div>
 
         {/* ── FILTER BAR ── */}
@@ -3439,7 +3426,7 @@ const Home = () => {
                     }}
                     onClick={closeDetail}
                   >
-                    ← Back to All Homestays
+                    ← Back to HomePage
                   </a>
                   <div className="absolute bottom-0 left-0 right-0 px-20 pb-14 pt-12">
                     <div className="flex gap-2 mb-4 flex-wrap">

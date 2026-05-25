@@ -325,26 +325,7 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* Desktop CTA */}
-          <div className="kha-desktop-cta max-[900px]:hidden">
-            <a
-              href="/explore"
-              className="transition-all duration-300 text-[#c8a96a] hover:bg-[#c8a96a] hover:text-[#182318]"
-              style={{
-                display: "inline-block",
-                padding: ".58rem 1.6rem",
-                border: "1px solid #c8a96a",
-                fontFamily: "'Jost',sans-serif",
-                fontSize: ".72rem",
-                letterSpacing: ".2em",
-                textTransform: "uppercase",
-                textDecoration: "none",
-                cursor: "pointer",
-              }}
-            >
-              List Your Homestay
-            </a>
-          </div>
+          
 
           {/* Hamburger — mobile only */}
           <button

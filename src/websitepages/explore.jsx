@@ -724,20 +724,22 @@ const HS = [
     hasWebsite: false,
     phone: "9480100001",
     mapLink: "https://maps.app.goo.gl/oDqoZrocnkduhm1K9",
-    img: "https://homestayinmysore.com/assets/img/about1.jpeg",
+    img: "/images/kuke1.png",
     imgs: [
-      "https://homestayinmysore.com/assets/img/about1.jpeg",
-      "https://homestayinmysore.com/assets/img/gal5.jpeg",
-      "https://homestayinmysore.com/assets/img/gal4.jpeg",
-      "https://homestayinmysore.com/assets/img/gal0.jpeg",
-      "https://homestayinmysore.com/assets/img/gal3.jpeg",
+      "/images/kuke1.png",
+      "/images/kuke2.png",
+      "/images/kuke3.png",
+      "/images/kuke4.png",
+      "/images/kuke5.png",
+      
+
     ],
     type: "Family Homestay",
-    desc: "A warm and welcoming family homestay in the heart of Mysuru. Experience authentic Karnataka hospitality with home-cooked meals and a beautifully maintained garden. Ideal for travellers looking for a peaceful, local experience close to Mysuru's heritage sites.",
+    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
     host: {
       name: "Kukkeshree Family",
       since: "Host since 2018",
-      avatar: "https://homestayinmysore.com/assets/img/about1.jpeg",
+      avatar: "/images/kuke1.png",
       desc: "A gracious Mysuru family who take pride in offering guests an authentic local experience. They are happy to guide you to nearby temples, markets and sightseeing spots.",
     },
     guestReviews: [
@@ -3205,7 +3207,7 @@ const Explore = () => {
                     }}
                     onClick={closeDetail}
                   >
-                    ← Back to All Homestays
+                    ← Back to HomePage
                   </a>
                   <div className="absolute bottom-0 left-0 right-0 px-20 pb-14 pt-12">
                     <div className="flex gap-2 mb-4 flex-wrap">
