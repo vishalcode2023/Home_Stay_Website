@@ -2717,7 +2717,7 @@ const Home = () => {
                   marginBottom: ".35rem",
                 }}
               >
-               The homestays listed on this platform are operated by members of the Mysuru District Homestay Owners Association and are registered under the Department of Tourism, Government of Karnataka, as per applicable guidelines and approvals.
+               The homestays listed on this platform are operated by members of the Mysuru District Homestay Owners Association(R) and are registered under the Department of Tourism, Government of Karnataka, as per applicable guidelines and approvals.
               </div>
             </div>
           </div>
