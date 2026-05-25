@@ -2473,7 +2473,7 @@ const Home = () => {
           }}
         >
           <div className="kha-hero-eyebrow">
-            Mysore District Homestay Owners Association(R)
+            Mysuru District Homestay Owners Association(R)
           </div>
           <h1
             style={{
@@ -2485,7 +2485,7 @@ const Home = () => {
               marginBottom: ".8rem",
             }}
           >
-            Mysore's{" "}
+            Mysuru's{" "}
             <em style={{ fontStyle: "italic", color: "#e0c88a" }}>Finest</em>
             <br />
             Homestays — One Place
@@ -2511,11 +2511,12 @@ const Home = () => {
               marginBottom: "1.3rem",
             }}
           >
-            One Trusted Association Platform Connecting Verified Homestays,
-            direct WhatsApp Enquiries, And Responsible Tourism Throughout The
-            district. Approved by the Department of Tourism, Government of
-            Karnataka, And Managed by The Registered Mysuru District Homestay
-            Owners Association(R).
+            All homestays listed on this platform
+            are registered, verified, and operated by honorable members of the
+            Mysuru District Homestay Owners Association (Registered). Book
+            directly with verified homestay promoters through WhatsApp — no OTA
+            commissions, no hidden charges, only safe and responsible stays in
+            Mysuru District
           </p>
           <a
             href="#browse"
@@ -2574,13 +2575,13 @@ const Home = () => {
             {
               icon: "/mha.jpg",
               title:
-                "Managed by Mysore District Homestay Owners Association(R)",
-              desc: "MDHOA is the registered representative body of homestay across Mysore — not a private aggregator.",
+                "Managed by Mysuru District Homestay Owners Association(R)",
+              desc: "MDHOA is the registered representative body of homestay across Mysuru — not a private aggregator.",
             },
             {
               icon: "/verify.jpg",
               title: "Verified & Certified Stays",
-              desc: "Every property is  inspected and certified by Mysore District Homestay Owners Association(R) officers before going live on this platform.",
+              desc: "Every property is  inspected and certified by Mysuru District Homestay Owners Association(R) officers before going live on this platform.",
             },
           ].map((ts) => (
             <div
