@@ -2511,12 +2511,11 @@ const Home = () => {
               marginBottom: "1.3rem",
             }}
           >
-            All homestays listed on this platform
-            are registered, verified, and operated by honorable members of the
-            Mysuru District Homestay Owners Association (Registered). Book
-            directly with verified homestay promoters through WhatsApp — no OTA
-            commissions, no hidden charges, only safe and responsible stays in
-            Mysuru District
+            All homestays listed on this platform are registered, verified, and
+            operated by honorable members of the Mysuru District Homestay Owners
+            Association (R). Book directly with verified homestay promoters
+            through WhatsApp — no OTA commissions, no hidden charges, only safe
+            and responsible stays in Mysuru District
           </p>
           <a
             href="#browse"
@@ -2534,10 +2533,10 @@ const Home = () => {
               cursor: "none",
             }}
           >
-            🏡 Click Here to Book a Homestay
+            🏡 Click Here to Book a Homestay In Mysuru
           </a>
           <a href="#browse" className="kha-hero-cta" onClick={scrollToBrowse}>
-            Browse All Homestays
+            Browse All Homestays In Mysuru
           </a>
         </div>
 
@@ -2570,18 +2569,18 @@ const Home = () => {
             {
               icon: "/image.png",
               title: "Government Approved",
-              desc: "Officially recognised by the Department of Tourism, Government of Karnataka. All listings comply with MDHOA tourism regulations.",
+              desc: "All the Homestays listed on this website are officially approved by the Department of Tourism, Government of Karnataka, ensuring safe, verified, and legally compliant stays for guests visiting Mysuru District.",
             },
             {
               icon: "/mha.jpg",
               title:
                 "Managed by Mysuru District Homestay Owners Association(R)",
-              desc: "MDHOA is the registered representative body of homestay across Mysuru — not a private aggregator.",
+              desc: "All homestays featured on this website are official members of the Mysuru District Homestay Owners Association (R), offering verified, Government-approved, safe, and family-friendly stays across Mysuru District with direct booking access.",
             },
             {
               icon: "/verify.jpg",
               title: "Verified & Certified Stays",
-              desc: "Every property is  inspected and certified by Mysuru District Homestay Owners Association(R) officers before going live on this platform.",
+              desc: "All homestays listed on this platform are verified, certified, and official members of the Mysuru District Homestay Owners Association. Every property is inspected by the association office bearers before going live on the platform.",
             },
           ].map((ts) => (
             <div
@@ -2650,39 +2649,8 @@ const Home = () => {
         }}
       >
         <div className="max-w-[1200px] mx-auto">
-          <span className="kha-cred-eyebrow kha-reveal">
-            Official Credentials & Licences
-          </span>
-          <h2
-            className="kha-reveal"
-            style={{
-              fontFamily: cg,
-              fontSize: "clamp(2rem,3.5vw,2.9rem)",
-              fontWeight: 300,
-              color: "#f4efe5",
-            }}
-          >
-            Recognized by the{" "}
-            <em style={{ fontStyle: "italic", color: "#e0c88a" }}>
-              Department of Tourism, Government of Karnataka
-            </em>
-          </h2>
-          <p
-            className="kha-reveal"
-            style={{
-              fontSize: ".97rem",
-              color: "rgba(244,239,229,.55)",
-              fontWeight: 300,
-              lineHeight: 1.85,
-              maxWidth: "720px",
-              marginBottom: "3rem",
-            }}
-          >
-            MDHOA is officially recognised by The Department of Tourism,
-            Government of Karnataka, ensuring every homestay is registered,
-            inspected, and approved by the relevant authorities & Mysore
-            District Homestay Owners Association(R).
-          </p>
+         
+        
           <div
             className="kha-auth-banner kha-reveal grid gap-10 items-center px-[2.8rem] py-[2.2rem] mb-10"
             style={{
@@ -2749,66 +2717,11 @@ const Home = () => {
                   marginBottom: ".35rem",
                 }}
               >
-                Department of Tourism ,Government of Karnataka — Registered
-                Representative Body
-              </div>
-              <div
-                style={{
-                  fontSize: ".88rem",
-                  color: "rgba(244,239,229,.58)",
-                  fontWeight: 300,
-                  lineHeight: 1.75,
-                }}
-              >
-                MDHOA is the officially registered homestay association in
-                Mysuru, recognised under state tourism policies and operating
-                under the guidance of the Department of Tourism, Government of
-                Karnataka.
+               The homestays listed on this platform are operated by members of the Mysuru District Homestay Owners Association and are registered under the Department of Tourism, Government of Karnataka, as per applicable guidelines and approvals.
               </div>
             </div>
           </div>
-          <div
-            className="kha-safety-grid kha-reveal grid gap-4 px-8 py-[1.8rem]"
-            style={{
-              gridTemplateColumns: "repeat(4,1fr)",
-              background: "rgba(200,169,106,.04)",
-              border: "1px solid rgba(200,169,106,.12)",
-            }}
-          >
-            {[
-              ["7", "Govt. Dept. Licences"],
-              ["14", "Years of Operation"],
-              ["31", "Districts Covered"],
-              ["100%", "Police-Cleared Hosts"],
-            ].map(([num, lbl]) => (
-              <div key={lbl} className="text-center">
-                <span
-                  style={{
-                    fontFamily: cg,
-                    fontSize: "2.6rem",
-                    fontWeight: 300,
-                    color: "#c8a96a",
-                    display: "block",
-                    lineHeight: 1,
-                    marginBottom: ".3rem",
-                  }}
-                >
-                  {num}
-                </span>
-                <span
-                  style={{
-                    fontSize: ".68rem",
-                    letterSpacing: ".18em",
-                    textTransform: "uppercase",
-                    color: "rgba(244,239,229,.48)",
-                    display: "block",
-                  }}
-                >
-                  {lbl}
-                </span>
-              </div>
-            ))}
-          </div>
+         
         </div>
       </div>
 
