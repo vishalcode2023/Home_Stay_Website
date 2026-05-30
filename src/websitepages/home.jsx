@@ -132,13 +132,19 @@ const STYLES = `
   .kha-btn-web { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(200,169,106,.14); border:1px solid rgba(200,169,106,.38); color:#c8a96a; font-family:'Jost',sans-serif; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; }
   .kha-btn-web:hover { background:rgba(200,169,106,.28); }
 
-  .kha-footer-link:hover { color:#c8a96a !important; }
+  /* Explore cards grid */
+  .kha-cards-grid { grid-template-columns: repeat(3,1fr); }
+
+  /* Credentials */
+  .kha-cred-outer { padding: 5.5rem 4rem; }
+
+
 
   @media(max-width:900px){
     body { cursor:auto !important; }
     .kha-cur,.kha-cuf { display:none !important; }
     .kha-about-grid { grid-template-columns:1fr !important; }
-    .kha-cards-grid { grid-template-columns:1fr !important; }
+    .kha-cards-grid { grid-template-columns:repeat(2,1fr) !important; }
     .kha-ts-inner { flex-direction:column !important; align-items:stretch !important; }
     .kha-trust-card { max-width:100% !important; }
     .kha-detail-grid { grid-template-columns:1fr !important; }
@@ -150,16 +156,33 @@ const STYLES = `
     .dp-topbar { padding:.8rem 1.5rem !important; }
     .kha-rl-card { grid-template-columns:1fr !important; }
     .kha-rl-card-img { height:200px !important; }
+    .kha-cred-outer { padding:3rem 0 !important; }
+    .kha-cred-inner { grid-template-columns:1fr !important; gap:1.4rem !important; padding:1.8rem !important; text-align:center; }
+    .kha-cred-logo { margin:0 auto !important; }
+    .kha-cred-text { font-size:1.15rem !important; }
+    .kha-browse-section { padding-left:1.2rem !important; padding-right:1.2rem !important; padding-top:4rem !important; padding-bottom:4rem !important; }
   }
   @media(max-width:768px){
     body { cursor:auto !important; }
     .kha-cur,.kha-cuf { display:none !important; }
     .px-16 { padding-left:1.5rem !important; padding-right:1.5rem !important; }
     .kha-browse-section { padding-left:1rem !important; padding-right:1rem !important; }
+    .kha-cards-grid { grid-template-columns:repeat(2,1fr) !important; gap:1rem !important; }
     .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 120px 120px !important; }
     .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
     .kha-rl-card { grid-template-columns:1fr !important; }
     .kha-rl-card-img { height:190px !important; }
+    .kha-cred-inner { grid-template-columns:1fr !important; gap:1.2rem !important; padding:1.5rem !important; text-align:center; }
+    .kha-cred-logo { margin:0 auto !important; }
+    .kha-cred-text { font-size:1.05rem !important; }
+  }
+  @media(max-width:560px){
+    body { cursor:auto !important; }
+    .kha-cur,.kha-cuf { display:none !important; }
+    .kha-cards-grid { grid-template-columns:1fr !important; }
+    .kha-browse-section { padding-left:.9rem !important; padding-right:.9rem !important; padding-top:3rem !important; padding-bottom:3rem !important; }
+    .kha-cred-inner { padding:1.2rem !important; }
+    .kha-cred-text { font-size:1rem !important; }
   }
   @media(max-width:480px){
     body { cursor:auto !important; }
@@ -1041,8 +1064,16 @@ function HsCard({ h, onOpen }) {
 function RoomListCard({ room, h, onOpen, index }) {
   const price = Math.round((h.price * room.multiplier) / 100) * 100;
   const [hovered, setHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768,
+  );
 
-  // Pick a different image per room so they look distinct
+  useEffect(() => {
+    const fn = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+
   const imgSrc = h.imgs[index % h.imgs.length] || h.img;
 
   const specs = [
@@ -1062,11 +1093,11 @@ function RoomListCard({ room, h, onOpen, index }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: "grid",
-        gridTemplateColumns: "340px 1fr",
+        gridTemplateColumns: isMobile ? "1fr" : "340px 1fr",
         overflow: "hidden",
         border: `1px solid ${hovered ? room.tagBorder : "rgba(200,169,106,.14)"}`,
         background: hovered ? "rgba(31,46,31,.95)" : "#1c2d1c",
-        transform: hovered ? "translateY(-5px)" : "translateY(0)",
+        transform: hovered && !isMobile ? "translateY(-5px)" : "translateY(0)",
         boxShadow: hovered
           ? `0 24px 64px rgba(0,0,0,.5), 0 0 0 1px ${room.tagBorder}`
           : "0 4px 20px rgba(0,0,0,.25)",
@@ -1075,23 +1106,30 @@ function RoomListCard({ room, h, onOpen, index }) {
         position: "relative",
       }}
     >
-      {/* Left accent bar */}
+      {/* Left accent bar — top bar on mobile */}
       <div
         style={{
           position: "absolute",
-          left: 0,
+          left: isMobile ? 0 : 0,
           top: 0,
-          bottom: 0,
-          width: "3px",
-          background: `linear-gradient(to bottom, ${room.accentColor}, transparent)`,
-          opacity: hovered ? 1 : 0.5,
+          right: isMobile ? 0 : "auto",
+          bottom: isMobile ? "auto" : 0,
+          width: isMobile ? "auto" : "3px",
+          height: isMobile ? "3px" : "auto",
+          background: `linear-gradient(to ${isMobile ? "right" : "bottom"}, ${room.accentColor}, transparent)`,
+          opacity: hovered ? 1 : 0.6,
           transition: "opacity .4s",
+          zIndex: 2,
         }}
       />
 
-      {/* ── Image column ── */}
+      {/* ── Image ── */}
       <div
-        style={{ position: "relative", overflow: "hidden", height: "240px" }}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: isMobile ? "200px" : "240px",
+        }}
       >
         <img
           src={imgSrc}
@@ -1105,35 +1143,34 @@ function RoomListCard({ room, h, onOpen, index }) {
             transition: "transform .8s cubic-bezier(.22,1,.36,1)",
           }}
         />
-        {/* Dark overlay */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(120deg,rgba(24,35,24,.15) 0%,rgba(24,35,24,.72) 100%)",
+              "linear-gradient(120deg,rgba(24,35,24,.1) 0%,rgba(24,35,24,.65) 100%)",
           }}
         />
-        {/* Bottom fade */}
+        {/* Bottom fade — connects image to content below on mobile */}
         <div
           style={{
             position: "absolute",
             bottom: 0,
             left: 0,
             right: 0,
-            height: "80px",
-            background: "linear-gradient(to top,rgba(28,45,28,1),transparent)",
+            height: "90px",
+            background: `linear-gradient(to top,rgba(28,45,28,1),transparent)`,
           }}
         />
 
-        {/* Room index number — large watermark style */}
+        {/* Watermark number */}
         <div
           style={{
             position: "absolute",
             top: "-.5rem",
             right: ".8rem",
             fontFamily: cg,
-            fontSize: "6rem",
+            fontSize: isMobile ? "4.5rem" : "6rem",
             fontWeight: 300,
             lineHeight: 1,
             color: room.accentColor,
@@ -1146,7 +1183,7 @@ function RoomListCard({ room, h, onOpen, index }) {
           {String(index + 1).padStart(2, "0")}
         </div>
 
-        {/* Tag pill — top left */}
+        {/* Tag pill */}
         <div style={{ position: "absolute", top: ".85rem", left: ".85rem" }}>
           <span
             style={{
@@ -1168,14 +1205,14 @@ function RoomListCard({ room, h, onOpen, index }) {
           </span>
         </div>
 
-        {/* Price — bottom left over image */}
+        {/* Price over image */}
         <div style={{ position: "absolute", bottom: ".85rem", left: ".95rem" }}>
           <div
             style={{
-              fontSize: ".6rem",
+              fontSize: ".58rem",
               letterSpacing: ".24em",
               textTransform: "uppercase",
-              color: "rgba(244,239,229,.55)",
+              color: "rgba(244,239,229,.5)",
               marginBottom: ".1rem",
             }}
           >
@@ -1184,7 +1221,7 @@ function RoomListCard({ room, h, onOpen, index }) {
           <div
             style={{
               fontFamily: cg,
-              fontSize: "1.9rem",
+              fontSize: isMobile ? "1.6rem" : "1.9rem",
               fontWeight: 300,
               color: room.accentColor,
               lineHeight: 1,
@@ -1193,8 +1230,8 @@ function RoomListCard({ room, h, onOpen, index }) {
             ₹{price.toLocaleString("en-IN")}
             <span
               style={{
-                fontSize: ".75rem",
-                color: "rgba(244,239,229,.4)",
+                fontSize: ".72rem",
+                color: "rgba(244,239,229,.38)",
                 marginLeft: ".35rem",
                 fontFamily: jost,
               }}
@@ -1205,14 +1242,16 @@ function RoomListCard({ room, h, onOpen, index }) {
         </div>
       </div>
 
-      {/* ── Content column ── */}
+      {/* ── Content ── */}
       <div
         style={{
-          padding: "1.7rem 2rem 1.7rem 1.8rem",
+          padding: isMobile
+            ? "1.3rem 1.2rem 1.4rem"
+            : "1.7rem 2rem 1.7rem 1.8rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          gap: "1rem",
+          gap: ".85rem",
         }}
       >
         <div>
@@ -1220,24 +1259,24 @@ function RoomListCard({ room, h, onOpen, index }) {
           <div
             style={{
               fontFamily: cg,
-              fontSize: "1.85rem",
+              fontSize: isMobile ? "1.5rem" : "1.85rem",
               fontWeight: 300,
               color: hovered ? "#fdfaf4" : "#e8e2d4",
               lineHeight: 1.1,
-              marginBottom: ".55rem",
+              marginBottom: ".5rem",
               transition: "color .3s",
             }}
           >
             {room.name}
           </div>
 
-          {/* Spec pills row */}
+          {/* Spec pills */}
           <div
             style={{
               display: "flex",
-              gap: ".55rem",
+              gap: ".4rem",
               flexWrap: "wrap",
-              marginBottom: "1rem",
+              marginBottom: ".85rem",
             }}
           >
             {specs.map((s) => (
@@ -1246,11 +1285,11 @@ function RoomListCard({ room, h, onOpen, index }) {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: ".35rem",
-                  padding: ".32rem .85rem",
-                  fontSize: ".72rem",
+                  gap: ".3rem",
+                  padding: ".28rem .72rem",
+                  fontSize: ".7rem",
                   background: "rgba(200,169,106,.07)",
-                  border: "1px solid rgba(200,169,106,.15)",
+                  border: "1px solid rgba(200,169,106,.14)",
                   color: "rgba(244,239,229,.6)",
                 }}
               >
@@ -1263,102 +1302,101 @@ function RoomListCard({ room, h, onOpen, index }) {
           {/* Description */}
           <p
             style={{
-              fontSize: ".87rem",
-              lineHeight: 1.8,
+              fontSize: ".86rem",
+              lineHeight: 1.75,
               fontWeight: 300,
-              color: "rgba(244,239,229,.58)",
+              color: "rgba(244,239,229,.56)",
               overflow: "hidden",
               display: "-webkit-box",
-              WebkitLineClamp: 2,
+              WebkitLineClamp: isMobile ? 3 : 2,
               WebkitBoxOrient: "vertical",
-              marginBottom: "1rem",
+              marginBottom: ".85rem",
+              margin: "0 0 .85rem",
             }}
           >
             {room.desc}
           </p>
 
-          {/* Amenity icons row */}
-          <div
-            style={{
-              display: "flex",
-              gap: ".7rem",
-              flexWrap: "wrap",
-              alignItems: "center",
-            }}
-          >
-            {room.amenities.map((a) => (
-              <span
-                key={a}
-                title={a}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: ".32rem",
-                  fontSize: ".7rem",
-                  letterSpacing: ".06em",
-                  color: "rgba(244,239,229,.5)",
-                  padding: ".28rem .75rem",
-                  background: hovered
-                    ? "rgba(200,169,106,.1)"
-                    : "rgba(200,169,106,.05)",
-                  border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
-                  transition: "all .3s",
-                }}
-              >
-                <span style={{ color: room.accentColor, opacity: 0.85 }}>
-                  {AICONS[a] || <Leaf size={12} />}
+          {/* Amenity pills */}
+          <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
+            {room.amenities
+              .slice(0, isMobile ? 3 : room.amenities.length)
+              .map((a) => (
+                <span
+                  key={a}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: ".28rem",
+                    fontSize: ".68rem",
+                    letterSpacing: ".05em",
+                    color: "rgba(244,239,229,.5)",
+                    padding: ".24rem .7rem",
+                    background: hovered
+                      ? "rgba(200,169,106,.1)"
+                      : "rgba(200,169,106,.05)",
+                    border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
+                    transition: "all .3s",
+                  }}
+                >
+                  <span style={{ color: room.accentColor, opacity: 0.85 }}>
+                    {AICONS[a] || <Leaf size={11} />}
+                  </span>
+                  {a}
                 </span>
-                {a}
-              </span>
-            ))}
+              ))}
           </div>
         </div>
 
-        {/* Bottom row — divider + CTA */}
+        {/* Bottom — CTA */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: "1rem",
+            justifyContent: isMobile ? "space-between" : "space-between",
+            flexWrap: "wrap",
+            gap: ".6rem",
+            paddingTop: ".9rem",
             borderTop: `1px solid ${hovered ? "rgba(200,169,106,.2)" : "rgba(200,169,106,.08)"}`,
             transition: "border-color .3s",
           }}
         >
-          {/* Included note */}
           <span
             style={{
-              fontSize: ".72rem",
-              letterSpacing: ".1em",
-              color: "rgba(244,239,229,.38)",
+              fontSize: ".7rem",
+              letterSpacing: ".08em",
+              color: "rgba(244,239,229,.35)",
               display: "flex",
               alignItems: "center",
-              gap: ".4rem",
+              gap: ".35rem",
             }}
           >
-            <CheckCircle2 size={12} style={{ color: "#7a9e6e" }} /> Meals &amp;
-            direct booking included
+            <CheckCircle2
+              size={11}
+              style={{ color: "#7a9e6e", flexShrink: 0 }}
+            />{" "}
+            Meals &amp; direct booking
           </span>
 
-          {/* CTA button */}
           <div
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: ".55rem",
-              padding: ".65rem 1.5rem",
+              gap: ".5rem",
+              padding: isMobile ? ".55rem 1.2rem" : ".65rem 1.5rem",
               background: hovered ? room.accentColor : "transparent",
               border: `1px solid ${room.tagBorder}`,
               color: hovered ? "#182318" : room.tagColor,
-              fontSize: ".72rem",
-              letterSpacing: ".18em",
+              fontSize: ".7rem",
+              letterSpacing: ".16em",
               textTransform: "uppercase",
               fontFamily: jost,
               fontWeight: hovered ? 600 : 400,
               transition: "all .35s cubic-bezier(.22,1,.36,1)",
+              flexShrink: 0,
             }}
           >
-            View Room <ChevronRight size={13} />
+            View Room <ChevronRight size={12} />
           </div>
         </div>
       </div>
@@ -2337,14 +2375,15 @@ const Home = () => {
 
       {/* ════ CREDENTIALS ════ */}
       <div
-        className="kha-reveal bg-[#1f2e1f] px-16 py-[5.5rem]"
+        className="kha-reveal bg-[#1f2e1f] kha-cred-outer"
         style={{
           borderTop: "1px solid rgba(200,169,106,.15)",
           borderBottom: "1px solid rgba(200,169,106,.15)",
         }}
       >
-        <div className="max-w-[1200px] mx-auto">
+        <div className="max-w-[1200px] mx-auto" style={{ padding: "0 2rem" }}>
           <div
+            className="kha-cred-inner"
             style={{
               position: "relative",
               overflow: "hidden",
@@ -2369,6 +2408,7 @@ const Home = () => {
               }}
             ></div>
             <div
+              className="kha-cred-logo"
               style={{
                 width: "88px",
                 height: "88px",
@@ -2424,12 +2464,12 @@ const Home = () => {
                 Primary Recognition
               </span>
               <div
+                className="kha-cred-text"
                 style={{
                   fontFamily: cg,
-                  fontSize: "1.55rem",
                   fontWeight: 300,
                   color: "#fdfaf4",
-                  lineHeight: 1.3,
+                  lineHeight: 1.4,
                 }}
               >
                 The homestays listed on this platform are operated by members of
@@ -2473,10 +2513,7 @@ const Home = () => {
             with the host.
           </p>
         </div>
-        <div
-          className="kha-cards-grid max-w-[1300px] mx-auto grid gap-6"
-          style={{ gridTemplateColumns: "repeat(3,1fr)" }}
-        >
+        <div className="kha-cards-grid max-w-[1300px] mx-auto grid gap-6">
           {HS.map((h) => (
             <HsCard key={h.id} h={h} onOpen={openHs} />
           ))}
