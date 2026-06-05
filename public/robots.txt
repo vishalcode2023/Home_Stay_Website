@@ -1,0 +1,34 @@
+# ─────────────────────────────────────────
+# robots.txt — Mysore Homestays (MDHOA)
+# https://www.mysorestayhomes.com/robots.txt
+# ─────────────────────────────────────────
+
+User-agent: *
+Allow: /
+Allow: /explore
+Allow: /our-story
+Allow: /contact
+
+# Block internal/utility paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /*.json$
+Disallow: /404
+Disallow: /500
+
+# Allow Google Images to index photos
+User-agent: Googlebot-Image
+Allow: /
+
+# Allow Bingbot full access
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay for polite bots
+User-agent: *
+Crawl-delay: 2
+
+# Sitemap location
+Sitemap: https://www.mysorestayhomes.com/sitemap.xml

@@ -1,0 +1,2813 @@
+import React, { useState, useEffect, useRef } from "react";
+import {
+  UtensilsCrossed,
+  Waves,
+  Mountain,
+  Flame,
+  Coffee,
+  Bird,
+  Moon,
+  Leaf,
+  Building2,
+  Heart,
+  MapPin,
+  Star,
+  Globe,
+  Smartphone,
+  MessageCircle,
+  CheckCircle2,
+  Award,
+  ChevronRight,
+  ArrowLeft,
+  Users,
+  Bed,
+  Bath,
+  Wifi,
+  Wind,
+  Tv,
+  Link,
+} from "lucide-react";
+import FloatBookButton from "../components/FloatBookButton";
+import Footer from "../components/Footer";
+import Navbar from "./navbar";
+
+const STYLES = `
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body {  background: #182318; color: #f4efe5; cursor: none; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: #182318; }
+  ::-webkit-scrollbar-thumb { background: #c8a96a; }
+
+  .kha-cur { width:9px; height:9px; background:#c8a96a; border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
+  .kha-cuf { width:34px; height:34px; border:1px solid rgba(200,169,106,.4); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); }
+
+  .kha-reveal { opacity:0; transform:translateY(36px); transition:opacity .85s ease,transform .85s ease; }
+  .kha-reveal.in { opacity:1; transform:translateY(0); }
+  .kha-d1{transition-delay:.12s;} .kha-d2{transition-delay:.24s;} .kha-d3{transition-delay:.36s;}
+
+  .kha-eyebrow { display:inline-flex; align-items:center; gap:.6rem; font-size:.72rem; letter-spacing:.32em; text-transform:uppercase; color:#c8a96a; margin-bottom:5rem; }
+  .kha-eyebrow::before { content:''; width:22px; height:1px; background:#c8a96a; }
+  .kha-hero-eyebrow { display:flex; align-items:center; gap:.6rem; font-size:.72rem; letter-spacing:.32em; text-transform:uppercase; color:#c8a96a; margin-bottom:.8rem; }
+  .kha-hero-eyebrow::before { content:''; width:28px; height:1px; background:#c8a96a; flex-shrink:0; }
+
+  .kha-cred-block { padding:.75rem 1.2rem; background:rgba(24,35,24,.55); border:1px solid rgba(200,169,106,.2); backdrop-filter:blur(8px); margin-bottom:1.1rem; }
+  .kha-cred-title { font-size:13px; font-weight:600; color:#e0c88a; text-align:center; margin-bottom:12px; line-height:1.4; }
+  .kha-cred-logos { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+  .kha-cred-logos img { height:55px; width:auto; object-fit:contain; flex-shrink:0; transform: scale(1.2);  }
+
+  @keyframes khaCardIn { to { opacity:1; transform:translateY(0); } }
+  .kha-hero-card { animation:khaCardIn 1.1s .7s forwards; opacity:0; transform:translateY(32px); }
+  .kha-hero-cta { display:inline-flex; align-items:center; gap:.75rem; text-decoration:none; color:#c8a96a; font-size:.78rem; letter-spacing:.2em; text-transform:uppercase; margin-top:.7rem; }
+  .kha-hero-cta::after { content:''; width:36px; height:1px; background:#c8a96a; transition:width .4s; }
+  .kha-hero-cta:hover::after { width:64px; }
+
+  @keyframes khaScrollPulse { 0%,100%{opacity:.3;} 50%{opacity:1;} }
+  .kha-scroll-line { width:1px; height:50px; background:linear-gradient(to bottom,#c8a96a,transparent); animation:khaScrollPulse 2s infinite; }
+
+  @keyframes khaScrollX { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+  .kha-marquee { display:flex; gap:.9rem; animation:khaScrollX 28s linear infinite; width:max-content; }
+  .kha-marquee:hover { animation-play-state:paused; }
+  .kha-m-img img { filter:saturate(.6) brightness(.8); transition:filter .5s,transform .5s; }
+  .kha-m-img:hover img { filter:saturate(1) brightness(1); transform:scale(1.04); }
+
+  .kha-arch-1 { border-radius:90px 90px 6px 6px; }
+  .kha-arch-2 { border-radius:6px 6px 90px 90px; margin-top:2.5rem; }
+  .kha-arch-wrap img { transition:transform .8s ease; }
+  .kha-arch-wrap:hover img { transform:scale(1.07); }
+
+  @keyframes heroBtnPulse { 0%,100%{box-shadow:0 4px 24px rgba(200,169,106,.35);} 50%{box-shadow:0 8px 36px rgba(200,169,106,.65);} }
+  .kha-hero-book-btn { animation:heroBtnPulse 2.8s ease-in-out infinite; position:relative; overflow:hidden; }
+  .kha-hero-book-btn span { position:relative; z-index:1; }
+  .kha-hero-book-btn:hover { background:#e0c88a !important; transform:translateY(-2px); animation-play-state:paused; }
+
+  @keyframes ctaBtnGlow { 0%,100%{box-shadow:0 4px 20px rgba(200,169,106,.3);} 50%{box-shadow:0 8px 40px rgba(200,169,106,.65);} }
+  @keyframes shimmer { 0%{left:-100%;} 100%{left:160%;} }
+  .kha-cta-anim-btn { animation:ctaBtnGlow 3s ease-in-out infinite; position:relative; overflow:hidden; cursor:none; }
+  .kha-cta-anim-btn::before { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent); animation:shimmer 3s ease-in-out infinite 1s; z-index:0; }
+  .kha-cta-anim-btn:hover { background:#e0c88a !important; transform:translateY(-2px); }
+  .kha-cta-anim-btn span { position:relative; z-index:1; }
+
+  /* Explore cards */
+  .kha-card { transition:transform .4s,border-color .4s,box-shadow .4s; cursor:none; }
+  .kha-card:hover { transform:translateY(-7px); border-color:rgba(200,169,106,.32) !important; box-shadow:0 20px 60px rgba(0,0,0,.35); }
+  .kha-card:hover .kha-card-img { transform:scale(1.09); }
+  .kha-card-img { transition:transform .7s; }
+  .kha-card-img-wrap { border-radius:52px 52px 0 0; }
+  .kha-card:hover .kha-price-overlay { opacity:1; }
+
+  /* Trust strip */
+  .kha-trust-card { display:flex; align-items:flex-start; gap:1rem; flex:1 1 260px; max-width:360px; padding:1.6rem 1.8rem; border:1px solid rgba(200,169,106,.22); background:rgba(200,169,106,.07); }
+  .kha-trust-icon { width:62px; height:62px; border:1px solid rgba(200,169,106,.4); border-radius:50%; background:rgba(200,169,106,.1); overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .kha-trust-icon img { width:62px; height:62px; object-fit:contain; }
+
+  /* Detail + Room slides */
+  #khaDetailPage { position:fixed; inset:0; z-index:2000; background:#182318; overflow-y:auto; transform:translateX(100%); transition:transform .65s cubic-bezier(.22,1,.36,1); }
+  #khaDetailPage.open { transform:translateX(0); }
+  #khaRoomPage { position:fixed; inset:0; z-index:3000; background:#182318; overflow-y:auto; transform:translateX(100%); transition:transform .6s cubic-bezier(.22,1,.36,1); }
+  #khaRoomPage.open { transform:translateX(0); }
+
+  /* Room list cards */
+  .kha-room-card { display:flex; overflow:hidden; border:1px solid rgba(200,169,106,.12); background:#1f2e1f; transition:border-color .35s,transform .35s,box-shadow .35s; cursor:none; border-radius:4px; }
+  .kha-room-card:hover { border-color:rgba(200,169,106,.42); transform:translateY(-4px); box-shadow:0 18px 50px rgba(0,0,0,.45); }
+  .kha-room-card:hover .kha-room-img { transform:scale(1.06); }
+  .kha-room-img { transition:transform .7s; }
+
+  /* 6-img mosaic */
+  .kha-mosaic { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:230px 180px; gap:.55rem; border-radius:4px; overflow:hidden; margin-bottom:2.4rem; }
+  .kha-mosaic-main { grid-row:1/3; overflow:hidden; }
+  .kha-mosaic-cell { overflow:hidden; }
+  .kha-mosaic img { width:100%; height:100%; object-fit:cover; transition:transform .6s; }
+  .kha-mosaic-main:hover img,.kha-mosaic-cell:hover img { transform:scale(1.06); }
+
+  /* Amenity items */
+  .kha-amen-item { display:flex; align-items:center; gap:.75rem; padding:.85rem 1.1rem; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.1); transition:border-color .3s; }
+  .kha-amen-item:hover { border-color:rgba(200,169,106,.3); }
+
+  /* Shared buttons */
+  .kha-back-btn { display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; color:rgba(244,239,229,.72); font-size:.76rem; letter-spacing:.2em; text-transform:uppercase; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.22); padding:.5rem 1.4rem; transition:color .3s,border-color .3s; cursor:none; }
+  .kha-back-btn:hover { color:#c8a96a; border-color:#c8a96a; }
+  .kha-btn-wa { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(37,211,102,.18); border:1px solid rgba(37,211,102,.42); color:#4ade80;  font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; }
+  .kha-btn-wa:hover { background:rgba(37,211,102,.32); }
+  .kha-btn-web { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(200,169,106,.14); border:1px solid rgba(200,169,106,.38); color:#c8a96a; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; }
+  .kha-btn-web:hover { background:rgba(200,169,106,.28); }
+
+  /* Explore cards grid */
+  .kha-cards-grid { grid-template-columns: repeat(3,1fr); }
+
+  /* Credentials */
+  .kha-cred-outer { padding: 5.5rem 4rem; }
+
+  /* Detail two-col */
+  .kha-detail-two-col { grid-template-columns: 450px 1fr; }
+
+  @media(max-width:900px){
+    body { cursor:auto !important; }
+    .kha-cur,.kha-cuf { display:none !important; }
+    .kha-about-grid { grid-template-columns:1fr !important; }
+    .kha-cards-grid { grid-template-columns:repeat(2,1fr) !important; }
+    .kha-ts-inner { flex-direction:column !important; align-items:stretch !important; }
+    .kha-trust-card { max-width:100% !important; }
+    .kha-detail-grid { grid-template-columns:1fr !important; }
+    .kha-detail-two-col { grid-template-columns:1fr !important; }
+    .kha-mosaic { grid-template-rows:180px 140px !important; }
+    .kha-hero { margin-top:0 !important; padding-top:90px; box-sizing:border-box; height:auto !important; min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; }
+    .kha-hero-card { position:relative !important; bottom:auto !important; left:auto !important; max-width:none !important; margin:auto 1rem 2.5rem !important; padding:1.4rem !important; }
+    .kha-hero-book-btn { display:none !important; }
+    #khaDetailPage .dp-inner, #khaRoomPage .dp-inner { padding:2rem 1.5rem 5rem !important; }
+    .dp-topbar { padding:.8rem 1.5rem !important; }
+    .kha-rl-card { grid-template-columns:1fr !important; }
+    .kha-rl-card-img { height:200px !important; }
+    .kha-cred-outer { padding:3rem 0 !important; }
+    .kha-cred-inner { grid-template-columns:1fr !important; gap:1.4rem !important; padding:1.8rem !important; text-align:center; }
+    .kha-cred-logo { margin:0 auto !important; }
+    .kha-cred-text { font-size:1.15rem !important; }
+    .kha-browse-section { padding-left:1.2rem !important; padding-right:1.2rem !important; padding-top:4rem !important; padding-bottom:4rem !important; }
+  }
+  @media(max-width:768px){
+    body { cursor:auto !important; }
+    .kha-cur,.kha-cuf { display:none !important; }
+    .px-16 { padding-left:1.5rem !important; padding-right:1.5rem !important; }
+    .kha-browse-section { padding-left:1rem !important; padding-right:1rem !important; }
+    .kha-cards-grid { grid-template-columns:repeat(2,1fr) !important; gap:1rem !important; }
+    .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 120px 120px !important; }
+    .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
+    .kha-rl-card { grid-template-columns:1fr !important; }
+    .kha-rl-card-img { height:190px !important; }
+    .kha-cred-inner { grid-template-columns:1fr !important; gap:1.2rem !important; padding:1.5rem !important; text-align:center; }
+    .kha-cred-logo { margin:0 auto !important; }
+    .kha-cred-text { font-size:1.05rem !important; }
+  }
+  @media(max-width:560px){
+    body { cursor:auto !important; }
+    .kha-cur,.kha-cuf { display:none !important; }
+    .kha-cards-grid { grid-template-columns:1fr !important; }
+    .kha-browse-section { padding-left:.9rem !important; padding-right:.9rem !important; padding-top:3rem !important; padding-bottom:3rem !important; }
+    .kha-cred-inner { padding:1.2rem !important; }
+    .kha-cred-text { font-size:1rem !important; }
+  }
+  @media(max-width:480px){
+    body { cursor:auto !important; }
+    .kha-cur,.kha-cuf { display:none !important; }
+    .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
+    .kha-mosaic { grid-template-columns:1fr !important; grid-template-rows:repeat(6,150px) !important; }
+    .kha-mosaic-main { grid-row:auto !important; grid-column:auto !important; }
+    .kha-rl-card { grid-template-columns:1fr !important; }
+    .kha-rl-card-img { height:180px !important; }
+  }
+`;
+
+const cg = "'Cormorant Garamond',serif";
+const jost = "'Jost',sans-serif";
+
+const TOURIST_PLACES = [
+  { key: "mysore_palace", label: "Mysore Palace", lat: 12.3051, lng: 76.6551 },
+  { key: "krs", label: "KRS Dam / Brindavan Gdns", lat: 12.4227, lng: 76.5712 },
+  { key: "chamundi", label: "Chamundi Hills", lat: 12.2724, lng: 76.6761 },
+  { key: "zoo", label: "Mysore Zoo", lat: 12.2953, lng: 76.6551 },
+  {
+    key: "nagarahole",
+    label: "Nagarahole National Park",
+    lat: 12.0473,
+    lng: 76.1144,
+  },
+  { key: "kabini", label: "Kabini Backwaters", lat: 11.9376, lng: 76.3534 },
+  { key: "coorg", label: "Coorg / Madikeri", lat: 12.4244, lng: 75.7382 },
+  { key: "ooty", label: "Ooty", lat: 11.4102, lng: 76.695 },
+  { key: "chikmagalur", label: "Chikmagalur", lat: 13.3161, lng: 75.772 },
+  { key: "hassan", label: "Hassan", lat: 13.0072, lng: 76.0962 },
+  { key: "wayanad", label: "Wayanad", lat: 11.6854, lng: 76.132 },
+  { key: "mangalore", label: "Mangalore", lat: 12.9141, lng: 74.856 },
+  { key: "sakleshpur", label: "Sakleshpur", lat: 12.9452, lng: 75.7862 },
+  {
+    key: "belur_halebidu",
+    label: "Belur / Halebidu",
+    lat: 13.1683,
+    lng: 75.868,
+  },
+];
+
+function haversine(la1, ln1, la2, ln2) {
+  const R = 6371,
+    dLa = ((la2 - la1) * Math.PI) / 180,
+    dLn = ((ln2 - ln1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLa / 2) ** 2 +
+    Math.cos((la1 * Math.PI) / 180) *
+      Math.cos((la2 * Math.PI) / 180) *
+      Math.sin(dLn / 2) ** 2;
+  return +(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(1);
+}
+
+const AICONS = {
+  "Meals Included": <UtensilsCrossed size={17} />,
+  "Swimming Pool": <Waves size={17} />,
+  "Nature Trails": <Mountain size={17} />,
+  Bonfire: <Flame size={17} />,
+  "Mountain View": <Mountain size={17} />,
+  "River Access": <Waves size={17} />,
+  "Coffee Estate": <Coffee size={17} />,
+  "Wildlife Zone": <Bird size={17} />,
+  "Stargazing Deck": <Moon size={17} />,
+  "Private Garden": <Leaf size={17} />,
+  "Heritage Architecture": <Building2 size={17} />,
+  "Yoga Space": <Heart size={17} />,
+  "Air Conditioning": <Wind size={17} />,
+  "Free WiFi": <Wifi size={17} />,
+  "Smart TV": <Tv size={17} />,
+  "Private Bathroom": <Bath size={17} />,
+};
+
+/* ── 3 Room types — each with its own 6 images ── */
+const ROOM_TYPES = [
+  {
+    key: "deluxe",
+    name: "ನೆಲಮಳಿಗೆ (Nela Maalige) – Ground Floor 2BHK",
+    tag: "Most Popular",
+    tagBg: "rgba(200,169,106,.16)",
+    tagBorder: "rgba(200,169,106,.4)",
+    tagColor: "#c8a96a",
+    accentColor: "#c8a96a",
+    multiplier: 1,
+    guests: 2,
+    beds: 2,
+    sqft: 280,
+    desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK designed for families seeking comfort, privacy, and easy access. The space is spacious, well-ventilated, and ideal for peaceful living. •	Entire private 2BHK space •	Calm and quiet residential surroundings •	Excellent ventilation and natural light •	Suitable for short & long stays •	Family-friendly environment",
+    amenities: [
+      "Fully equipped Italian-style kitchen ",
+      "2 bedrooms with one attached Toilet & Common bathroom",
+      "Solar + gas geyser",
+      "Smart TV &WiFi",
+      "Covered parking",
+      "Swiggy / Zomato / Ola / Uber accessible",
+      "Floor plan Available on Request",
+    ],
+    imgs: [
+      "/images/nela1.jpg",
+      "/images/nela2.jpg",
+      "/images/nela3.jpg",
+      "/images/nela4.jpg",
+      "/images/nela5.jpg",
+      "/images/nela6.jpg",
+    ],
+  },
+  {
+    key: "family",
+    name: "ಮಹಡಿಮನೆ (Mahadimane) – First Floor 2BHK",
+    tag: "Best for Families",
+    tagBg: "rgba(122,158,110,.15)",
+    tagBorder: "rgba(122,158,110,.4)",
+    tagColor: "#adc49a",
+    accentColor: "#7a9e6e",
+    multiplier: 1.55,
+    guests: 4,
+    beds: 2,
+    sqft: 420,
+    desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay offering a bright, airy, and peaceful living space. Perfect for families who prefer elevated views with privacy and comfort •	Entire private 2BHK unit (Spacious) •	Well-ventilated and naturally lit •	Quiet and peaceful environment •	Ideal for families and longer stays •	Safe residential locality.",
+    amenities: [
+      "Fully equipped kitchen ",
+      "2 bedrooms with attached bathrooms",
+      "Solar / geyser hot water",
+      "Smart TV &WiFi",
+      "Covered parking",
+      "Online delivery & cab services available",
+    ],
+    imgs: [
+      "/images/mad1.png",
+      "/images/mad2.png",
+      "/images/mad3.png",
+      "/images/mad4.png",
+      "/images/mad6.png",
+      "/images/mad5.png",
+    ],
+  },
+  {
+    key: "suite",
+    name: "ತಾರಸಿಮನೆ (Thaarasimane) – Studio (Top Floor)",
+    tag: "Premium",
+    tagBg: "rgba(200,169,106,.28)",
+    tagBorder: "#c8a96a",
+    tagColor: "#fdfaf4",
+    accentColor: "#e0c88a",
+    multiplier: 2.1,
+    guests: 2,
+    beds: 1,
+    sqft: 520,
+    desc: "ತಾರಸಿಮನೆ is a compact studio apartement on the top floor, ideal for small families looking for a simple, peaceful, and minimal stay experience •	Entire private studio space •	Calm, green, and quiet surroundings •	Excellent ventilation and natural light •	Ideal for short/long stays •	Peaceful residential atmosphere.",
+    amenities: [
+      "Compact kitchen with induction stove",
+      "Indian toilet / Bathroom with solar / geyser hot water",
+      "Smart TV &WiFi",
+      "Covered parking",
+      "Swiggy / Zomato / Ola / Uber serviceable",
+    ],
+    imgs: [
+      "/images/thar1.png",
+      "/images/thar2.png",
+      "/images/thar3.png",
+      "/images/thar4.png",
+      "/images/thar5.png",
+      "/images/thar6.png",
+    ],
+  },
+];
+
+/* ── Homestay data ── */
+const HS = [
+  {
+    id: 1,
+    lat: 12.3093357,
+    lng: 76.5778982,
+    name: "Kukkeshree Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 2500,
+    rating: 4.9,
+    reviews: 40,
+    amenities: ["Meals Included", "Private Garden", "Nature Trails", "Bonfire"],
+    hasWebsite: false,
+    phone: "9480100001",
+    img: "/images/nela2.jpg",
+    imgs: [
+      "/images/nela1.jpg",
+      "/images/nela2.jpg",
+      "/images/nela3.jpg",
+      "/images/nela4.jpg",
+      "/images/nela5.jpg",
+      "/images/nela6.jpg",
+    ],
+    type: "Family Homestay",
+    location: "Vijayanagar 4th Stage, near NPS School , Mysuru • 2 km from Ring Road • 15 minutes from Mysore Palace",
+    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
+    host: {
+      name: "Mr. Nagendra N",
+      since: "Host since 2022",
+      avatar: "/images/kukeprofile.png",
+      desc: "A gracious Mysuru family who take pride in offering guests an authentic experience.",
+    },
+    guestReviews: [
+      {
+        name: "Ravi Kumar",
+        stars: 5,
+        date: "March 2026",
+        text: "Felt like home from the first moment. The meals were incredible and the family so warm.",
+      },
+      {
+        name: "Sneha Patil",
+        stars: 4,
+        date: "January 2026",
+        text: "Great location in Mysuru, very clean and comfortable. Lovely hosts.",
+      },
+    ],
+  },
+];
+
+const HERO_VIDEO = "/herovideo.mp4";
+const MARQUEE_IMGS = [
+  "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400&q=70",
+  "https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&q=70",
+  "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=400&q=70",
+  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&q=70",
+  "https://images.unsplash.com/photo-1482192505345-5852310ed21d?w=400&q=70",
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=70",
+  "https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=400&q=70",
+];
+
+/* ─── Helpers ─────────────────────────────────────────────────────────────── */
+function Stars({ rating, sz = 14 }) {
+  return (
+    <span style={{ display: "inline-flex", gap: "2px" }}>
+      {Array.from({ length: Math.floor(rating) }, (_, i) => (
+        <Star key={i} size={sz} style={{ color: "#c8a96a", fill: "#c8a96a" }} />
+      ))}
+    </span>
+  );
+}
+
+function Badge({ children, bg, border, color }) {
+  return (
+    <span
+      style={{
+        padding: ".28rem .85rem",
+        fontSize: ".62rem",
+        letterSpacing: ".18em",
+        textTransform: "uppercase",
+        background: bg,
+        border: `1px solid ${border}`,
+        color,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+/* ─── Explore Card ─────────────────────────────────────────────────────────── */
+function HsCard({ h, onOpen }) {
+  return (
+    <div
+      className="kha-card bg-[#1f2e1f] overflow-hidden kha-reveal"
+      style={{ border: "1px solid rgba(200,169,106,.1)" }}
+      onClick={() => onOpen(h.id)}
+    >
+      <div
+        className="kha-card-img-wrap w-full overflow-hidden relative"
+        style={{ aspectRatio: "4/3" }}
+      >
+        <img
+          src={h.img}
+          alt={h.name}
+          loading="lazy"
+          className="kha-card-img w-full h-full object-cover"
+        />
+
+        <div
+          style={{
+            position: "absolute",
+            top: ".9rem",
+            left: ".9rem",
+            display: "flex",
+            gap: ".4rem",
+            flexWrap: "wrap",
+            zIndex: 2,
+          }}
+        >
+          <Badge
+            bg="rgba(24,35,24,.78)"
+            border="rgba(200,169,106,.32)"
+            color="#c8a96a"
+          >
+            {h.type}
+          </Badge>
+          {h.hasWebsite ? (
+            <Badge
+              bg="rgba(46,74,46,.85)"
+              border="rgba(122,158,110,.4)"
+              color="#adc49a"
+            >
+              Has Website
+            </Badge>
+          ) : (
+            <Badge
+              bg="rgba(37,211,102,.15)"
+              border="rgba(37,211,102,.38)"
+              color="#4ade80"
+            >
+              WhatsApp Only
+            </Badge>
+          )}
+        </div>
+
+        {/* Hover overlay */}
+        <div
+          className="kha-price-overlay absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 transition-opacity duration-300"
+          style={{
+            background: "rgba(24,35,24,.9)",
+            backdropFilter: "blur(4px)",
+            zIndex: 3,
+          }}
+        >
+          <span
+            style={{
+              fontSize: ".68rem",
+              letterSpacing: ".28em",
+              textTransform: "uppercase",
+              color: "#7a9e6e",
+            }}
+          >
+            Starting from
+          </span>
+          <span
+            style={{
+              fontFamily: cg,
+              fontSize: "2.9rem",
+              fontWeight: 300,
+              color: "#c8a96a",
+              lineHeight: 1,
+            }}
+          >
+            ₹{h.price.toLocaleString("en-IN")}
+          </span>
+          <span
+            style={{
+              fontSize: ".74rem",
+              color: "rgba(244,239,229,.5)",
+              letterSpacing: ".1em",
+            }}
+          >
+            per night · 3 Unique Stays available
+          </span>
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: ".55rem",
+              marginTop: ".5rem",
+              padding: ".7rem 1.8rem",
+              background: "#c8a96a",
+              color: "#182318",
+              fontFamily: jost,
+              fontSize: ".74rem",
+              letterSpacing: ".2em",
+              textTransform: "uppercase",
+              fontWeight: 600,
+            }}
+          >
+            View Rooms <ChevronRight size={14} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: "1.3rem 1.4rem 1.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".35rem",
+            fontSize: ".68rem",
+            letterSpacing: ".2em",
+            textTransform: "uppercase",
+            color: "#7a9e6e",
+            marginBottom: ".3rem",
+          }}
+        >
+          <MapPin size={10} />
+          {h.taluk}, {h.district}
+        </div>
+        <div
+          style={{
+            fontFamily: cg,
+            fontSize: "1.5rem",
+            fontWeight: 400,
+            color: "#f4efe5",
+            lineHeight: 1.2,
+            marginBottom: ".3rem",
+          }}
+        >
+          {h.name}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".5rem",
+            marginBottom: ".85rem",
+          }}
+        >
+          <Stars rating={h.rating} sz={13} />
+          <span
+            style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}
+          >
+            {h.rating}
+          </span>
+          <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}>
+            ({h.reviews})
+          </span>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: ".8rem",
+            flexWrap: "wrap",
+            marginBottom: ".9rem",
+          }}
+        >
+         
+        </div>
+        <div
+          style={{
+            borderTop: "1px solid rgba(200,169,106,.1)",
+            paddingTop: ".75rem",
+          }}
+        >
+          {TOURIST_PLACES.map((p) => ({
+            ...p,
+            dist: haversine(h.lat, h.lng, p.lat, p.lng),
+          }))
+            .sort((a, b) => a.dist - b.dist)
+            .slice(0, 2)
+            .map((p) => (
+              <div
+                key={p.key}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: ".3rem",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: ".72rem",
+                    color: "rgba(244,239,229,.45)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".35rem",
+                  }}
+                >
+                  <MapPin size={9} style={{ color: "#c8a96a" }} />
+                  {p.label}
+                </span>
+                <span
+                  style={{
+                    fontSize: ".7rem",
+                    color: "#c8a96a",
+                    fontWeight: 600,
+                  }}
+                >
+                  {p.dist} km
+                </span>
+              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Room list card (inside detail slide) ─────────────────────────────────── */
+function RoomListCard({ room, h, onOpen, index }) {
+  const price = Math.round((h.price * room.multiplier) / 100) * 100;
+  const [hovered, setHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768,
+  );
+
+  useEffect(() => {
+    const fn = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", fn);
+    return () => window.removeEventListener("resize", fn);
+  }, []);
+
+  const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
+  const imgSrc = roomImgs[0] || h.img;
+
+  
+
+  return (
+    <div
+      onClick={() => onOpen(room.key)}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: "grid",
+        gridTemplateColumns: isMobile ? "1fr" : "340px 1fr",
+        overflow: "hidden",
+        border: `1px solid ${hovered ? room.tagBorder : "rgba(200,169,106,.14)"}`,
+        background: hovered ? "rgba(31,46,31,.95)" : "#1c2d1c",
+        transform: hovered && !isMobile ? "translateY(-5px)" : "translateY(0)",
+        boxShadow: hovered
+          ? `0 24px 64px rgba(0,0,0,.5), 0 0 0 1px ${room.tagBorder}`
+          : "0 4px 20px rgba(0,0,0,.25)",
+        transition: "all .4s cubic-bezier(.22,1,.36,1)",
+        cursor: "none",
+        position: "relative",
+      }}
+    >
+      {/* Left accent bar — top bar on mobile */}
+      <div
+        style={{
+          position: "absolute",
+          left: isMobile ? 0 : 0,
+          top: 0,
+          right: isMobile ? 0 : "auto",
+          bottom: isMobile ? "auto" : 0,
+          width: isMobile ? "auto" : "3px",
+          height: isMobile ? "3px" : "auto",
+          background: `linear-gradient(to ${isMobile ? "right" : "bottom"}, ${room.accentColor}, transparent)`,
+          opacity: hovered ? 1 : 0.6,
+          transition: "opacity .4s",
+          zIndex: 2,
+        }}
+      />
+
+      {/* ── Image ── */}
+      <div
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: isMobile ? "200px" : "440px",
+        }}
+      >
+        <img
+          src={imgSrc}
+          alt={room.name}
+          loading="lazy"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: hovered ? "scale(1.08)" : "scale(1)",
+            transition: "transform .8s cubic-bezier(.22,1,.36,1)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(120deg,rgba(24,35,24,.1) 0%,rgba(24,35,24,.65) 100%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "90px",
+            background: `linear-gradient(to top,rgba(28,45,28,1),transparent)`,
+          }}
+        />
+
+        {/* Watermark number */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-.5rem",
+            right: ".8rem",
+            fontFamily: cg,
+            fontSize: isMobile ? "4.5rem" : "6rem",
+            fontWeight: 300,
+            lineHeight: 1,
+            color: room.accentColor,
+            opacity: hovered ? 0.22 : 0.12,
+            transition: "opacity .4s",
+            userSelect: "none",
+            pointerEvents: "none",
+          }}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </div>
+
+        {/* Tag pill */}
+        <div style={{ position: "absolute", top: ".85rem", left: ".85rem" }}>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: ".4rem",
+              padding: ".3rem .95rem",
+              fontSize: ".6rem",
+              letterSpacing: ".2em",
+              textTransform: "uppercase",
+              background: room.tagBg,
+              border: `1px solid ${room.tagBorder}`,
+              color: room.tagColor,
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            {index === 2 && <Star size={9} style={{ fill: room.tagColor }} />}
+            {room.tag}
+          </span>
+        </div>
+
+        {/* Price over image */}
+        <div style={{ position: "absolute", bottom: ".85rem", left: ".95rem" }}>
+          <div
+            style={{
+              fontSize: ".58rem",
+              letterSpacing: ".24em",
+              textTransform: "uppercase",
+              color: "rgba(244,239,229,.5)",
+              marginBottom: ".1rem",
+            }}
+          >
+            from
+          </div>
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: isMobile ? "1.6rem" : "1.9rem",
+              fontWeight: 300,
+              color: room.accentColor,
+              lineHeight: 1,
+            }}
+          >
+            ₹{price.toLocaleString("en-IN")}
+            <span
+              style={{
+                fontSize: ".72rem",
+                color: "rgba(244,239,229,.38)",
+                marginLeft: ".35rem",
+                fontFamily: jost,
+              }}
+            >
+              /night
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Content ── */}
+      <div
+        style={{
+          padding: isMobile
+            ? "1.3rem 1.2rem 1.4rem"
+            : "1.7rem 2rem 1.7rem 1.8rem",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          gap: ".85rem",
+        }}
+      >
+        <div>
+          {/* Room name */}
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: isMobile ? "1.5rem" : "1.85rem",
+              fontWeight: 300,
+              color: hovered ? "#fdfaf4" : "#e8e2d4",
+              lineHeight: 1.1,
+              marginBottom: ".5rem",
+              transition: "color .3s",
+            }}
+          >
+            {room.name}
+          </div>
+
+         
+
+          {/* Description */}
+          <p
+            style={{
+              fontSize: ".86rem",
+              lineHeight: 1.75,
+              fontWeight: 300,
+              color: "rgba(244,239,229,.56)",
+              overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: isMobile ? 3 : 2,
+              WebkitBoxOrient: "vertical",
+              marginBottom: ".85rem",
+              margin: "0 0 .85rem",
+            }}
+          >
+            {room.desc}
+          </p>
+
+          {/* Amenity pills */}
+          <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
+            {room.amenities
+              .slice(0, isMobile ? 3 : room.amenities.length)
+              .map((a) => (
+                <span
+                  key={a}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: ".28rem",
+                    fontSize: ".68rem",
+                    letterSpacing: ".05em",
+                    color: "rgba(244,239,229,.5)",
+                    padding: ".24rem .7rem",
+                    background: hovered
+                      ? "rgba(200,169,106,.1)"
+                      : "rgba(200,169,106,.05)",
+                    border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
+                    transition: "all .3s",
+                  }}
+                >
+                  <span style={{ color: room.accentColor, opacity: 0.85 }}>
+                    {AICONS[a] || <Leaf size={11} />}
+                  </span>
+                  {a}
+                </span>
+              ))}
+          </div>
+        </div>
+
+        {/* Bottom — CTA */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: isMobile ? "space-between" : "space-between",
+            flexWrap: "wrap",
+            gap: ".6rem",
+            paddingTop: ".9rem",
+            borderTop: `1px solid ${hovered ? "rgba(200,169,106,.2)" : "rgba(200,169,106,.08)"}`,
+            transition: "border-color .3s",
+          }}
+        >
+          
+
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: ".5rem",
+              padding: isMobile ? ".55rem 1.2rem" : ".65rem 1.5rem",
+              background: hovered ? room.accentColor : "transparent",
+              border: `1px solid ${room.tagBorder}`,
+              color: hovered ? "#182318" : room.tagColor,
+              fontSize: ".7rem",
+              letterSpacing: ".16em",
+              textTransform: "uppercase",
+              fontFamily: jost,
+              fontWeight: hovered ? 600 : 400,
+              transition: "all .35s cubic-bezier(.22,1,.36,1)",
+              flexShrink: 0,
+            }}
+          >
+            View Room <ChevronRight size={12} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Room Full Detail ────────────────────────────────────────────────────── */
+function RoomDetail({ h, roomKey, onBack }) {
+  const room = ROOM_TYPES.find((r) => r.key === roomKey);
+  if (!h || !room) return null;
+  const price = Math.round((h.price * room.multiplier) / 100) * 100;
+  const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
+
+  const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
+  const sixImgs =
+    roomImgs.length >= 6
+      ? roomImgs.slice(0, 6)
+      : [...roomImgs, ...Array(6 - roomImgs.length).fill(h.img)];
+
+  const allAmens = [...new Set([...room.amenities,])];
+
+  return (
+    <div id="khaRoomPage" className={roomKey ? "open" : ""}>
+      {/* Top bar */}
+      <div
+        className="dp-topbar"
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          background: "rgba(24,35,24,.96)",
+          backdropFilter: "blur(20px)",
+          borderBottom: "1px solid rgba(200,169,106,.15)",
+          padding: ".85rem 3rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "1.2rem",
+          flexWrap: "wrap",
+        }}
+      >
+        <a
+          href="#"
+          className="kha-back-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            onBack();
+          }}
+        >
+          <ArrowLeft size={13} /> Back to Rooms
+        </a>
+        <div
+          style={{
+            width: "1px",
+            height: "16px",
+            background: "rgba(200,169,106,.2)",
+            flexShrink: 0,
+          }}
+        ></div>
+        <span
+          style={{
+            fontSize: ".7rem",
+            letterSpacing: ".18em",
+            textTransform: "uppercase",
+            color: "rgba(244,239,229,.35)",
+          }}
+        >
+          {h.name}
+        </span>
+        <div style={{ marginLeft: "auto" }}>
+          <span
+            style={{
+              padding: ".25rem .85rem",
+              fontSize: ".62rem",
+              letterSpacing: ".18em",
+              textTransform: "uppercase",
+              background: room.tagBg,
+              border: `1px solid ${room.tagBorder}`,
+              color: room.tagColor,
+              borderRadius: "2px",
+            }}
+          >
+            {room.tag}
+          </span>
+        </div>
+      </div>
+
+      <div
+        className="dp-inner"
+        style={{
+          maxWidth: "1160px",
+          margin: "0 auto",
+          padding: "3rem 3rem 6rem 1rem",
+        }}
+      >
+        {/* Heading block */}
+        <div style={{ marginBottom: "2rem" }}>
+          <div
+            style={{
+              fontSize: ".68rem",
+              letterSpacing: ".3em",
+              textTransform: "uppercase",
+              color: "#7a9e6e",
+              marginBottom: ".5rem",
+              display: "flex",
+              alignItems: "center",
+              gap: ".45rem",
+            }}
+          >
+            <MapPin size={11} />
+            {h.taluk} · {h.district} District, Mysore
+          </div>
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: "clamp(2rem,4vw,3.1rem)",
+              fontWeight: 300,
+              color: "#fdfaf4",
+              lineHeight: 1.1,
+              marginBottom: ".3rem",
+            }}
+          >
+            {room.name}
+          </div>
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: "1.15rem",
+              fontWeight: 300,
+              color: "rgba(244,239,229,.4)",
+              marginBottom: "1rem",
+            }}
+          >
+            at {h.name}
+          </div>
+        </div>
+
+        {/* 6-image mosaic */}
+        <div className="kha-mosaic">
+          <div className="kha-mosaic-main">
+            <img src={sixImgs[0]} alt="main" />
+          </div>
+          {sixImgs.slice(1).map((src, i) => (
+            <div key={i} className="kha-mosaic-cell">
+              <img src={src} alt={`photo ${i + 2}`} loading="lazy" />
+            </div>
+          ))}
+        </div>
+
+        {/* 2-col layout */}
+        <div
+          className="kha-detail-grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 330px",
+            gap: "3rem",
+            alignItems: "start",
+          }}
+        >
+          {/* Left */}
+          <div>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".8rem",
+              }}
+            >
+              About This Room
+            </h3>
+            <p
+              style={{
+                fontSize: ".97rem",
+                lineHeight: 2,
+                fontWeight: 300,
+                color: "rgba(244,239,229,.72)",
+                marginBottom: "2.5rem",
+              }}
+            >
+              {room.desc}
+            </p>
+
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
+              What's Included
+            </h3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit,minmax(172px,1fr))",
+                gap: ".6rem",
+                marginBottom: "2.5rem",
+              }}
+            >
+              {allAmens.map((a) => (
+                <div key={a} className="kha-amen-item">
+                  <span style={{ color: "#c8a96a", flexShrink: 0 }}>
+                    {AICONS[a] || <Leaf size={17} />}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: ".82rem",
+                      color: "rgba(244,239,229,.75)",
+                    }}
+                  >
+                    {a}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
+              Nearby Attractions
+            </h3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: ".5rem",
+                marginBottom: "2.5rem",
+              }}
+            >
+              {TOURIST_PLACES.map((p) => ({
+                ...p,
+                dist: haversine(h.lat, h.lng, p.lat, p.lng),
+              }))
+                .sort((a, b) => a.dist - b.dist)
+                .map((p) => (
+                  <div
+                    key={p.key}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: ".7rem 1rem",
+                      background: "rgba(31,46,31,.6)",
+                      border: "1px solid rgba(200,169,106,.08)",
+                      transition: "border-color .2s",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.borderColor =
+                        "rgba(200,169,106,.28)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.borderColor =
+                        "rgba(200,169,106,.08)")
+                    }
+                  >
+                    <span
+                      style={{
+                        fontSize: ".79rem",
+                        color: "rgba(244,239,229,.55)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".4rem",
+                      }}
+                    >
+                      <MapPin
+                        size={10}
+                        style={{ color: "#c8a96a", flexShrink: 0 }}
+                      />
+                      {p.label}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: ".69rem",
+                        fontWeight: 700,
+                        whiteSpace: "nowrap",
+                        marginLeft: ".5rem",
+                        padding: ".15rem .5rem",
+                        color:
+                          p.dist <= 30
+                            ? "#4ade80"
+                            : p.dist <= 80
+                              ? "#c8a96a"
+                              : "rgba(244,239,229,.32)",
+                        background:
+                          p.dist <= 30
+                            ? "rgba(37,211,102,.1)"
+                            : p.dist <= 80
+                              ? "rgba(200,169,106,.1)"
+                              : "transparent",
+                        border: `1px solid ${p.dist <= 30 ? "rgba(37,211,102,.25)" : p.dist <= 80 ? "rgba(200,169,106,.2)" : "transparent"}`,
+                      }}
+                    >
+                      {p.dist} km
+                    </span>
+                  </div>
+                ))}
+            </div>
+
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
+              Your Host
+            </h3>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "1.2rem",
+                padding: "1.4rem 1.6rem",
+                background: "rgba(31,46,31,.65)",
+                border: "1px solid rgba(200,169,106,.12)",
+                marginBottom: "2.5rem",
+              }}
+            >
+              <div
+                style={{
+                  width: "58px",
+                  height: "58px",
+                  borderRadius: "50%",
+                  border: "2px solid rgba(200,169,106,.3)",
+                  overflow: "hidden",
+                  flexShrink: 0,
+                }}
+              >
+                <img
+                  src={h.host.avatar}
+                  alt={h.host.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+              <div>
+                <div
+                  style={{
+                    fontFamily: cg,
+                    fontSize: "1.28rem",
+                    fontWeight: 300,
+                    color: "#f4efe5",
+                  }}
+                >
+                  {h.host.name}
+                </div>
+                <div
+                  style={{
+                    fontSize: ".68rem",
+                    letterSpacing: ".15em",
+                    textTransform: "uppercase",
+                    color: "#7a9e6e",
+                    marginTop: ".12rem",
+                  }}
+                >
+                  {h.host.since}
+                </div>
+                <div
+                  style={{
+                    fontSize: ".88rem",
+                    lineHeight: 1.8,
+                    color: "rgba(244,239,229,.58)",
+                    marginTop: ".45rem",
+                    fontWeight: 300,
+                  }}
+                >
+                  {h.host.desc}
+                </div>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: ".85rem",
+              }}
+            >
+            </div>
+            {/* Location Map */}
+
+<h3
+  style={{
+    fontFamily: cg,
+    fontSize: "1.5rem",
+    fontWeight: 300,
+    color: "#f4efe5",
+    marginBottom: ".85rem",
+  }}
+>
+  Property Location
+</h3>
+
+<div
+  style={{
+    overflow: "hidden",
+    border: "1px solid rgba(200,169,106,.15)",
+    marginBottom: "2.5rem",
+    height: "420px",
+  }}
+>
+  <iframe
+    title="Property Location"
+    width="100%"
+    height="100%"
+    style={{ border: 0 }}
+    loading="lazy"
+    allowFullScreen
+    src={`https://maps.google.com/maps?q=${h.lat},${h.lng}&z=15&output=embed`}
+  />
+</div>
+          </div>
+
+          {/* Right — sticky booking card */}
+          <div style={{ position: "sticky", top: "80px" }}>
+            <div
+              style={{
+                background: "rgba(31,46,31,.9)",
+                border: "1px solid rgba(200,169,106,.24)",
+                backdropFilter: "blur(20px)",
+                padding: "1.8rem 2rem",
+              }}
+            >
+              <div
+                style={{
+                  textAlign: "center",
+                  paddingBottom: "1.3rem",
+                  marginBottom: "1.3rem",
+                  borderBottom: "1px solid rgba(200,169,106,.12)",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: ".66rem",
+                    letterSpacing: ".26em",
+                    textTransform: "uppercase",
+                    color: "#7a9e6e",
+                    display: "block",
+                    marginBottom: ".2rem",
+                  }}
+                >
+                  Starting from
+                </span>
+                <span
+                  style={{
+                    fontFamily: cg,
+                    fontSize: "3rem",
+                    fontWeight: 300,
+                    color: "#c8a96a",
+                    lineHeight: 1,
+                    display: "block",
+                  }}
+                >
+                  ₹{price.toLocaleString("en-IN")}
+                </span>
+                <span
+                  style={{
+                    fontSize: ".78rem",
+                    color: "#adc49a",
+                    letterSpacing: ".1em",
+                  }}
+                >
+                  per night · direct booking
+                </span>
+              </div>
+              {h.hasWebsite && (
+                <a
+                  href={h.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="kha-btn-web w-full"
+                  style={{ marginBottom: ".55rem", width: "100%" }}
+                >
+                  <Globe size={14} /> Visit Official Website
+                </a>
+              )}
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="kha-btn-wa"
+                style={{ width: "100%" }}
+              >
+                <MessageCircle size={14} /> Book via WhatsApp
+              </a>
+              <div
+                style={{
+                  marginTop: "1.3rem",
+                  paddingTop: "1.1rem",
+                  borderTop: "1px solid rgba(200,169,106,.1)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: ".55rem",
+                }}
+              >
+                {[
+                  ["Room", room.name],
+                  ["Property", h.name],
+                  ["District", h.district],
+                  ["Guests", `Up to ${room.guests}`],
+                  [
+                    "Booking",
+                    h.hasWebsite ? "Website + WhatsApp" : "WhatsApp Only",
+                  ],
+                ].map(([l, v]) => (
+                  <div
+                    key={l}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      gap: ".5rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: ".7rem",
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        color: "rgba(244,239,229,.32)",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {l}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: ".84rem",
+                        color: "rgba(244,239,229,.68)",
+                        textAlign: "right",
+                      }}
+                    >
+                      {v}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".7rem",
+                  marginTop: "1.1rem",
+                  padding: ".85rem 1rem",
+                  background: "rgba(200,169,106,.07)",
+                  border: "1px solid rgba(200,169,106,.15)",
+                }}
+              >
+                <Award size={17} style={{ color: "#c8a96a", flexShrink: 0 }} />
+                <div
+                  style={{
+                    fontSize: ".75rem",
+                    lineHeight: 1.6,
+                    color: "rgba(244,239,229,.48)",
+                  }}
+                >
+                  <strong
+                    style={{
+                      color: "#c8a96a",
+                      display: "block",
+                      fontSize: ".66rem",
+                      letterSpacing: ".15em",
+                      textTransform: "uppercase",
+                      marginBottom: ".1rem",
+                    }}
+                  >
+                    MDHOA Certified
+                  </strong>
+                  Verified member of the Mysore Homestays Association.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main Component ─────────────────────────────────────────────────────── */
+const Home = () => {
+  const curRef = useRef(null),
+    curFRef = useRef(null);
+  const cxRef = useRef(0),
+    cyRef = useRef(0),
+    fxRef = useRef(0),
+    fyRef = useRef(0);
+
+  useEffect(() => {
+    const mv = (e) => {
+      cxRef.current = e.clientX;
+      cyRef.current = e.clientY;
+      if (curRef.current) {
+        curRef.current.style.left = e.clientX + "px";
+        curRef.current.style.top = e.clientY + "px";
+      }
+    };
+    document.addEventListener("mousemove", mv);
+    let raf;
+    const tick = () => {
+      fxRef.current += (cxRef.current - fxRef.current) * 0.11;
+      fyRef.current += (cyRef.current - fyRef.current) * 0.11;
+      if (curFRef.current) {
+        curFRef.current.style.left = fxRef.current + "px";
+        curFRef.current.style.top = fyRef.current + "px";
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => {
+      document.removeEventListener("mousemove", mv);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("in");
+        }),
+      { threshold: 0.1 },
+    );
+    document.querySelectorAll(".kha-reveal").forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  });
+
+  useEffect(() => {
+    const fn = () => {
+      const bg = document.querySelector(".kha-testi-bg");
+      if (!bg) return;
+      const r = bg.parentElement.getBoundingClientRect();
+      bg.style.transform = `translateY(${(-r.top / (r.height + window.innerHeight)) * 70}px)`;
+    };
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  const [hsId, setHsId] = useState(null);
+  const [roomKey, setRoomKey] = useState(null);
+
+  useEffect(() => {
+    const fn = (e) => {
+      if (e.key === "Escape") {
+        if (roomKey) {
+          setRoomKey(null);
+          return;
+        }
+        if (hsId) {
+          setHsId(null);
+          document.body.style.overflow = "";
+        }
+      }
+    };
+    document.addEventListener("keydown", fn);
+    return () => document.removeEventListener("keydown", fn);
+  }, [hsId, roomKey]);
+
+  const openHs = (id) => {
+    setHsId(id);
+    setRoomKey(null);
+    document.body.style.overflow = "hidden";
+    setTimeout(
+      () => document.getElementById("khaDetailPage")?.scrollTo(0, 0),
+      50,
+    );
+  };
+  const closeHs = (e) => {
+    e?.preventDefault();
+    setHsId(null);
+    setRoomKey(null);
+    document.body.style.overflow = "";
+  };
+  const openRoom = (key) => {
+    setRoomKey(key);
+    setTimeout(
+      () => document.getElementById("khaRoomPage")?.scrollTo(0, 0),
+      50,
+    );
+  };
+  const closeRoom = () => setRoomKey(null);
+
+  const currentHs = HS.find((h) => h.id === hsId) || null;
+  const scrollToBrowse = (e) => {
+    e.preventDefault();
+    document.getElementById("browse")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const Divider = () => (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: ".8rem",
+        margin: "1.4rem 0",
+      }}
+    >
+      <div
+        style={{
+          height: "1px",
+          background: "#c8a96a",
+          opacity: 0.35,
+          width: "50px",
+        }}
+      ></div>
+      <div
+        style={{
+          width: "5px",
+          height: "5px",
+          background: "#c8a96a",
+          transform: "rotate(45deg)",
+        }}
+      ></div>
+      <div
+        style={{
+          height: "1px",
+          background: "#c8a96a",
+          opacity: 0.35,
+          width: "50px",
+        }}
+      ></div>
+    </div>
+  );
+
+  return (
+    <>
+      <style>{STYLES}</style>
+      <div className="kha-cur" ref={curRef}></div>
+      <div className="kha-cuf" ref={curFRef}></div>
+      <Navbar />
+      <FloatBookButton />
+
+      {/* ════ HERO ════ */}
+      <section
+        className="kha-hero relative w-full h-screen overflow-hidden"
+        id="hero"
+        style={{ marginTop: "90px" }}
+      >
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src={HERO_VIDEO} type="video/mp4" />
+          </video>
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(135deg,rgba(24,35,24,.72) 0%,rgba(24,35,24,.28) 55%,rgba(24,35,24,.55) 100%)",
+            }}
+          ></div>
+        </div>
+        <div
+          className="kha-hero-card absolute z-10 bottom-[4%] left-[6%] px-[2.8rem] py-[2.4rem]"
+          style={{
+            background: "rgba(24,35,24,.5)",
+            backdropFilter: "blur(28px) saturate(1.5)",
+            border: "1px solid rgba(200,169,106,.28)",
+            maxWidth: "510px",
+          }}
+        >
+          <div className="kha-hero-eyebrow">
+            Mysuru District Homestay Owners Association(R)
+          </div>
+          <h1
+            style={{
+              fontFamily: cg,
+              fontSize: "2.9rem",
+              fontWeight: 300,
+              lineHeight: 1.1,
+              color: "#fdfaf4",
+              marginBottom: ".8rem",
+            }}
+          >
+            Mysuru's{" "}
+            <em style={{ fontStyle: "italic", color: "#e0c88a" }}>Finest</em>
+            <br />
+            Homestays — One Place
+          </h1>
+          <div className="kha-cred-block">
+            <p className="kha-cred-title">
+              "Department of Tourism — Government of Karnataka Approved
+              Homestays"
+            </p>
+            <div className="kha-cred-logos">
+              <img src="/gov-logo.png" alt="Karnataka Tourism" />
+              <img src="/mha.jpg" alt="MDHOA Logo" />
+              <img src="/image.png" alt="Government of Karnataka" />
+              <img src="/mysurubrand.png" alt="Government of Karnataka" />
+            </div>
+          </div>
+          <p
+            style={{
+              fontSize: ".95rem",
+              fontWeight: 300,
+              lineHeight: 1.75,
+              color: "rgba(244,239,229,.82)",
+              marginBottom: "1.3rem",
+            }}
+          >
+            All homestays listed on this platform are registered, verified, and
+            operated by honorable members of the Mysuru District Homestay Owners
+            Association (R). Book directly — no OTA commissions, no hidden
+            charges.
+          </p>
+
+          <a
+            href="#browse"
+            className="kha-hero-book-btn inline-flex items-center gap-[.7rem] mt-4 px-8 py-[.82rem] font-semibold"
+            onClick={scrollToBrowse}
+            style={{
+              background: "#c8a96a",
+              color: "#182318",
+              fontFamily: jost,
+              fontSize: ".76rem",
+              letterSpacing: ".22em",
+              textTransform: "uppercase",
+              textDecoration: "none",
+              border: "1px solid rgba(255,255,255,.1)",
+              cursor: "none",
+            }}
+          >
+            <span>🏡 Click Here to Book a Homestay In Mysuru</span>
+          </a>
+          <a href="#browse" className="kha-hero-cta" onClick={scrollToBrowse}>
+            Browse All Homestays In Mysuru
+          </a>
+        </div>
+        <div className="absolute bottom-[2.2rem] left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-[.5rem]">
+          <div className="kha-scroll-line"></div>
+          <span
+            style={{
+              fontSize: ".65rem",
+              letterSpacing: ".32em",
+              textTransform: "uppercase",
+              color: "rgba(200,169,106,.55)",
+            }}
+          >
+            Scroll to explore
+          </span>
+        </div>
+      </section>
+
+      {/* ════ TRUST STRIP ════ */}
+      <div
+        className="kha-reveal px-16 py-10"
+        style={{
+          background: "#2e4a2e",
+          borderTop: "1px solid rgba(200,169,106,.15)",
+          borderBottom: "1px solid rgba(200,169,106,.15)",
+        }}
+      >
+        <div className="kha-ts-inner max-w-[1100px] mx-auto flex items-stretch justify-center gap-6 flex-wrap">
+          {[
+            {
+              icon: "/image.png",
+              title: "Government Approved",
+              desc: "All homestays are officially approved by the Department of Tourism, Government of Karnataka.",
+            },
+            {
+              icon: "/mha.jpg",
+              title: "Mysuru District Homestay Owners Association(R)",
+              desc: "Every homestay is an official verified member offering Government-approved stays with direct booking.",
+            },
+            {
+              icon: "/verify.jpg",
+              title: "Verified & Certified Stays",
+              desc: "All homestays are personally inspected by association office bearers before going live on this platform.",
+            },
+          ].map((ts) => (
+            <div key={ts.title} className="kha-trust-card">
+              <div className="kha-trust-icon">
+                <img src={ts.icon} alt={ts.title} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <span
+                  style={{
+                    fontSize: ".72rem",
+                    letterSpacing: ".18em",
+                    textTransform: "uppercase",
+                    color: "#c8a96a",
+                    display: "block",
+                    marginBottom: ".35rem",
+                  }}
+                >
+                  {ts.title}
+                </span>
+                <span
+                  style={{
+                    fontSize: ".82rem",
+                    color: "rgba(244,239,229,.65)",
+                    lineHeight: 1.65,
+                  }}
+                >
+                  {ts.desc}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ════ CREDENTIALS ════ */}
+      <div
+        className="kha-reveal bg-[#1f2e1f] kha-cred-outer"
+        style={{
+          borderTop: "1px solid rgba(200,169,106,.15)",
+          borderBottom: "1px solid rgba(200,169,106,.15)",
+        }}
+      >
+        <div className="max-w-[1200px] mx-auto" style={{ padding: "0 2rem" }}>
+          <div
+            className="kha-cred-inner"
+            style={{
+              position: "relative",
+              overflow: "hidden",
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gap: "2.5rem",
+              alignItems: "center",
+              padding: "2.2rem 2.8rem",
+              background: "rgba(200,169,106,.06)",
+              border: "1px solid rgba(200,169,106,.32)",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                height: "2px",
+                background:
+                  "linear-gradient(90deg,transparent,#c8a96a,transparent)",
+              }}
+            ></div>
+            <div
+              className="kha-cred-logo"
+              style={{
+                width: "88px",
+                height: "88px",
+                borderRadius: "50%",
+                border: "2px solid rgba(200,169,106,.5)",
+                background: "rgba(200,169,106,.08)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src="/image.png"
+                alt="Govt"
+                style={{
+                  height: "88px",
+                  width: "auto",
+                  objectFit: "contain",
+                  marginTop: "29px",
+                }}
+              />
+              <span
+                style={{
+                  fontSize: ".52rem",
+                  letterSpacing: ".16em",
+                  textTransform: "uppercase",
+                  color: "#c8a96a",
+                  textAlign: "center",
+                }}
+              >
+                Govt. of
+                <br />
+                Karnataka
+              </span>
+            </div>
+            <div>
+              <span
+                style={{
+                  display: "inline-block",
+                  marginBottom: ".65rem",
+                  padding: ".22rem .9rem",
+                  fontSize: ".66rem",
+                  letterSpacing: ".28em",
+                  textTransform: "uppercase",
+                  color: "#c8a96a",
+                  background: "rgba(200,169,106,.1)",
+                  border: "1px solid rgba(200,169,106,.25)",
+                }}
+              >
+                Primary Recognition
+              </span>
+              <div
+                className="kha-cred-text"
+                style={{
+                  fontFamily: cg,
+                  fontWeight: 300,
+                  color: "#fdfaf4",
+                  lineHeight: 1.4,
+                }}
+              >
+                The homestays listed on this platform are operated by members of
+                the Mysuru District Homestay Owners Association(R) and are
+                registered under the Department of Tourism, Government of
+                Karnataka.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ════ EXPLORE ════ */}
+      <section
+        className="kha-browse-section px-16 py-[6rem] bg-[#182318]"
+        id="browse"
+      >
+        <div className="kha-reveal max-w-[1300px] mx-auto mb-10">
+          <span className="kha-eyebrow">Explore</span>
+          <h2
+            style={{
+              fontFamily: cg,
+              fontSize: "clamp(2.2rem,3.8vw,3.4rem)",
+              fontWeight: 300,
+              lineHeight: 1.15,
+              color: "#f4efe5",
+            }}
+          >
+            All Mysore{" "}
+            <em style={{ fontStyle: "italic", color: "#e0c88a" }}>Homestays</em>
+          </h2>
+          <p
+            style={{
+              fontSize: ".9rem",
+              color: "rgba(244,239,229,.45)",
+              fontWeight: 300,
+              marginTop: ".4rem",
+            }}
+          >
+            Click any homestay to browse available room types and book directly
+            with the host.
+          </p>
+        </div>
+        <div className="kha-cards-grid max-w-[1300px] mx-auto grid gap-6">
+          {HS.map((h) => (
+            <HsCard key={h.id} h={h} onOpen={openHs} />
+          ))}
+        </div>
+      </section>
+
+      {/* ════ CTA ════ */}
+      <div
+        className="kha-reveal text-center py-[2.8rem] px-16"
+        style={{
+          background:
+            "linear-gradient(135deg,rgba(200,169,106,.12) 0%,rgba(46,74,46,.4) 100%)",
+          borderTop: "1px solid rgba(200,169,106,.18)",
+          borderBottom: "1px solid rgba(200,169,106,.18)",
+        }}
+      >
+        <div className="max-w-[700px] mx-auto">
+          <h3
+            style={{
+              fontFamily: cg,
+              fontSize: "1.9rem",
+              fontWeight: 300,
+              color: "#f4efe5",
+              marginBottom: ".4rem",
+            }}
+          >
+            Ready to Experience{" "}
+            <em style={{ fontStyle: "italic", color: "#e0c88a" }}>
+              Real Mysore?
+            </em>
+          </h3>
+          <p
+            style={{
+              fontSize: ".9rem",
+              color: "rgba(244,239,229,.65)",
+              marginBottom: "1.3rem",
+              fontWeight: 300,
+              lineHeight: 1.7,
+            }}
+          >
+            148 verified, government-approved homestays. Book directly with host
+            families — no OTA commissions.
+          </p>
+
+         
+        </div>
+      </div>
+
+      {/* ════ ABOUT ════ */}
+      <section className="px-16 py-[6rem] bg-[#1f2e1f]" id="about">
+        <div
+          className="kha-about-grid max-w-[1200px] mx-auto grid gap-20 items-center"
+          style={{ gridTemplateColumns: "1fr 1fr" }}
+        >
+          <div className="kha-reveal grid grid-cols-2 gap-[1.1rem]">
+            {[
+              {
+                src: "/mysuru.jpg",
+                label: "Mysuru",
+                cls: "kha-arch-1",
+              },
+              {
+                src: "/bandipura.jpg",
+                label: "Bandipura",
+                cls: "kha-arch-2",
+              },
+            ].map(({ src, label, cls }) => (
+              <div
+                key={label}
+                className={`kha-arch-wrap ${cls} overflow-hidden relative`}
+                style={{ aspectRatio: "3/4" }}
+              >
+                <img
+                  src={src}
+                  alt={label}
+                  className="w-full h-full object-cover"
+                />
+                <span
+                  className="absolute bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap px-[.9rem] py-[.38rem]"
+                  style={{
+                    fontSize: ".65rem",
+                    letterSpacing: ".25em",
+                    textTransform: "uppercase",
+                    color: "#e0c88a",
+                    background: "rgba(24,35,24,.65)",
+                    backdropFilter: "blur(8px)",
+                  }}
+                >
+                  {label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div>
+            <span className="kha-eyebrow kha-reveal">Who We Are</span>
+            <h2
+              className="kha-reveal kha-d1"
+              style={{
+                fontFamily: cg,
+                fontSize: "clamp(2.2rem,3.8vw,3.4rem)",
+                fontWeight: 300,
+                lineHeight: 1.15,
+                color: "#f4efe5",
+              }}
+            >
+              The Official Voice of
+              <br />
+              Mysore's{" "}
+              <em style={{ fontStyle: "italic", color: "#e0c88a" }}>
+                Homestay
+              </em>{" "}
+              Hosts
+            </h2>
+            <div className="kha-reveal kha-d2">
+              <Divider />
+            </div>
+            <p
+              className="kha-reveal kha-d2"
+              style={{
+                fontSize: ".97rem",
+                lineHeight: 1.9,
+                fontWeight: 300,
+                color: "rgba(244,239,229,.78)",
+                marginBottom: "1.4rem",
+              }}
+            >
+              The Mysore District Homestay Owners Association (MDHOA) is the
+              registered body representing authentic homestay operators across
+              all taluks of Mysore — from the royal heritage of Mysuru to its
+              rich culture and timeless beauty.
+            </p>
+            <p
+              className="kha-reveal kha-d3"
+              style={{
+                fontSize: ".97rem",
+                lineHeight: 1.9,
+                fontWeight: 300,
+                color: "rgba(244,239,229,.78)",
+                marginBottom: "1.4rem",
+              }}
+            >
+              Whether a homestay has a polished website or simply a WhatsApp
+              number, every member is verified, reviewed and listed here.
+            </p>
+            <div
+              className="kha-reveal kha-d3 grid grid-cols-2 gap-[1.1rem] mt-8 pt-8"
+              style={{ borderTop: "1px solid rgba(200,169,106,.18)" }}
+            >
+              {[
+                {
+                  icon: <CheckCircle2 size={20} />,
+                  name: "Verified Members",
+                  desc: "Every listing personally verified by KHA",
+                },
+                {
+                  icon: <Leaf size={20} />,
+                  name: "Eco Committed",
+                  desc: "Sustainable & responsible tourism first",
+                },
+                {
+                  icon: <Smartphone size={20} />,
+                  name: "WhatsApp Booking",
+                  desc: "Book any stay — even without a website",
+                },
+                {
+                  icon: <Award size={20} />,
+                  name: "State Recognised",
+                  desc: "Mysore Tourism affiliated body",
+                },
+              ].map((f) => (
+                <div key={f.name} className="flex items-start gap-[.9rem]">
+                  <span
+                    style={{
+                      fontSize: "1.3rem",
+                      flexShrink: 0,
+                      marginTop: ".1rem",
+                      color: "#7a9e6e",
+                    }}
+                  >
+                    {f.icon}
+                  </span>
+                  <div>
+                    <span
+                      style={{
+                        fontSize: ".78rem",
+                        letterSpacing: ".12em",
+                        textTransform: "uppercase",
+                        color: "#7a9e6e",
+                        display: "block",
+                        marginBottom: ".2rem",
+                      }}
+                    >
+                      {f.name}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: ".88rem",
+                        color: "rgba(244,239,229,.6)",
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {f.desc}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════ PARALLAX QUOTE ════ */}
+      <div
+        className="relative flex items-center overflow-hidden"
+        style={{ minHeight: "82vh" }}
+      >
+        <div
+          className="kha-testi-bg absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1600&q=80')",
+            filter: "brightness(.3) saturate(.75)",
+          }}
+        ></div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom,rgba(24,35,24,.6),rgba(24,35,24,.22),rgba(24,35,24,.65))",
+          }}
+        ></div>
+        <div className="relative z-[2] w-full text-center px-16 py-20">
+          <span
+            style={{
+              fontFamily: cg,
+              fontSize: "10rem",
+              lineHeight: 0.4,
+              color: "#c8a96a",
+              opacity: 0.28,
+              display: "block",
+              marginBottom: "1.3rem",
+            }}
+          >
+            "
+          </span>
+          <p
+            className="kha-reveal"
+            style={{
+              fontFamily: cg,
+              fontSize: "clamp(1.6rem,3.2vw,2.5rem)",
+              fontWeight: 300,
+              fontStyle: "italic",
+              color: "#fdfaf4",
+              maxWidth: "820px",
+              margin: "0 auto 2rem",
+              lineHeight: 1.55,
+            }}
+          >
+            Through Mysuru Homestay Association, travelers discover authentic
+            stays hosted by local families — from wildlife escapes in Kabini to
+            peaceful countryside homes in Hunsur and Nanjangud.
+          </p>
+          <div className="kha-reveal kha-d1 flex items-center justify-center gap-5 mb-8">
+            <div
+              style={{
+                width: "38px",
+                height: "1px",
+                background: "#c8a96a",
+                opacity: 0.6,
+              }}
+            ></div>
+            <div>
+              <div
+                style={{
+                  fontSize: ".82rem",
+                  letterSpacing: ".25em",
+                  textTransform: "uppercase",
+                  color: "#c8a96a",
+                }}
+              >
+                Mysuru District HomeStays Association
+              </div>
+              <div
+                style={{
+                  fontSize: ".74rem",
+                  letterSpacing: ".12em",
+                  color: "#adc49a",
+                }}
+              >
+                Mysore, Karnataka
+              </div>
+            </div>
+            <div
+              style={{
+                width: "38px",
+                height: "1px",
+                background: "#c8a96a",
+                opacity: 0.6,
+              }}
+            ></div>
+          </div>
+
+          <a
+            href="/explore"
+            className="kha-cta-anim-btn kha-reveal kha-d2 inline-flex items-center gap-[.8rem] px-[2.6rem] py-[.9rem] font-semibold"
+            style={{
+              background: "#c8a96a",
+              color: "#182318",
+              fontFamily: jost,
+              fontSize: ".78rem",
+              letterSpacing: ".22em",
+              textTransform: "uppercase",
+              textDecoration: "none",
+              marginTop: "2rem",
+            }}
+          >
+            <span>🏡 Click Here to Book Your Homestay</span>
+          </a>
+        </div>
+      </div>
+
+      {/* ════ MARQUEE ════ */}
+      <div className="bg-[#182318] py-14 overflow-hidden">
+        <div className="kha-marquee">
+          {[...MARQUEE_IMGS, ...MARQUEE_IMGS].map((src, i) => (
+            <div
+              key={i}
+              className="kha-m-img flex-shrink-0 overflow-hidden"
+              style={{ width: "270px", height: "175px" }}
+            >
+              <img src={src} alt="" className="w-full h-full object-cover" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Footer />
+
+      {/* ════ DETAIL SLIDE — Room list ════ */}
+      <div id="khaDetailPage" className={hsId ? "open" : ""}>
+        {currentHs && (
+          <>
+            {/* Nav bar */}
+            <div
+              className="dp-topbar"
+              style={{
+                position: "sticky",
+                top: 0,
+                zIndex: 100,
+                background: "rgba(24,35,24,.96)",
+                backdropFilter: "blur(20px)",
+                borderBottom: "1px solid rgba(200,169,106,.15)",
+                padding: ".85rem 3rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "1.2rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <a href="#" className="kha-back-btn" onClick={closeHs}>
+                <ArrowLeft size={13} /> Back to Explore
+              </a>
+              <div
+                style={{
+                  width: "1px",
+                  height: "16px",
+                  background: "rgba(200,169,106,.2)",
+                  flexShrink: 0,
+                }}
+              ></div>
+              <div
+                style={{
+                  fontFamily: cg,
+                  fontSize: "1.12rem",
+                  fontWeight: 300,
+                  color: "#c8a96a",
+                }}
+              >
+                {currentHs.name}
+              </div>
+              <div
+                style={{
+                  marginLeft: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".5rem",
+                }}
+              >
+                <Stars rating={currentHs.rating} sz={13} />
+                <span
+                  style={{
+                    fontSize: ".84rem",
+                    color: "#c8a96a",
+                    fontWeight: 500,
+                  }}
+                >
+                  {currentHs.rating}
+                </span>
+                <span
+                  style={{ fontSize: ".74rem", color: "rgba(244,239,229,.35)" }}
+                >
+                  ({currentHs.reviews} reviews)
+                </span>
+              </div>
+            </div>
+
+            {/* Hero strip */}
+            <div
+              style={{
+                position: "relative",
+                height: "300px",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src={currentHs.img}
+                alt={currentHs.name}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to bottom,rgba(24,35,24,.05) 0%,rgba(24,35,24,.85) 100%)",
+                }}
+              ></div>
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "2rem",
+                  left: "3rem",
+                  right: "3rem",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: ".55rem",
+                    marginBottom: ".65rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Badge
+                    bg="rgba(24,35,24,.72)"
+                    border="rgba(200,169,106,.38)"
+                    color="#c8a96a"
+                  >
+                    {currentHs.type}
+                  </Badge>
+                  {currentHs.hasWebsite ? (
+                    <Badge
+                      bg="rgba(46,74,46,.82)"
+                      border="rgba(122,158,110,.42)"
+                      color="#adc49a"
+                    >
+                      Has Website
+                    </Badge>
+                  ) : (
+                    <Badge
+                      bg="rgba(37,211,102,.15)"
+                      border="rgba(37,211,102,.4)"
+                      color="#4ade80"
+                    >
+                      WhatsApp Booking
+                    </Badge>
+                  )}
+                </div>
+                <div
+                  style={{
+                    fontFamily: cg,
+                    fontSize: "clamp(1.8rem,4vw,2.9rem)",
+                    fontWeight: 300,
+                    color: "#fdfaf4",
+                    lineHeight: 1.1,
+                    marginBottom: ".4rem",
+                  }}
+                >
+                  {currentHs.name}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".55rem",
+                    fontSize: ".82rem",
+                    letterSpacing: ".14em",
+                    textTransform: "uppercase",
+                    color: "#adc49a",
+                  }}
+                >
+                  <MapPin size={12} />
+                  {currentHs.taluk} · {currentHs.district} District, Mysore
+                </div>
+              </div>
+            </div>
+
+            {/* ════ ROOM LIST BODY — two column layout ════ */}
+            <div
+              className="dp-inner"
+              style={{
+                maxWidth: "1350px",
+                margin: "0 auto",
+                padding: "3rem 3rem 6rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "420px 1fr",
+                  gap: "2.5rem",
+                  alignItems: "start",
+                }}
+                className="kha-detail-two-col"
+              >
+                {/* ── LEFT: About + Host ── */}
+                <div style={{ position: "sticky", top: "80px" }}>
+                  {/* About block */}
+                  <div
+                    style={{
+                      padding: "1.6rem 1.8rem",
+                      background: "rgba(31,46,31,.5)",
+                      border: "1px solid rgba(200,169,106,.12)",
+                      marginBottom: "1.4rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: ".45rem",
+                        fontSize: ".66rem",
+                        letterSpacing: ".28em",
+                        textTransform: "uppercase",
+                        color: "#c8a96a",
+                        marginBottom: ".7rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "16px",
+                          height: "1px",
+                          background: "#c8a96a",
+                          display: "inline-block",
+                        }}
+                      ></span>
+                      About
+                    </span>
+                    <h3
+                      style={{
+                        fontFamily: cg,
+                        fontSize: "1.35rem",
+                        fontWeight: 300,
+                        color: "#f4efe5",
+                        marginBottom: ".3rem",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {currentHs.name}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: ".78rem",
+                        letterSpacing: ".08em",
+                        color: "#7a9e6e",
+                        marginBottom: ".75rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".35rem",
+                      }}
+                    >
+                      <MapPin size={11} style={{ color: "#c8a96a", flexShrink: 0 }} />
+                      <span>Vijayanagar 4th Stage, near NPS School
+                        • 2 km from Ring Road
+                        • 15 minutes from Mysore Palace</span>
+                    </p>
+                    (Government of Karnataka,Dept of Tourism Approved Homestay)
+                    <p
+                      style={{
+                        fontSize: ".87rem",
+                        lineHeight: 1.85,
+                        color: "rgba(244,239,229,.62)",
+                        fontWeight: 300,
+                        margin: "0 0 1.1rem",
+                      }}
+                    >
+                      {currentHs.desc}
+                    </p>
+                  </div>
+
+                  {/* Host profile block */}
+                  <div
+                    style={{
+                      padding: "1.6rem 1.8rem",
+                      background: "rgba(31,46,31,.65)",
+                      border: "1px solid rgba(200,169,106,.12)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: ".45rem",
+                        fontSize: ".66rem",
+                        letterSpacing: ".28em",
+                        textTransform: "uppercase",
+                        color: "#c8a96a",
+                        marginBottom: ".9rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "16px",
+                          height: "1px",
+                          background: "#c8a96a",
+                          display: "inline-block",
+                        }}
+                      ></span>
+                      Your Host
+                    </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                        marginBottom: ".9rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "58px",
+                          height: "58px",
+                          borderRadius: "50%",
+                          border: "2px solid rgba(200,169,106,.3)",
+                          overflow: "hidden",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <img
+                          src={currentHs.host.avatar}
+                          alt={currentHs.host.name}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <div
+                          style={{
+                            fontFamily: cg,
+                            fontSize: "1.18rem",
+                            fontWeight: 300,
+                            color: "#f4efe5",
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {currentHs.host.name}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: ".66rem",
+                            letterSpacing: ".15em",
+                            textTransform: "uppercase",
+                            color: "#7a9e6e",
+                            marginTop: ".12rem",
+                          }}
+                        >
+                          {currentHs.host.since}
+                        </div>
+                      </div>
+                    </div>
+                    <p
+                      style={{
+                        fontSize: ".86rem",
+                        lineHeight: 1.8,
+                        color: "rgba(244,239,229,.58)",
+                        fontWeight: 300,
+                        margin: "0 0 1.1rem",
+                      }}
+                    >
+                      {currentHs.host.desc}
+                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".6rem",
+                        padding: ".7rem 1rem",
+                        background: "rgba(200,169,106,.07)",
+                        border: "1px solid rgba(200,169,106,.14)",
+                      }}
+                    >
+                      <Stars rating={currentHs.rating} sz={14} />
+                      <span
+                        style={{
+                          fontSize: ".9rem",
+                          color: "#c8a96a",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {currentHs.rating}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── RIGHT: Room heading + cards ── */}
+                <div>
+                  <div style={{ marginBottom: "1.6rem" }}>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: ".55rem",
+                        fontSize: ".7rem",
+                        letterSpacing: ".3em",
+                        textTransform: "uppercase",
+                        color: "#c8a96a",
+                        marginBottom: ".55rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "20px",
+                          height: "1px",
+                          background: "#c8a96a",
+                          display: "inline-block",
+                        }}
+                      ></span>
+                      Choose Your Room
+                    </span>
+                    <h2
+                      style={{
+                        fontFamily: cg,
+                        fontSize: "clamp(1.7rem,3vw,2.5rem)",
+                        fontWeight: 300,
+                        color: "#f4efe5",
+                        lineHeight: 1.15,
+                      }}
+                    >
+                      3 Unique Stays Available
+                    </h2>
+                    <p
+                      style={{
+                        fontSize: ".86rem",
+                        color: "rgba(244,239,229,.42)",
+                        marginTop: ".35rem",
+                        fontWeight: 300,
+                      }}
+                    >
+                      All rooms include home-cooked meals and direct WhatsApp
+                      booking with the host family. Click any room to see full
+                      details.
+                    </p>
+                  </div>
+
+                  <div
+                    style={{
+                      height: "1px",
+                      background:
+                        "linear-gradient(to right,rgba(200,169,106,.28),transparent)",
+                      marginBottom: "1.8rem",
+                    }}
+                  ></div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1.2rem",
+                    }}
+                  >
+                    {ROOM_TYPES.map((room, i) => (
+                      <RoomListCard
+                        key={room.key}
+                        room={room}
+                        h={currentHs}
+                        onOpen={openRoom}
+                        index={i}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* ════ ROOM FULL DETAIL ════ */}
+      <RoomDetail h={currentHs} roomKey={roomKey} onBack={closeRoom} />
+    </>
+  );
+};
+
+export default Home;
