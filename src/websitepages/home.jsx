@@ -30,6 +30,7 @@ import {
 import FloatBookButton from "../components/FloatBookButton";
 import Footer from "../components/Footer";
 import Navbar from "./navbar";
+import Homerules from "./Homerules";
 
 const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
@@ -245,13 +246,12 @@ const AICONS = {
   "Meals Included": <UtensilsCrossed size={17} />,
   "Swimming Pool": <Waves size={17} />,
   "Nature Trails": <Mountain size={17} />,
-  Bonfire: <Flame size={17} />,
+  "Bonfire": <Flame size={17} />,
   "Mountain View": <Mountain size={17} />,
   "River Access": <Waves size={17} />,
   "Coffee Estate": <Coffee size={17} />,
   "Wildlife Zone": <Bird size={17} />,
   "Stargazing Deck": <Moon size={17} />,
-  "Private Garden": <Leaf size={17} />,
   "Heritage Architecture": <Building2 size={17} />,
   "Yoga Space": <Heart size={17} />,
   "Air Conditioning": <Wind size={17} />,
@@ -261,98 +261,262 @@ const AICONS = {
 };
 
 /* ── 3 Room types — each with its own 6 images ── */
-const ROOM_TYPES = [
-  {
-    key: "deluxe",
-    name: "ನೆಲಮಳಿಗೆ (Nela Maalige) – Ground Floor 2BHK",
-    tag: "Most Popular",
-    tagBg: "rgba(200,169,106,.16)",
-    tagBorder: "rgba(200,169,106,.4)",
-    tagColor: "#c8a96a",
-    accentColor: "#c8a96a",
-    multiplier: 1,
-    guests: 2,
-    beds: 2,
-    sqft: 280,
-    desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK designed for families seeking comfort, privacy, and easy access. The space is spacious, well-ventilated, and ideal for peaceful living. •	Entire private 2BHK space •	Calm and quiet residential surroundings •	Excellent ventilation and natural light •	Suitable for short & long stays •	Family-friendly environment",
-    amenities: [
-      "Fully equipped Italian-style kitchen ",
-      "2 bedrooms with one attached Toilet & Common bathroom",
-      "Solar + gas geyser",
-      "Smart TV &WiFi",
-      "Covered parking",
-      "Swiggy / Zomato / Ola / Uber accessible",
-      "Floor plan Available on Request",
-    ],
-    imgs: [
-      "/images/nela1.jpg",
-      "/images/nela2.jpg",
-      "/images/nela3.jpg",
-      "/images/nela4.jpg",
-      "/images/nela5.jpg",
-      "/images/nela6.jpg",
-    ],
-  },
-  {
-    key: "family",
-    name: "ಮಹಡಿಮನೆ (Mahadimane) – First Floor 2BHK",
-    tag: "Best for Families",
-    tagBg: "rgba(122,158,110,.15)",
-    tagBorder: "rgba(122,158,110,.4)",
-    tagColor: "#adc49a",
-    accentColor: "#7a9e6e",
-    multiplier: 1.55,
-    guests: 4,
-    beds: 2,
-    sqft: 420,
-    desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay offering a bright, airy, and peaceful living space. Perfect for families who prefer elevated views with privacy and comfort •	Entire private 2BHK unit (Spacious) •	Well-ventilated and naturally lit •	Quiet and peaceful environment •	Ideal for families and longer stays •	Safe residential locality.",
-    amenities: [
-      "Fully equipped kitchen ",
-      "2 bedrooms with attached bathrooms",
-      "Solar / geyser hot water",
-      "Smart TV &WiFi",
-      "Covered parking",
-      "Online delivery & cab services available",
-    ],
-    imgs: [
-      "/images/mad1.png",
-      "/images/mad2.png",
-      "/images/mad3.png",
-      "/images/mad4.png",
-      "/images/mad6.png",
-      "/images/mad5.png",
-    ],
-  },
-  {
-    key: "suite",
-    name: "ತಾರಸಿಮನೆ (Thaarasimane) – Studio (Top Floor)",
-    tag: "Premium",
-    tagBg: "rgba(200,169,106,.28)",
-    tagBorder: "#c8a96a",
-    tagColor: "#fdfaf4",
-    accentColor: "#e0c88a",
-    multiplier: 2.1,
-    guests: 2,
-    beds: 1,
-    sqft: 520,
-    desc: "ತಾರಸಿಮನೆ is a compact studio apartement on the top floor, ideal for small families looking for a simple, peaceful, and minimal stay experience •	Entire private studio space •	Calm, green, and quiet surroundings •	Excellent ventilation and natural light •	Ideal for short/long stays •	Peaceful residential atmosphere.",
-    amenities: [
-      "Compact kitchen with induction stove",
-      "Indian toilet / Bathroom with solar / geyser hot water",
-      "Smart TV &WiFi",
-      "Covered parking",
-      "Swiggy / Zomato / Ola / Uber serviceable",
-    ],
-    imgs: [
-      "/images/thar1.png",
-      "/images/thar2.png",
-      "/images/thar3.png",
-      "/images/thar4.png",
-      "/images/thar5.png",
-      "/images/thar6.png",
-    ],
-  },
-];
+const ROOM_TYPES = {
+  // Kukkeshree — id: 1
+  1: [
+    {
+      key: "deluxe",
+      name: "ನೆಲಮಳಿಗೆ (Nela Maalige) – Ground Floor 2BHK",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 2,
+      beds: 2,
+      sqft: 280,
+      desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK...",
+      amenities: [
+        "Fully equipped Italian-style kitchen",
+        "2 bedrooms with one attached Toilet & Common bathroom",
+        "Solar + gas geyser",
+        "Smart TV & WiFi",
+        "Covered parking",
+        "Swiggy / Zomato / Ola / Uber accessible",
+        "Floor plan Available on Request",
+      ],
+      imgs: [
+        "/images/nela1.jpg",
+        "/images/nela2.jpg",
+        "/images/nela3.jpg",
+        "/images/nela4.jpg",
+        "/images/nela5.jpg",
+        "/images/nela6.jpg",
+      ],
+    },
+    {
+      key: "family",
+      name: "ಮಹಡಿಮನೆ (Mahadimane) – First Floor 2BHK",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1.55,
+      guests: 4,
+      beds: 2,
+      sqft: 420,
+      desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay...",
+      amenities: [
+        "Fully equipped kitchen",
+        "2 bedrooms with attached bathrooms",
+        "Solar / geyser hot water",
+        "Smart TV & WiFi",
+        "Covered parking",
+        "Online delivery & cab services available",
+      ],
+      imgs: [
+        "/images/mad1.png",
+        "/images/mad2.png",
+        "/images/mad3.png",
+        "/images/mad4.png",
+        "/images/mad6.png",
+        "/images/mad5.png",
+      ],
+    },
+    {
+      key: "suite",
+      name: "ತಾರಸಿಮನೆ (Thaarasimane) – Studio (Top Floor)",
+      tag: "Premium",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: 2.1,
+      guests: 2,
+      beds: 1,
+      sqft: 520,
+      desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor...",
+      amenities: [
+        "Compact kitchen with induction stove",
+        "Indian toilet / Bathroom with solar / geyser hot water",
+        "Smart TV & WiFi",
+        "Covered parking",
+        "Swiggy / Zomato / Ola / Uber serviceable",
+      ],
+      imgs: [
+        "/images/thar1.png",
+        "/images/thar2.png",
+        "/images/thar3.png",
+        "/images/thar4.png",
+        "/images/thar5.png",
+        "/images/thar6.png",
+      ],
+    },
+  ],
+
+  // Sky House — id: 2
+  2: [
+    {
+      key: "1bhk_garden",
+      name: "1 BHK Family Room – Garden View",
+      tag: "Best Value",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 5,
+      beds: 1,
+      sqft: 320,
+      desc: "A spacious ground floor 1BHK with a beautiful garden view, ideal for families, couples, and small groups visiting Mysore. Non-air-conditioned with excellent natural ventilation. Fully equipped for a comfortable self-catering stay with modern conveniences throughout.",
+      amenities: [
+        "Ground Floor Accommodation",
+        "Free WiFi",
+        "Smart TV",
+        "Private Bathroom",
+        "Free Parking",
+        "Washing Machine",
+        "24hr Hot Water",
+        "Electric Kettle",
+        "Fully Equipped Kitchen",
+        "Garden View",
+        "Accommodates up to 5 Guests",
+      ],
+      imgs: [
+        "/images/skyhouse-1bhk-2.jpg",
+        "/images/skyhouse-1bhk-3.jpg",
+        "/images/skyhouse-1bhk-4.jpg",
+        "/images/skyhouse-1bhk-5.jpg",
+        "/images/skyhouse-1bhk-6.jpg",
+        "/images/skyhouse-1bhk-7.jpg",
+      ],
+    },
+    {
+      key: "2bhk_ac",
+      name: "2 BHK Deluxe AC Apartment",
+      tag: "Most Popular",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1.6,
+      guests: 4,
+      beds: 2,
+      sqft: 480,
+      desc: "A premium second floor 2BHK apartment with air conditioning in both bedrooms and a private sit-out balcony. Perfect for families, corporate travelers, and groups wanting extra privacy and comfort. Two bathrooms and a fully equipped kitchen included.",
+      amenities: [
+        "Air Conditioning",
+        "Private Balcony",
+        "Free WiFi",
+        "Smart TV",
+        "Private Bathroom",
+        "Free Parking",
+        "24hr Hot Water",
+        "Electric Kettle",
+        "Fully Equipped Kitchen",
+        "Private Sit‑Out Balcony",
+        "Second Floor Apartment",
+      ],
+      imgs: [
+        "/images/skyhouse-2bhk-1.jpg",
+        "/images/skyhouse-2bhk-2.jpg",
+        "/images/skyhouse-2bhk-3.jpg",
+        "/images/skyhouse-2bhk-4.jpg",
+        "/images/skyhouse-2bhk-5.jpg",
+      ],
+    },
+  ],
+
+  // Kracadawna — id: 3
+  3: [
+    {
+      key: "dragonfly",
+      name: "The Dragonfly Room",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 1,
+      sqft: 340,
+      desc: "A cozy room with a loft, queen-size bed, single bed, and attached bathroom with a small curated library. Easily houses 4 adults. Stay includes organic farm-to-table meals (3 a day), bed tea/coffee, guided farm walk, and a boat ride on the Nugu river. Minimum 2-night stay.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Private Bathroom",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Stargazing Deck",
+      ],
+      imgs: [
+        "/images/krac-dragonfly-1.jpg",
+        "/images/krac-dragonfly-2.jpg",
+        "/images/krac-dragonfly-3.jpg",
+        "/images/krac-dragonfly-4.jpg",
+      ],
+    },
+    {
+      key: "firefly",
+      name: "The Firefly Room",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1,
+      guests: 4,
+      beds: 1,
+      sqft: 340,
+      desc: "A warm, character-filled room with a loft, queen-size bed, single bed, attached bathroom, and an in-room library. Identical in comfort to the Dragonfly but with its own unique personality. All stays include organic meals, farm walk, and Nugu river boat ride. Minimum 2-night stay.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Private Bathroom",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Stargazing Deck",
+      ],
+      imgs: [
+        "/images/krac-firefly-1.jpg",
+        "/images/krac-firefly-2.jpg",
+        "/images/krac-firefly-3.jpg",
+        "/images/krac-firefly-4.jpg",
+      ],
+    },
+    {
+      key: "day_visit",
+      name: "Day Visit Experience",
+      tag: "No Overnight",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: 0.36,
+      guests: 6,
+      beds: 0,
+      sqft: 0,
+      desc: "Join Kracadawna for a full farm day (10:30am – 3pm). Includes welcome refreshments, guided farm tour, organic lunch with freshly harvested vegetables, herbal tea, and seasonal activities like fruit picking, composting, jaggery making (winter), and harvest. Minimum 6 members required.",
+      amenities: [
+        "Meals Included",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Yoga Space",
+      ],
+      imgs: [
+        "/images/krac-dayvisit-2.jpg",
+        "/images/krac-dayvisit-1.jpg",
+        "/images/krac-dayvisit-3.jpg",
+        "/images/krac-dayvisit-4.jpg",
+        "/images/krac-dayvisit-5.jpg",
+        "/images/krac-dayvisit-6.jpg",
+      ],
+    },
+  ],
+};
 
 /* ── Homestay data ── */
 const HS = [
@@ -380,7 +544,8 @@ const HS = [
       "/images/nela6.jpg",
     ],
     type: "Family Homestay",
-    location: "Vijayanagar 4th Stage, near NPS School , Mysuru • 2 km from Ring Road • 15 minutes from Mysore Palace",
+    location:
+      "Vijayanagar 4th Stage, near NPS School , Mysuru • 2 km from Ring Road • 15 minutes from Mysore Palace",
     desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
     host: {
       name: "Mr. Nagendra N",
@@ -403,17 +568,123 @@ const HS = [
       },
     ],
   },
+
+  // HS[1] — Sky House Homestay
+  {
+    id: 2,
+    lat: 12.3156, // Mysuru city — update with exact coords
+    lng: 76.6553,
+    name: "Sky House Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 2800,
+    rating: 4.8,
+    reviews: 32,
+    amenities: ["Free WiFi", "Air Conditioning"],
+    hasWebsite: false,
+    phone: "9480100003", // update with actual number
+    img: "/images/skyhouse-1bhk-1.jpg",
+    imgs: [
+      "/images/skyhouse1.jpg",
+      "/images/skyhouse2.jpg",
+      "/images/skyhouse3.jpg",
+      "/images/skyhouse4.jpg",
+      "/images/skyhouse5.jpg",
+      "/images/skyhouse6.jpg",
+    ],
+    type: "Family Homestay",
+    location:
+      "Mysuru City • Close to Mysore Palace, Chamundi Hills & Brindavan Gardens",
+    desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms.",
+    host: {
+      name: "B S Krishan Kanth", // update with actual name
+      since: "Host since 2023",
+      avatar: "/images/hon.png",
+      desc: "A welcoming Mysuru family offering a true home-away-from-home experience for all guests.",
+    },
+    guestReviews: [
+      {
+        name: "Priya Nair",
+        stars: 5,
+        date: "April 2026",
+        text: "Very clean and comfortable. The garden view room was so peaceful.",
+      },
+      {
+        name: "Rahul Mehta",
+        stars: 5,
+        date: "March 2026",
+        text: "The 2BHK apartment was spacious and perfectly located for sightseeing.",
+      },
+    ],
+  },
+
+  // HS[2] — Kracadawna Wilderness Farm
+  {
+    id: 3,
+    lat: 12.02, // Nugu Valley, H.D. Kote — update with exact coords
+    lng: 76.33,
+    name: "Kracadawna Wilderness Farm",
+    taluk: "H.D. Kote",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 5500,
+    rating: 4.9,
+    reviews: 58,
+    amenities: [
+      "Meals Included",
+      "Nature Trails",
+      "Wildlife Zone",
+      "Coffee Estate",
+    ],
+    hasWebsite: false,
+    phone: "8861537500",
+    img: "/images/krac-cover.jpg",
+    imgs: [
+      "/images/krac1.jpg",
+      "/images/krac2.jpg",
+      "/images/krac3.jpg",
+      "/images/krac4.jpg",
+      "/images/krac5.jpg",
+      "/images/krac6.jpg",
+    ],
+    type: "Wilderness Farm Stay",
+    location:
+      "Nugu Valley, H.D. Kote • Near Nagarahole National Park • Off-grid organic farm",
+    desc: "Nestled in Nugu Valley, Kracadawna is a naturally generated woodland organic farm protected since 1986. Escape city life and immerse yourself in regenerative agriculture, farm-to-table organic meals, and the wild beauty of a wet deciduous forest. Frequent visitors include elephants, paradise flycatchers, hornbills, and golden-back woodpeckers. All meals — vegan, vegetarian, and pescatarian options available — are freshly harvested from the farm. Minimum 2-night stay. No alcohol. No outside food. WiFi available in rooms. Poor mobile network — a true digital detox.",
+    host: {
+      name: "Azad Cariappa",
+      since: "Host since 2018",
+      avatar: "/images/krac-host.jpg",
+      desc: "Azad and Harshitha run this working family farm with a passion for sustainable living, organic food, and sharing their unique lifestyle with guests.",
+    },
+    guestReviews: [
+      {
+        name: "Meera Krishnan",
+        stars: 5,
+        date: "February 2026",
+        text: "The most unique stay of my life. Woke up to birds, ate the freshest food, and learned so much about organic farming.",
+      },
+      {
+        name: "Sameer Joshi",
+        stars: 5,
+        date: "December 2025",
+        text: "Truly off the beaten path. Azad and his team are incredible hosts. The farm walk and boat ride on Nugu river were unforgettable.",
+      },
+    ],
+  },
 ];
 
 const HERO_VIDEO = "/herovideo.mp4";
 const MARQUEE_IMGS = [
-  "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=400&q=70",
-  "https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&q=70",
-  "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=400&q=70",
-  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&q=70",
-  "https://images.unsplash.com/photo-1482192505345-5852310ed21d?w=400&q=70",
-  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&q=70",
-  "https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=400&q=70",
+  "/images/skyhouse-2bhk-1.jpg",
+  "/images/nela1.jpg",
+  "/images/skyhouse-1bhk-1.jpg",   // ← replace skyhouse2.jpg with correct name
+  "/images/nela3.jpg",
+  "/images/krac-dragonfly-1.jpg",
+  "/images/krac-dragonfly-2.jpg",
+  "/images/krac-dragonfly-3.jpg",
+  "/images/mad1.png",              // ← add an 8th so the loop is cleaner
 ];
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
@@ -538,7 +809,7 @@ function HsCard({ h, onOpen }) {
               letterSpacing: ".1em",
             }}
           >
-            per night · 3 Unique Stays available
+            per night · Unique Stays available
           </span>
           <div
             style={{
@@ -614,9 +885,7 @@ function HsCard({ h, onOpen }) {
             flexWrap: "wrap",
             marginBottom: ".9rem",
           }}
-        >
-         
-        </div>
+        ></div>
         <div
           style={{
             borderTop: "1px solid rgba(200,169,106,.1)",
@@ -684,8 +953,6 @@ function RoomListCard({ room, h, onOpen, index }) {
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
   const imgSrc = roomImgs[0] || h.img;
-
-  
 
   return (
     <div
@@ -870,8 +1137,6 @@ function RoomListCard({ room, h, onOpen, index }) {
             {room.name}
           </div>
 
-         
-
           {/* Description */}
           <p
             style={{
@@ -934,8 +1199,6 @@ function RoomListCard({ room, h, onOpen, index }) {
             transition: "border-color .3s",
           }}
         >
-          
-
           <div
             style={{
               display: "inline-flex",
@@ -964,8 +1227,9 @@ function RoomListCard({ room, h, onOpen, index }) {
 
 /* ─── Room Full Detail ────────────────────────────────────────────────────── */
 function RoomDetail({ h, roomKey, onBack }) {
-  const room = ROOM_TYPES.find((r) => r.key === roomKey);
-  if (!h || !room) return null;
+  if (!h || !roomKey) return null;
+  const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
+  if (!room) return null;
   const price = Math.round((h.price * room.multiplier) / 100) * 100;
   const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
 
@@ -975,7 +1239,7 @@ function RoomDetail({ h, roomKey, onBack }) {
       ? roomImgs.slice(0, 6)
       : [...roomImgs, ...Array(6 - roomImgs.length).fill(h.img)];
 
-  const allAmens = [...new Set([...room.amenities,])];
+  const allAmens = [...new Set([...room.amenities])];
 
   return (
     <div id="khaRoomPage" className={roomKey ? "open" : ""}>
@@ -1150,6 +1414,7 @@ function RoomDetail({ h, roomKey, onBack }) {
             >
               What's Included
             </h3>
+
             <div
               style={{
                 display: "grid",
@@ -1263,6 +1528,8 @@ function RoomDetail({ h, roomKey, onBack }) {
                 ))}
             </div>
 
+            <Homerules />
+
             <h3
               style={{
                 fontFamily: cg,
@@ -1343,40 +1610,39 @@ function RoomDetail({ h, roomKey, onBack }) {
                 flexDirection: "column",
                 gap: ".85rem",
               }}
-            >
-            </div>
+            ></div>
             {/* Location Map */}
 
-<h3
-  style={{
-    fontFamily: cg,
-    fontSize: "1.5rem",
-    fontWeight: 300,
-    color: "#f4efe5",
-    marginBottom: ".85rem",
-  }}
->
-  Property Location
-</h3>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
+              Property Location
+            </h3>
 
-<div
-  style={{
-    overflow: "hidden",
-    border: "1px solid rgba(200,169,106,.15)",
-    marginBottom: "2.5rem",
-    height: "420px",
-  }}
->
-  <iframe
-    title="Property Location"
-    width="100%"
-    height="100%"
-    style={{ border: 0 }}
-    loading="lazy"
-    allowFullScreen
-    src={`https://maps.google.com/maps?q=${h.lat},${h.lng}&z=15&output=embed`}
-  />
-</div>
+            <div
+              style={{
+                overflow: "hidden",
+                border: "1px solid rgba(200,169,106,.15)",
+                marginBottom: "2.5rem",
+                height: "420px",
+              }}
+            >
+              <iframe
+                title="Property Location"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                allowFullScreen
+                src={`https://maps.google.com/maps?q=${h.lat},${h.lng}&z=15&output=embed`}
+              />
+            </div>
           </div>
 
           {/* Right — sticky booking card */}
@@ -2056,8 +2322,6 @@ const Home = () => {
             148 verified, government-approved homestays. Book directly with host
             families — no OTA commissions.
           </p>
-
-         
         </div>
       </div>
 
@@ -2584,10 +2848,14 @@ const Home = () => {
                         gap: ".35rem",
                       }}
                     >
-                      <MapPin size={11} style={{ color: "#c8a96a", flexShrink: 0 }} />
-                      <span>Vijayanagar 4th Stage, near NPS School
-                        • 2 km from Ring Road
-                        • 15 minutes from Mysore Palace</span>
+                      <MapPin
+                        size={11}
+                        style={{ color: "#c8a96a", flexShrink: 0 }}
+                      />
+                      <span>
+                        Vijayanagar 4th Stage, near NPS School • 2 km from Ring
+                        Road • 15 minutes from Mysore Palace
+                      </span>
                     </p>
                     (Government of Karnataka,Dept of Tourism Approved Homestay)
                     <p
@@ -2787,7 +3055,7 @@ const Home = () => {
                       gap: "1.2rem",
                     }}
                   >
-                    {ROOM_TYPES.map((room, i) => (
+                    {ROOM_TYPES[currentHs.id]?.map((room, i) => (
                       <RoomListCard
                         key={room.key}
                         room={room}

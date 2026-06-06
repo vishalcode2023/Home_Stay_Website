@@ -289,107 +289,11 @@ const About = () => {
         </div>
       </div>
 
-      {/* ════════════════ BREADCRUMB ════════════════ */}
-      <div
-        className="flex items-center gap-[.6rem] px-16 py-[.9rem]"
-        style={{ background: "#1f2e1f", borderBottom: "1px solid rgba(200,169,106,.1)" }}
-      >
-        <a
-          href="/"
-          className="kha-breadcrumb-link transition-colors duration-300"
-          style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(244,239,229,.42)", textDecoration: "none" }}
-        >
-          Home
-        </a>
-        <span style={{ color: "rgba(200,169,106,.3)" }}>›</span>
-        <span style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#c8a96a" }}>
-          About the Association
-        </span>
-      </div>
+     
 
-      {/* ════════════════ MISSION ════════════════ */}
-      <section className="px-16 py-28 bg-[#1f2e1f]">
-        <div
-          className="kha-mission-inner max-w-[1200px] mx-auto grid gap-24 items-center"
-          style={{ gridTemplateColumns: "1fr 1fr" }}
-        >
-          {/* Text */}
-          <div>
-            <span className="kha-eyebrow kha-reveal">Our Mission</span>
-            <h2
-              className="kha-reveal kha-d1"
-              style={{ fontFamily: cg, fontSize: "clamp(2.2rem,3.5vw,3.2rem)", fontWeight: 300, lineHeight: 1.15, color: "#f4efe5" }}
-            >
-              Founded to{" "}
-              <em style={{ fontStyle: "italic", color: "#e0c88a" }}>Protect</em>
-              <br />
-              the Authentic Mysuru
-              <br />
-              Homestay Experience
-            </h2>
-            <div className="kha-reveal kha-d2"><Divider /></div>
-            <p
-              className="kha-reveal kha-d2"
-              style={{ fontSize: ".97rem", lineHeight: 1.95, fontWeight: 300, color: "rgba(244,239,229,.72)", marginBottom: "1.2rem" }}
-            >
-              The Mysuru Homestays Association was founded in 2010 by a small group of homestay operators who believed that the real Mysuru — its forests, its families, its food and its stories — was in danger of being lost to impersonal resort tourism.
-            </p>
-            <p
-              className="kha-reveal kha-d3"
-              style={{ fontSize: ".97rem", lineHeight: 1.95, fontWeight: 300, color: "rgba(244,239,229,.72)", marginBottom: "1.2rem" }}
-            >
-              Today we represent verified homestay families across Mysuru district and its taluks. We verify, support, and promote authentic homestay operators — whether they have a website or simply a WhatsApp number.
-            </p>
-            <p
-              className="kha-reveal kha-d3"
-              style={{ fontSize: ".97rem", lineHeight: 1.95, fontWeight: 300, color: "rgba(244,239,229,.72)" }}
-            >
-              We do not charge guests. We do not take booking commissions. We exist solely to connect the families who open their homes with the travellers who are ready to receive what they offer.
-            </p>
-          </div>
-
-          {/* Visual */}
-          <div className="kha-reveal kha-d2 relative">
-            <div className="kha-mission-img-stack relative" style={{ height: "540px" }}>
-              <img
-                className="Mha-mimg-main absolute object-cover"
-                src="https://images.pexels.com/photos/33827314/pexels-photo-33827314.jpeg"
-                alt="Mysuru homestay"
-                style={{ width: "75%", height: "420px", top: 0, right: 0 }}
-              />
-              <img
-                className="kha-mimg-accent absolute object-cover"
-                src="/mha.jpg"
-                alt="Karnataka landscape"
-                style={{ width: "55%", height: "280px", bottom: 0, left: 0 }}
-              />
-              <div
-                className="absolute text-center px-[1.8rem] py-[1.4rem]"
-                style={{
-                  top: "40%",
-                  left: "5%",
-                  transform: "translateY(-50%)",
-                  background: "rgba(31,46,31,.92)",
-                  backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(200,169,106,.28)",
-                }}
-              >
-                <span style={{ fontFamily: cg, fontSize: "3rem", fontWeight: 300, color: "#c8a96a", lineHeight: 1, display: "block" }}>2010</span>
-                <span style={{ fontSize: ".68rem", letterSpacing: ".22em", textTransform: "uppercase", color: "#7a9e6e", display: "block", marginTop: ".3rem" }}>
-                  Year Founded
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      
-
-      
-
+    
       {/* ════════════════ PRESIDENT & SECRETARY ════════════════ */}
-      <section className="px-5 py-10 bg-[#1f2e1f]">
+      <section className="px-5 py-20 bg-[#1f2e1f]">
         <div className="max-w-[1200px] -mt-15 mx-auto">
           <div className="kha-reveal mb-5">
             <span className="kha-eyebrow">Leadership</span>
@@ -520,7 +424,7 @@ const About = () => {
                 <div
                   style={{ fontFamily: cg, fontSize: "1.65rem", fontWeight: 300, color: "#fdfaf4", lineHeight: 1.1, marginBottom: ".35rem" }}
                 >
-                  -------
+                  B S Krishan Kanth
                 </div>
                 <div style={{ fontSize: ".72rem", letterSpacing: ".18em", textTransform: "uppercase", color: "#adc49a", marginBottom: ".9rem" }}>
                   Honorable Secretary, MDHOA

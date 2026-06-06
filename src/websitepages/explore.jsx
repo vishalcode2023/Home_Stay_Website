@@ -26,6 +26,7 @@ import {
 import FloatBookButton from "../components/FloatBookButton";
 import Navbar from "./navbar";
 import Footer from "../components/Footer";
+import HouseRules from "./Homerules";
 
 /* ─── Non-Tailwindable CSS ──────────────────────────────────────────────── */
 const STYLES = `
@@ -154,16 +155,41 @@ const TOURIST_PLACES = [
   { key: "chamundi", label: "Chamundi Hills", lat: 12.2724, lng: 76.6761 },
   { key: "zoo", label: "Mysore Zoo", lat: 12.2953, lng: 76.6551 },
   { key: "krs", label: "KRS Dam / Brindavan Gdns", lat: 12.4227, lng: 76.5712 },
-  { key: "nagarahole", label: "Nagarahole National Park", lat: 12.0473, lng: 76.1144 },
+  {
+    key: "nagarahole",
+    label: "Nagarahole National Park",
+    lat: 12.0473,
+    lng: 76.1144,
+  },
   { key: "kabini", label: "Kabini Backwaters", lat: 11.9376, lng: 76.3534 },
   { key: "coorg", label: "Coorg / Madikeri", lat: 12.4244, lng: 75.7382 },
   { key: "ooty", label: "Ooty", lat: 11.4102, lng: 76.695 },
   { key: "wayanad", label: "Wayanad", lat: 11.6854, lng: 76.132 },
   { key: "srirangapatna", label: "Srirangapatna", lat: 12.422, lng: 76.6954 },
-  { key: "bandipur", label: "Bandipur National Park", lat: 11.6711, lng: 76.6341 },
-  { key: "shravanabelagola", label: "Shravanabelagola", lat: 12.8586, lng: 76.4857 },
-  { key: "belur_halebidu", label: "Belur / Halebidu", lat: 13.1683, lng: 75.868 },
-  { key: "bylakuppe", label: "Bylakuppe (Tibetan Colony)", lat: 12.292, lng: 75.9947 },
+  {
+    key: "bandipur",
+    label: "Bandipur National Park",
+    lat: 11.6711,
+    lng: 76.6341,
+  },
+  {
+    key: "shravanabelagola",
+    label: "Shravanabelagola",
+    lat: 12.8586,
+    lng: 76.4857,
+  },
+  {
+    key: "belur_halebidu",
+    label: "Belur / Halebidu",
+    lat: 13.1683,
+    lng: 75.868,
+  },
+  {
+    key: "bylakuppe",
+    label: "Bylakuppe (Tibetan Colony)",
+    lat: 12.292,
+    lng: 75.9947,
+  },
 ];
 
 function haversine(lat1, lng1, lat2, lng2) {
@@ -199,99 +225,264 @@ const AICONS = {
 };
 
 /* ─── 3 Room Types (same as Home page) ──────────────────────────────────── */
-const ROOM_TYPES = [
-  {
-    key: "deluxe",
-    name: "ನೆಲಮಳಿಗೆ (Nela Maalige) – Ground Floor 2BHK",
-    tag: "Most Popular",
-    tagBg: "rgba(200,169,106,.16)",
-    tagBorder: "rgba(200,169,106,.4)",
-    tagColor: "#c8a96a",
-    accentColor: "#c8a96a",
-    multiplier: 1,
-    guests: 2,
-    beds: 2,
-    sqft: 280,
-    desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK designed for families seeking comfort, privacy, and easy access. The space is spacious, well-ventilated, and ideal for peaceful living. • Entire private 2BHK space • Calm and quiet residential surroundings • Excellent ventilation and natural light • Suitable for short & long stays • Family-friendly environment",
-    amenities: [
-      "Fully equipped Italian-style kitchen",
-      "2 bedrooms with one attached Toilet & Common bathroom",
-      "Solar + gas geyser",
-      "Smart TV &WiFi",
-      "Covered parking",
-      "Swiggy / Zomato / Ola / Uber accessible",
-    ],
-    imgs: [
-      "/images/nela1.jpg",
-      "/images/nela2.jpg",
-      "/images/nela3.jpg",
-      "/images/nela4.jpg",
-      "/images/nela5.jpg",
-      "/images/nela6.jpg",
-    ],
-  },
-  {
-    key: "family",
-    name: "ಮಹಡಿಮನೆ (Mahadimane) – First Floor 2BHK",
-    tag: "Best for Families",
-    tagBg: "rgba(122,158,110,.15)",
-    tagBorder: "rgba(122,158,110,.4)",
-    tagColor: "#adc49a",
-    accentColor: "#7a9e6e",
-    multiplier: 1.55,
-    guests: 4,
-    beds: 2,
-    sqft: 420,
-    desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay offering a bright, airy, and peaceful living space. Perfect for families who prefer elevated views with privacy and comfort. • Entire private 2BHK unit (Spacious) • Well-ventilated and naturally lit • Quiet and peaceful environment • Ideal for families and longer stays • Safe residential locality.",
-    amenities: [
-      "Fully equipped kitchen",
-      "2 bedrooms with attached bathrooms",
-      "Solar / geyser hot water",
-      "Smart TV &WiFi",
-      "Covered parking",
-      "Online delivery & cab services available",
-    ],
-    imgs: [
-      "/images/mad1.png",
-      "/images/mad2.png",
-      "/images/mad3.png",
-      "/images/mad4.png",
-      "/images/mad6.png",
-      "/images/mad5.png",
-    ],
-  },
-  {
-    key: "suite",
-    name: "ತಾರಸಿಮನೆ (Thaarasimane) – Studio (Top Floor)",
-    tag: "Premium",
-    tagBg: "rgba(200,169,106,.28)",
-    tagBorder: "#c8a96a",
-    tagColor: "#fdfaf4",
-    accentColor: "#e0c88a",
-    multiplier: 2.1,
-    guests: 2,
-    beds: 1,
-    sqft: 520,
-    desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor, ideal for small families looking for a simple, peaceful, and minimal stay experience. • Entire private studio space • Calm, green, and quiet surroundings • Excellent ventilation and natural light • Ideal for short/long stays • Peaceful residential atmosphere.",
-    amenities: [
-      "Compact kitchen with induction stove",
-      "Indian toilet / Bathroom with solar / geyser hot water",
-      "Smart TV &WiFi",
-      "Covered parking",
-      "Swiggy / Zomato / Ola / Uber serviceable",
-    ],
-    imgs: [
-      "/images/thar1.png",
-      "/images/thar2.png",
-      "/images/thar3.png",
-      "/images/thar4.png",
-      "/images/thar5.png",
-      "/images/thar6.png",
-    ],
-  },
-];
+const ROOM_TYPES = {
+  // Kukkeshree — id: 1
+  1: [
+    {
+      key: "deluxe",
+      name: "ನೆಲಮಳಿಗೆ (Nela Maalige) – Ground Floor 2BHK",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 2,
+      beds: 2,
+      sqft: 280,
+      desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK...",
+      amenities: [
+        "Fully equipped Italian-style kitchen",
+        "2 bedrooms with one attached Toilet & Common bathroom",
+        "Solar + gas geyser",
+        "Smart TV & WiFi",
+        "Covered parking",
+        "Swiggy / Zomato / Ola / Uber accessible",
+        "Floor plan Available on Request",
+      ],
+      imgs: [
+        "/images/nela1.jpg",
+        "/images/nela2.jpg",
+        "/images/nela3.jpg",
+        "/images/nela4.jpg",
+        "/images/nela5.jpg",
+        "/images/nela6.jpg",
+      ],
+    },
+    {
+      key: "family",
+      name: "ಮಹಡಿಮನೆ (Mahadimane) – First Floor 2BHK",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1.55,
+      guests: 4,
+      beds: 2,
+      sqft: 420,
+      desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay...",
+      amenities: [
+        "Fully equipped kitchen",
+        "2 bedrooms with attached bathrooms",
+        "Solar / geyser hot water",
+        "Smart TV & WiFi",
+        "Covered parking",
+        "Online delivery & cab services available",
+      ],
+      imgs: [
+        "/images/mad1.png",
+        "/images/mad2.png",
+        "/images/mad3.png",
+        "/images/mad4.png",
+        "/images/mad6.png",
+        "/images/mad5.png",
+      ],
+    },
+    {
+      key: "suite",
+      name: "ತಾರಸಿಮನೆ (Thaarasimane) – Studio (Top Floor)",
+      tag: "Premium",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: 2.1,
+      guests: 2,
+      beds: 1,
+      sqft: 520,
+      desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor...",
+      amenities: [
+        "Compact kitchen with induction stove",
+        "Indian toilet / Bathroom with solar / geyser hot water",
+        "Smart TV & WiFi",
+        "Covered parking",
+        "Swiggy / Zomato / Ola / Uber serviceable",
+      ],
+      imgs: [
+        "/images/thar1.png",
+        "/images/thar2.png",
+        "/images/thar3.png",
+        "/images/thar4.png",
+        "/images/thar5.png",
+        "/images/thar6.png",
+      ],
+    },
+  ],
 
-/* ─── Homestay Data ──────────────────────────────────────────────────────── */
+  // Sky House — id: 2
+  2: [
+    {
+      key: "1bhk_garden",
+      name: "1 BHK Family Room – Garden View",
+      tag: "Best Value",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 5,
+      beds: 1,
+      sqft: 320,
+      desc: "A spacious ground floor 1BHK with a beautiful garden view, ideal for families, couples, and small groups visiting Mysore. Non-air-conditioned with excellent natural ventilation. Fully equipped for a comfortable self-catering stay with modern conveniences throughout.",
+      amenities: [
+        "Ground Floor Accommodation",
+        "Free WiFi",
+        "Smart TV",
+        "Private Bathroom",
+        "Free Parking",
+        "Washing Machine",
+        "24hr Hot Water",
+        "Electric Kettle",
+        "Fully Equipped Kitchen",
+        "Garden View",
+        "Accommodates up to 5 Guests",
+      ],
+      imgs: [
+        "/images/skyhouse-1bhk-2.jpg",
+        "/images/skyhouse-1bhk-3.jpg",
+        "/images/skyhouse-1bhk-4.jpg",
+        "/images/skyhouse-1bhk-5.jpg",
+        "/images/skyhouse-1bhk-6.jpg",
+        "/images/skyhouse-1bhk-7.jpg",
+      ],
+    },
+    {
+      key: "2bhk_ac",
+      name: "2 BHK Deluxe AC Apartment",
+      tag: "Most Popular",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1.6,
+      guests: 4,
+      beds: 2,
+      sqft: 480,
+      desc: "A premium second floor 2BHK apartment with air conditioning in both bedrooms and a private sit-out balcony. Perfect for families, corporate travelers, and groups wanting extra privacy and comfort. Two bathrooms and a fully equipped kitchen included.",
+      amenities: [
+        "Air Conditioning",
+        "Private Balcony",
+        "Free WiFi",
+        "Smart TV",
+        "Private Bathroom",
+        "Free Parking",
+        "24hr Hot Water",
+        "Electric Kettle",
+        "Fully Equipped Kitchen",
+        "Private Sit‑Out Balcony",
+        "Second Floor Apartment",
+      ],
+      imgs: [
+        "/images/skyhouse-2bhk-1.jpg",
+        "/images/skyhouse-2bhk-2.jpg",
+        "/images/skyhouse-2bhk-3.jpg",
+        "/images/skyhouse-2bhk-4.jpg",
+        "/images/skyhouse-2bhk-5.jpg",
+      ],
+    },
+  ],
+
+  // Kracadawna — id: 3
+  3: [
+    {
+      key: "dragonfly",
+      name: "The Dragonfly Room",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 1,
+      sqft: 340,
+      desc: "A cozy room with a loft, queen-size bed, single bed, and attached bathroom with a small curated library. Easily houses 4 adults. Stay includes organic farm-to-table meals (3 a day), bed tea/coffee, guided farm walk, and a boat ride on the Nugu river. Minimum 2-night stay.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Private Bathroom",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Stargazing Deck",
+      ],
+      imgs: [
+        "/images/krac-dragonfly-1.jpg",
+        "/images/krac-dragonfly-2.jpg",
+        "/images/krac-dragonfly-3.jpg",
+        "/images/krac-dragonfly-4.jpg",
+      ],
+    },
+    {
+      key: "firefly",
+      name: "The Firefly Room",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1,
+      guests: 4,
+      beds: 1,
+      sqft: 340,
+      desc: "A warm, character-filled room with a loft, queen-size bed, single bed, attached bathroom, and an in-room library. Identical in comfort to the Dragonfly but with its own unique personality. All stays include organic meals, farm walk, and Nugu river boat ride. Minimum 2-night stay.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Private Bathroom",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Stargazing Deck",
+      ],
+      imgs: [
+        "/images/krac-firefly-1.jpg",
+        "/images/krac-firefly-2.jpg",
+        "/images/krac-firefly-3.jpg",
+        "/images/krac-firefly-4.jpg",
+      ],
+    },
+    {
+      key: "day_visit",
+      name: "Day Visit Experience",
+      tag: "No Overnight",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: 0.36,
+      guests: 6,
+      beds: 0,
+      sqft: 0,
+      desc: "Join Kracadawna for a full farm day (10:30am – 3pm). Includes welcome refreshments, guided farm tour, organic lunch with freshly harvested vegetables, herbal tea, and seasonal activities like fruit picking, composting, jaggery making (winter), and harvest. Minimum 6 members required.",
+      amenities: [
+        "Meals Included",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Yoga Space",
+      ],
+      imgs: [
+        "/images/krac-dayvisit-2.jpg",
+        "/images/krac-dayvisit-1.jpg",
+        "/images/krac-dayvisit-3.jpg",
+        "/images/krac-dayvisit-4.jpg",
+        "/images/krac-dayvisit-5.jpg",
+        "/images/krac-dayvisit-6.jpg",
+      ],
+    },
+  ],
+};
+
+/* ── Homestay data ── */
 const HS = [
   {
     id: 1,
@@ -307,7 +498,6 @@ const HS = [
     amenities: ["Meals Included", "Private Garden", "Nature Trails", "Bonfire"],
     hasWebsite: false,
     phone: "9480100001",
-    mapLink: "https://maps.app.goo.gl/oDqoZrocnkduhm1K9",
     img: "/images/nela2.jpg",
     imgs: [
       "/images/nela1.jpg",
@@ -318,8 +508,9 @@ const HS = [
       "/images/nela6.jpg",
     ],
     type: "Family Homestay",
-    location: "Vijayanagar 4th Stage, near NPS School, Mysuru • 2 km from Ring Road • 15 minutes from Mysore Palace",
-    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times. This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays. Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
+    location:
+      "Vijayanagar 4th Stage, near NPS School , Mysuru • 2 km from Ring Road • 15 minutes from Mysore Palace",
+    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
     host: {
       name: "Mr. Nagendra N",
       since: "Host since 2022",
@@ -338,6 +529,111 @@ const HS = [
         stars: 4,
         date: "January 2026",
         text: "Great location in Mysuru, very clean and comfortable. Lovely hosts.",
+      },
+    ],
+  },
+
+  // HS[1] — Sky House Homestay
+  {
+    id: 2,
+    lat: 12.3156, // Mysuru city — update with exact coords
+    lng: 76.6553,
+    name: "Sky House Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 2800,
+    rating: 4.8,
+    reviews: 32,
+    amenities: ["Free WiFi", "Air Conditioning"],
+    hasWebsite: false,
+    phone: "9480100003", // update with actual number
+    img: "/images/skyhouse-1bhk-1.jpg",
+    imgs: [
+      "/images/skyhouse1.jpg",
+      "/images/skyhouse2.jpg",
+      "/images/skyhouse3.jpg",
+      "/images/skyhouse4.jpg",
+      "/images/skyhouse5.jpg",
+      "/images/skyhouse6.jpg",
+    ],
+    type: "Family Homestay",
+    location:
+      "Mysuru City • Close to Mysore Palace, Chamundi Hills & Brindavan Gardens",
+    desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms.",
+    host: {
+      name: "B S Krishan Kanth", // update with actual name
+      since: "Host since 2023",
+      avatar: "/images/hon.png",
+      desc: "A welcoming Mysuru family offering a true home-away-from-home experience for all guests.",
+    },
+    guestReviews: [
+      {
+        name: "Priya Nair",
+        stars: 5,
+        date: "April 2026",
+        text: "Very clean and comfortable. The garden view room was so peaceful.",
+      },
+      {
+        name: "Rahul Mehta",
+        stars: 5,
+        date: "March 2026",
+        text: "The 2BHK apartment was spacious and perfectly located for sightseeing.",
+      },
+    ],
+  },
+
+  // HS[2] — Kracadawna Wilderness Farm
+  {
+    id: 3,
+    lat: 12.02, // Nugu Valley, H.D. Kote — update with exact coords
+    lng: 76.33,
+    name: "Kracadawna Wilderness Farm",
+    taluk: "H.D. Kote",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 5500,
+    rating: 4.9,
+    reviews: 58,
+    amenities: [
+      "Meals Included",
+      "Nature Trails",
+      "Wildlife Zone",
+      "Coffee Estate",
+    ],
+    hasWebsite: false,
+    phone: "8861537500",
+    img: "/images/krac-cover.jpg",
+    imgs: [
+      "/images/krac1.jpg",
+      "/images/krac2.jpg",
+      "/images/krac3.jpg",
+      "/images/krac4.jpg",
+      "/images/krac5.jpg",
+      "/images/krac6.jpg",
+    ],
+    type: "Wilderness Farm Stay",
+    location:
+      "Nugu Valley, H.D. Kote • Near Nagarahole National Park • Off-grid organic farm",
+    desc: "Nestled in Nugu Valley, Kracadawna is a naturally generated woodland organic farm protected since 1986. Escape city life and immerse yourself in regenerative agriculture, farm-to-table organic meals, and the wild beauty of a wet deciduous forest. Frequent visitors include elephants, paradise flycatchers, hornbills, and golden-back woodpeckers. All meals — vegan, vegetarian, and pescatarian options available — are freshly harvested from the farm. Minimum 2-night stay. No alcohol. No outside food. WiFi available in rooms. Poor mobile network — a true digital detox.",
+    host: {
+      name: "Azad Cariappa",
+      since: "Host since 2018",
+      avatar: "/images/krac-host.jpg",
+      desc: "Azad and Harshitha run this working family farm with a passion for sustainable living, organic food, and sharing their unique lifestyle with guests.",
+    },
+    guestReviews: [
+      {
+        name: "Meera Krishnan",
+        stars: 5,
+        date: "February 2026",
+        text: "The most unique stay of my life. Woke up to birds, ate the freshest food, and learned so much about organic farming.",
+      },
+      {
+        name: "Sameer Joshi",
+        stars: 5,
+        date: "December 2025",
+        text: "Truly off the beaten path. Azad and his team are incredible hosts. The farm walk and boat ride on Nugu river were unforgettable.",
       },
     ],
   },
@@ -399,15 +695,27 @@ function HsCard({ h, onOpen, distance }) {
         />
 
         <div className="absolute top-[.9rem] left-[.9rem] flex gap-1 flex-wrap z-[2]">
-          <Badge bg="rgba(24,35,24,.72)" border="rgba(200,169,106,.32)" color="#c8a96a">
+          <Badge
+            bg="rgba(24,35,24,.72)"
+            border="rgba(200,169,106,.32)"
+            color="#c8a96a"
+          >
             {h.type}
           </Badge>
           {h.hasWebsite ? (
-            <Badge bg="rgba(46,74,46,.85)" border="rgba(122,158,110,.4)" color="#adc49a">
+            <Badge
+              bg="rgba(46,74,46,.85)"
+              border="rgba(122,158,110,.4)"
+              color="#adc49a"
+            >
               Has Website
             </Badge>
           ) : (
-            <Badge bg="rgba(37,211,102,.15)" border="rgba(37,211,102,.38)" color="#4ade80">
+            <Badge
+              bg="rgba(37,211,102,.15)"
+              border="rgba(37,211,102,.38)"
+              color="#4ade80"
+            >
               WhatsApp Only
             </Badge>
           )}
@@ -431,16 +739,40 @@ function HsCard({ h, onOpen, distance }) {
 
         <div
           className="kha-price-overlay absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 transition-opacity duration-300 z-[3]"
-          style={{ background: "rgba(24,35,24,.9)", backdropFilter: "blur(4px)" }}
+          style={{
+            background: "rgba(24,35,24,.9)",
+            backdropFilter: "blur(4px)",
+          }}
         >
-          <span style={{ fontSize: ".68rem", letterSpacing: ".28em", textTransform: "uppercase", color: "#7a9e6e" }}>
+          <span
+            style={{
+              fontSize: ".68rem",
+              letterSpacing: ".28em",
+              textTransform: "uppercase",
+              color: "#7a9e6e",
+            }}
+          >
             Starting from
           </span>
-          <span style={{ fontFamily: cg, fontSize: "2.9rem", fontWeight: 300, color: "#c8a96a", lineHeight: 1 }}>
+          <span
+            style={{
+              fontFamily: cg,
+              fontSize: "2.9rem",
+              fontWeight: 300,
+              color: "#c8a96a",
+              lineHeight: 1,
+            }}
+          >
             ₹{h.price.toLocaleString("en-IN")}
           </span>
-          <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.5)", letterSpacing: ".1em" }}>
-            per night · 3 Unique Stays available
+          <span
+            style={{
+              fontSize: ".74rem",
+              color: "rgba(244,239,229,.5)",
+              letterSpacing: ".1em",
+            }}
+          >
+            {ROOM_TYPES[h.id]?.length ?? 0} Unique Stays Available
           </span>
           <div
             style={{
@@ -480,26 +812,68 @@ function HsCard({ h, onOpen, distance }) {
           {h.taluk}, {h.district}
         </div>
         <div
-          style={{ fontFamily: cg, fontSize: "1.5rem", fontWeight: 400, color: "#f4efe5", lineHeight: 1.2, marginBottom: ".3rem" }}
+          style={{
+            fontFamily: cg,
+            fontSize: "1.5rem",
+            fontWeight: 400,
+            color: "#f4efe5",
+            lineHeight: 1.2,
+            marginBottom: ".3rem",
+          }}
         >
           {h.name}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: ".5rem", marginBottom: ".85rem" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: ".5rem",
+            marginBottom: ".85rem",
+          }}
+        >
           <Stars rating={h.rating} sz={13} />
-          <span style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}>{h.rating}</span>
-          <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}>({h.reviews})</span>
+          <span
+            style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}
+          >
+            {h.rating}
+          </span>
+          <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}>
+            ({h.reviews})
+          </span>
         </div>
-        <div style={{ borderTop: "1px solid rgba(200,169,106,.1)", paddingTop: ".75rem" }}>
+        <div
+          style={{
+            borderTop: "1px solid rgba(200,169,106,.1)",
+            paddingTop: ".75rem",
+          }}
+        >
           {nearbyPlaces.map((p) => (
             <div
               key={p.key}
-              style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: ".3rem" }}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: ".3rem",
+              }}
             >
-              <span style={{ fontSize: ".72rem", color: "rgba(244,239,229,.45)", display: "flex", alignItems: "center", gap: ".35rem" }}>
+              <span
+                style={{
+                  fontSize: ".72rem",
+                  color: "rgba(244,239,229,.45)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".35rem",
+                }}
+              >
                 <MapPin size={9} style={{ color: "#c8a96a" }} />
                 {p.label}
               </span>
-              <span style={{ fontSize: ".7rem", color: "#c8a96a", fontWeight: 600 }}>{p.dist} km</span>
+              <span
+                style={{ fontSize: ".7rem", color: "#c8a96a", fontWeight: 600 }}
+              >
+                {p.dist} km
+              </span>
             </div>
           ))}
         </div>
@@ -513,7 +887,7 @@ function RoomListCard({ room, h, onOpen, index }) {
   const price = Math.round((h.price * room.multiplier) / 100) * 100;
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.innerWidth < 768
+    () => typeof window !== "undefined" && window.innerWidth < 768,
   );
 
   useEffect(() => {
@@ -563,7 +937,13 @@ function RoomListCard({ room, h, onOpen, index }) {
       />
 
       {/* Image */}
-      <div style={{ position: "relative", overflow: "hidden", height: isMobile ? "200px" : "440px" }}>
+      <div
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          height: isMobile ? "200px" : "440px",
+        }}
+      >
         <img
           src={imgSrc}
           alt={room.name}
@@ -576,8 +956,24 @@ function RoomListCard({ room, h, onOpen, index }) {
             transition: "transform .8s cubic-bezier(.22,1,.36,1)",
           }}
         />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(120deg,rgba(24,35,24,.1) 0%,rgba(24,35,24,.65) 100%)" }} />
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "90px", background: `linear-gradient(to top,rgba(28,45,28,1),transparent)` }} />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(120deg,rgba(24,35,24,.1) 0%,rgba(24,35,24,.65) 100%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "90px",
+            background: `linear-gradient(to top,rgba(28,45,28,1),transparent)`,
+          }}
+        />
 
         {/* Watermark number */}
         <div
@@ -623,12 +1019,37 @@ function RoomListCard({ room, h, onOpen, index }) {
 
         {/* Price over image */}
         <div style={{ position: "absolute", bottom: ".85rem", left: ".95rem" }}>
-          <div style={{ fontSize: ".58rem", letterSpacing: ".24em", textTransform: "uppercase", color: "rgba(244,239,229,.5)", marginBottom: ".1rem" }}>
+          <div
+            style={{
+              fontSize: ".58rem",
+              letterSpacing: ".24em",
+              textTransform: "uppercase",
+              color: "rgba(244,239,229,.5)",
+              marginBottom: ".1rem",
+            }}
+          >
             from
           </div>
-          <div style={{ fontFamily: cg, fontSize: isMobile ? "1.6rem" : "1.9rem", fontWeight: 300, color: room.accentColor, lineHeight: 1 }}>
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: isMobile ? "1.6rem" : "1.9rem",
+              fontWeight: 300,
+              color: room.accentColor,
+              lineHeight: 1,
+            }}
+          >
             ₹{price.toLocaleString("en-IN")}
-            <span style={{ fontSize: ".72rem", color: "rgba(244,239,229,.38)", marginLeft: ".35rem", fontFamily: jost }}>/night</span>
+            <span
+              style={{
+                fontSize: ".72rem",
+                color: "rgba(244,239,229,.38)",
+                marginLeft: ".35rem",
+                fontFamily: jost,
+              }}
+            >
+              /night
+            </span>
           </div>
         </div>
       </div>
@@ -636,7 +1057,9 @@ function RoomListCard({ room, h, onOpen, index }) {
       {/* Content */}
       <div
         style={{
-          padding: isMobile ? "1.3rem 1.2rem 1.4rem" : "1.7rem 2rem 1.7rem 1.8rem",
+          padding: isMobile
+            ? "1.3rem 1.2rem 1.4rem"
+            : "1.7rem 2rem 1.7rem 1.8rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -674,28 +1097,32 @@ function RoomListCard({ room, h, onOpen, index }) {
             {room.desc}
           </p>
           <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
-            {room.amenities.slice(0, isMobile ? 3 : room.amenities.length).map((a) => (
-              <span
-                key={a}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: ".28rem",
-                  fontSize: ".68rem",
-                  letterSpacing: ".05em",
-                  color: "rgba(244,239,229,.5)",
-                  padding: ".24rem .7rem",
-                  background: hovered ? "rgba(200,169,106,.1)" : "rgba(200,169,106,.05)",
-                  border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
-                  transition: "all .3s",
-                }}
-              >
-                <span style={{ color: room.accentColor, opacity: 0.85 }}>
-                  {AICONS[a] || <Leaf size={11} />}
+            {room.amenities
+              .slice(0, isMobile ? 3 : room.amenities.length)
+              .map((a) => (
+                <span
+                  key={a}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: ".28rem",
+                    fontSize: ".68rem",
+                    letterSpacing: ".05em",
+                    color: "rgba(244,239,229,.5)",
+                    padding: ".24rem .7rem",
+                    background: hovered
+                      ? "rgba(200,169,106,.1)"
+                      : "rgba(200,169,106,.05)",
+                    border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
+                    transition: "all .3s",
+                  }}
+                >
+                  <span style={{ color: room.accentColor, opacity: 0.85 }}>
+                    {AICONS[a] || <Leaf size={11} />}
+                  </span>
+                  {a}
                 </span>
-                {a}
-              </span>
-            ))}
+              ))}
           </div>
         </div>
 
@@ -739,9 +1166,11 @@ function RoomListCard({ room, h, onOpen, index }) {
 }
 
 /* ─── Room Full Detail ──────────────────────────────────────────────────── */
+// ✅ REPLACE WITH
 function RoomDetail({ h, roomKey, onBack }) {
-  const room = ROOM_TYPES.find((r) => r.key === roomKey);
-  if (!h || !room) return null;
+  if (!h || !roomKey) return null;                                  // guard FIRST
+  const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
+  if (!room) return null;
   const price = Math.round((h.price * room.multiplier) / 100) * 100;
   const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
 
@@ -773,12 +1202,29 @@ function RoomDetail({ h, roomKey, onBack }) {
         <a
           href="#"
           className="kha-back-btn"
-          onClick={(e) => { e.preventDefault(); onBack(); }}
+          onClick={(e) => {
+            e.preventDefault();
+            onBack();
+          }}
         >
           <ArrowLeft size={13} /> Back to Rooms
         </a>
-        <div style={{ width: "1px", height: "16px", background: "rgba(200,169,106,.2)", flexShrink: 0 }} />
-        <span style={{ fontSize: ".7rem", letterSpacing: ".18em", textTransform: "uppercase", color: "rgba(244,239,229,.35)" }}>
+        <div
+          style={{
+            width: "1px",
+            height: "16px",
+            background: "rgba(200,169,106,.2)",
+            flexShrink: 0,
+          }}
+        />
+        <span
+          style={{
+            fontSize: ".7rem",
+            letterSpacing: ".18em",
+            textTransform: "uppercase",
+            color: "rgba(244,239,229,.35)",
+          }}
+        >
           {h.name}
         </span>
         <div style={{ marginLeft: "auto" }}>
@@ -798,7 +1244,14 @@ function RoomDetail({ h, roomKey, onBack }) {
         </div>
       </div>
 
-      <div className="dp-inner" style={{ maxWidth: "1160px", margin: "0 auto", padding: "3rem 3rem 6rem 1rem" }}>
+      <div
+        className="dp-inner"
+        style={{
+          maxWidth: "1160px",
+          margin: "0 auto",
+          padding: "3rem 3rem 6rem 1rem",
+        }}
+      >
         {/* Heading */}
         <div style={{ marginBottom: "2rem" }}>
           <div
@@ -816,10 +1269,27 @@ function RoomDetail({ h, roomKey, onBack }) {
             <MapPin size={11} />
             {h.taluk} · {h.district} District, Mysore
           </div>
-          <div style={{ fontFamily: cg, fontSize: "clamp(2rem,4vw,3.1rem)", fontWeight: 300, color: "#fdfaf4", lineHeight: 1.1, marginBottom: ".3rem" }}>
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: "clamp(2rem,4vw,3.1rem)",
+              fontWeight: 300,
+              color: "#fdfaf4",
+              lineHeight: 1.1,
+              marginBottom: ".3rem",
+            }}
+          >
             {room.name}
           </div>
-          <div style={{ fontFamily: cg, fontSize: "1.15rem", fontWeight: 300, color: "rgba(244,239,229,.4)", marginBottom: "1rem" }}>
+          <div
+            style={{
+              fontFamily: cg,
+              fontSize: "1.15rem",
+              fontWeight: 300,
+              color: "rgba(244,239,229,.4)",
+              marginBottom: "1rem",
+            }}
+          >
             at {h.name}
           </div>
         </div>
@@ -839,35 +1309,93 @@ function RoomDetail({ h, roomKey, onBack }) {
         {/* 2-col layout */}
         <div
           className="kha-detail-grid"
-          style={{ display: "grid", gridTemplateColumns: "1fr 330px", gap: "3rem", alignItems: "start" }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 330px",
+            gap: "3rem",
+            alignItems: "start",
+          }}
         >
           {/* Left */}
           <div>
-            <h3 style={{ fontFamily: cg, fontSize: "1.5rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".8rem" }}>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".8rem",
+              }}
+            >
               About This Room
             </h3>
-            <p style={{ fontSize: ".97rem", lineHeight: 2, fontWeight: 300, color: "rgba(244,239,229,.72)", marginBottom: "2.5rem" }}>
+            <p
+              style={{
+                fontSize: ".97rem",
+                lineHeight: 2,
+                fontWeight: 300,
+                color: "rgba(244,239,229,.72)",
+                marginBottom: "2.5rem",
+              }}
+            >
               {room.desc}
             </p>
 
-            <h3 style={{ fontFamily: cg, fontSize: "1.5rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".85rem" }}>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
               What's Included
             </h3>
             <div
-              style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(172px,1fr))", gap: ".6rem", marginBottom: "2.5rem" }}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit,minmax(172px,1fr))",
+                gap: ".6rem",
+                marginBottom: "2.5rem",
+              }}
             >
               {room.amenities.map((a) => (
                 <div key={a} className="kha-amen-item">
-                  <span style={{ color: "#c8a96a", flexShrink: 0 }}>{AICONS[a] || <Leaf size={17} />}</span>
-                  <span style={{ fontSize: ".82rem", color: "rgba(244,239,229,.75)" }}>{a}</span>
+                  <span style={{ color: "#c8a96a", flexShrink: 0 }}>
+                    {AICONS[a] || <Leaf size={17} />}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: ".82rem",
+                      color: "rgba(244,239,229,.75)",
+                    }}
+                  >
+                    {a}
+                  </span>
                 </div>
               ))}
             </div>
 
-            <h3 style={{ fontFamily: cg, fontSize: "1.5rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".85rem" }}>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
               Nearby Attractions
             </h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".5rem", marginBottom: "2.5rem" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: ".5rem",
+                marginBottom: "2.5rem",
+              }}
+            >
               {TOURIST_PLACES.map((p) => ({
                 ...p,
                 dist: haversine(h.lat, h.lng, p.lat, p.lng),
@@ -885,11 +1413,28 @@ function RoomDetail({ h, roomKey, onBack }) {
                       border: "1px solid rgba(200,169,106,.08)",
                       transition: "border-color .2s",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(200,169,106,.28)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(200,169,106,.08)")}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.borderColor =
+                        "rgba(200,169,106,.28)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.borderColor =
+                        "rgba(200,169,106,.08)")
+                    }
                   >
-                    <span style={{ fontSize: ".79rem", color: "rgba(244,239,229,.55)", display: "flex", alignItems: "center", gap: ".4rem" }}>
-                      <MapPin size={10} style={{ color: "#c8a96a", flexShrink: 0 }} />
+                    <span
+                      style={{
+                        fontSize: ".79rem",
+                        color: "rgba(244,239,229,.55)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".4rem",
+                      }}
+                    >
+                      <MapPin
+                        size={10}
+                        style={{ color: "#c8a96a", flexShrink: 0 }}
+                      />
                       {p.label}
                     </span>
                     <span
@@ -899,8 +1444,18 @@ function RoomDetail({ h, roomKey, onBack }) {
                         whiteSpace: "nowrap",
                         marginLeft: ".5rem",
                         padding: ".15rem .5rem",
-                        color: p.dist <= 30 ? "#4ade80" : p.dist <= 80 ? "#c8a96a" : "rgba(244,239,229,.32)",
-                        background: p.dist <= 30 ? "rgba(37,211,102,.1)" : p.dist <= 80 ? "rgba(200,169,106,.1)" : "transparent",
+                        color:
+                          p.dist <= 30
+                            ? "#4ade80"
+                            : p.dist <= 80
+                              ? "#c8a96a"
+                              : "rgba(244,239,229,.32)",
+                        background:
+                          p.dist <= 30
+                            ? "rgba(37,211,102,.1)"
+                            : p.dist <= 80
+                              ? "rgba(200,169,106,.1)"
+                              : "transparent",
                         border: `1px solid ${p.dist <= 30 ? "rgba(37,211,102,.25)" : p.dist <= 80 ? "rgba(200,169,106,.2)" : "transparent"}`,
                       }}
                     >
@@ -910,7 +1465,17 @@ function RoomDetail({ h, roomKey, onBack }) {
                 ))}
             </div>
 
-            <h3 style={{ fontFamily: cg, fontSize: "1.5rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".85rem" }}>
+            <HouseRules />
+
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
               Your Host
             </h3>
             <div
@@ -924,25 +1489,78 @@ function RoomDetail({ h, roomKey, onBack }) {
                 marginBottom: "2.5rem",
               }}
             >
-              <div style={{ width: "58px", height: "58px", borderRadius: "50%", border: "2px solid rgba(200,169,106,.3)", overflow: "hidden", flexShrink: 0 }}>
-                <img src={h.host.avatar} alt={h.host.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <div
+                style={{
+                  width: "58px",
+                  height: "58px",
+                  borderRadius: "50%",
+                  border: "2px solid rgba(200,169,106,.3)",
+                  overflow: "hidden",
+                  flexShrink: 0,
+                }}
+              >
+                <img
+                  src={h.host.avatar}
+                  alt={h.host.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
               </div>
               <div>
-                <div style={{ fontFamily: cg, fontSize: "1.28rem", fontWeight: 300, color: "#f4efe5" }}>{h.host.name}</div>
-                <div style={{ fontSize: ".68rem", letterSpacing: ".15em", textTransform: "uppercase", color: "#7a9e6e", marginTop: ".12rem" }}>
+                <div
+                  style={{
+                    fontFamily: cg,
+                    fontSize: "1.28rem",
+                    fontWeight: 300,
+                    color: "#f4efe5",
+                  }}
+                >
+                  {h.host.name}
+                </div>
+                <div
+                  style={{
+                    fontSize: ".68rem",
+                    letterSpacing: ".15em",
+                    textTransform: "uppercase",
+                    color: "#7a9e6e",
+                    marginTop: ".12rem",
+                  }}
+                >
                   {h.host.since}
                 </div>
-                <div style={{ fontSize: ".88rem", lineHeight: 1.8, color: "rgba(244,239,229,.58)", marginTop: ".45rem", fontWeight: 300 }}>
+                <div
+                  style={{
+                    fontSize: ".88rem",
+                    lineHeight: 1.8,
+                    color: "rgba(244,239,229,.58)",
+                    marginTop: ".45rem",
+                    fontWeight: 300,
+                  }}
+                >
                   {h.host.desc}
                 </div>
               </div>
             </div>
 
             {/* Map */}
-            <h3 style={{ fontFamily: cg, fontSize: "1.5rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".85rem" }}>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "1.5rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".85rem",
+              }}
+            >
               Property Location
             </h3>
-            <div style={{ overflow: "hidden", border: "1px solid rgba(200,169,106,.15)", marginBottom: "2.5rem", height: "420px" }}>
+            <div
+              style={{
+                overflow: "hidden",
+                border: "1px solid rgba(200,169,106,.15)",
+                marginBottom: "2.5rem",
+                height: "420px",
+              }}
+            >
               <iframe
                 title="Property Location"
                 width="100%"
@@ -965,43 +1583,149 @@ function RoomDetail({ h, roomKey, onBack }) {
                 padding: "1.8rem 2rem",
               }}
             >
-              <div style={{ textAlign: "center", paddingBottom: "1.3rem", marginBottom: "1.3rem", borderBottom: "1px solid rgba(200,169,106,.12)" }}>
-                <span style={{ fontSize: ".66rem", letterSpacing: ".26em", textTransform: "uppercase", color: "#7a9e6e", display: "block", marginBottom: ".2rem" }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  paddingBottom: "1.3rem",
+                  marginBottom: "1.3rem",
+                  borderBottom: "1px solid rgba(200,169,106,.12)",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: ".66rem",
+                    letterSpacing: ".26em",
+                    textTransform: "uppercase",
+                    color: "#7a9e6e",
+                    display: "block",
+                    marginBottom: ".2rem",
+                  }}
+                >
                   Starting from
                 </span>
-                <span style={{ fontFamily: cg, fontSize: "3rem", fontWeight: 300, color: "#c8a96a", lineHeight: 1, display: "block" }}>
+                <span
+                  style={{
+                    fontFamily: cg,
+                    fontSize: "3rem",
+                    fontWeight: 300,
+                    color: "#c8a96a",
+                    lineHeight: 1,
+                    display: "block",
+                  }}
+                >
                   ₹{price.toLocaleString("en-IN")}
                 </span>
-                <span style={{ fontSize: ".78rem", color: "#adc49a", letterSpacing: ".1em" }}>per night · direct booking</span>
+                <span
+                  style={{
+                    fontSize: ".78rem",
+                    color: "#adc49a",
+                    letterSpacing: ".1em",
+                  }}
+                >
+                  per night · direct booking
+                </span>
               </div>
               {h.hasWebsite && (
-                <a href={h.website} target="_blank" rel="noopener noreferrer" className="kha-btn-web-room" style={{ marginBottom: ".55rem", width: "100%" }}>
+                <a
+                  href={h.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="kha-btn-web-room"
+                  style={{ marginBottom: ".55rem", width: "100%" }}
+                >
                   <Globe size={14} /> Visit Official Website
                 </a>
               )}
-              <a href={wa} target="_blank" rel="noopener noreferrer" className="kha-btn-wa-room" style={{ width: "100%" }}>
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="kha-btn-wa-room"
+                style={{ width: "100%" }}
+              >
                 <MessageCircle size={14} /> Book via WhatsApp
               </a>
-              <div style={{ marginTop: "1.3rem", paddingTop: "1.1rem", borderTop: "1px solid rgba(200,169,106,.1)", display: "flex", flexDirection: "column", gap: ".55rem" }}>
+              <div
+                style={{
+                  marginTop: "1.3rem",
+                  paddingTop: "1.1rem",
+                  borderTop: "1px solid rgba(200,169,106,.1)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: ".55rem",
+                }}
+              >
                 {[
                   ["Room", room.name],
                   ["Property", h.name],
                   ["District", h.district],
                   ["Guests", `Up to ${room.guests}`],
-                  ["Booking", h.hasWebsite ? "Website + WhatsApp" : "WhatsApp Only"],
+                  [
+                    "Booking",
+                    h.hasWebsite ? "Website + WhatsApp" : "WhatsApp Only",
+                  ],
                 ].map(([l, v]) => (
-                  <div key={l} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: ".5rem" }}>
-                    <span style={{ fontSize: ".7rem", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(244,239,229,.32)", flexShrink: 0 }}>
+                  <div
+                    key={l}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      gap: ".5rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: ".7rem",
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        color: "rgba(244,239,229,.32)",
+                        flexShrink: 0,
+                      }}
+                    >
                       {l}
                     </span>
-                    <span style={{ fontSize: ".84rem", color: "rgba(244,239,229,.68)", textAlign: "right" }}>{v}</span>
+                    <span
+                      style={{
+                        fontSize: ".84rem",
+                        color: "rgba(244,239,229,.68)",
+                        textAlign: "right",
+                      }}
+                    >
+                      {v}
+                    </span>
                   </div>
                 ))}
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: ".7rem", marginTop: "1.1rem", padding: ".85rem 1rem", background: "rgba(200,169,106,.07)", border: "1px solid rgba(200,169,106,.15)" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".7rem",
+                  marginTop: "1.1rem",
+                  padding: ".85rem 1rem",
+                  background: "rgba(200,169,106,.07)",
+                  border: "1px solid rgba(200,169,106,.15)",
+                }}
+              >
                 <Award size={17} style={{ color: "#c8a96a", flexShrink: 0 }} />
-                <div style={{ fontSize: ".75rem", lineHeight: 1.6, color: "rgba(244,239,229,.48)" }}>
-                  <strong style={{ color: "#c8a96a", display: "block", fontSize: ".66rem", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: ".1rem" }}>
+                <div
+                  style={{
+                    fontSize: ".75rem",
+                    lineHeight: 1.6,
+                    color: "rgba(244,239,229,.48)",
+                  }}
+                >
+                  <strong
+                    style={{
+                      color: "#c8a96a",
+                      display: "block",
+                      fontSize: ".66rem",
+                      letterSpacing: ".15em",
+                      textTransform: "uppercase",
+                      marginBottom: ".1rem",
+                    }}
+                  >
                     MDHOA Certified
                   </strong>
                   Verified member of the Mysore Homestays Association.
@@ -1019,8 +1743,12 @@ function RoomDetail({ h, roomKey, onBack }) {
    Explore Page
 ══════════════════════════════════════════════════════════════════════════ */
 const Explore = () => {
-  const curRef = useRef(null), curFRef = useRef(null);
-  const cxRef = useRef(0), cyRef = useRef(0), fxRef = useRef(0), fyRef = useRef(0);
+  const curRef = useRef(null),
+    curFRef = useRef(null);
+  const cxRef = useRef(0),
+    cyRef = useRef(0),
+    fxRef = useRef(0),
+    fyRef = useRef(0);
 
   useEffect(() => {
     const onMove = (e) => {
@@ -1051,8 +1779,11 @@ const Explore = () => {
 
   useEffect(() => {
     const obs = new IntersectionObserver(
-      (es) => es.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); }),
-      { threshold: 0.1 }
+      (es) =>
+        es.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("in");
+        }),
+      { threshold: 0.1 },
     );
     document.querySelectorAll(".kha-reveal").forEach((el) => obs.observe(el));
     return () => obs.disconnect();
@@ -1068,8 +1799,14 @@ const Explore = () => {
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
-        if (roomKey) { setRoomKey(null); return; }
-        if (detailId) { setDetailId(null); document.body.style.overflow = ""; }
+        if (roomKey) {
+          setRoomKey(null);
+          return;
+        }
+        if (detailId) {
+          setDetailId(null);
+          document.body.style.overflow = "";
+        }
       }
     };
     document.addEventListener("keydown", onKey);
@@ -1095,7 +1832,10 @@ const Explore = () => {
     setDetailId(id);
     setRoomKey(null);
     document.body.style.overflow = "hidden";
-    setTimeout(() => document.getElementById("khaExpDetailPage")?.scrollTo(0, 0), 50);
+    setTimeout(
+      () => document.getElementById("khaExpDetailPage")?.scrollTo(0, 0),
+      50,
+    );
   };
   const closeDetail = (e) => {
     e?.preventDefault();
@@ -1107,7 +1847,10 @@ const Explore = () => {
   /* Open / close room */
   const openRoom = (key) => {
     setRoomKey(key);
-    setTimeout(() => document.getElementById("khaExpRoomPage")?.scrollTo(0, 0), 50);
+    setTimeout(
+      () => document.getElementById("khaExpRoomPage")?.scrollTo(0, 0),
+      50,
+    );
   };
   const closeRoom = () => setRoomKey(null);
 
@@ -1122,111 +1865,83 @@ const Explore = () => {
       <Navbar />
       <FloatBookButton />
 
-      {/* ════ EXPLORE HERO ════ */}
-      <div
-        className="relative overflow-hidden flex items-end"
-        style={{ marginTop: "90px", height: "66vh", minHeight: "220px" }}
-      >
-        <div
-          className="kha-ex-hero-bg absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://i.pinimg.com/1200x/42/7a/d2/427ad2ad9722ae2826a13d3e91d28df7.jpg')" }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(160deg,rgba(24,35,24,.55) 0%,rgba(24,35,24,.18) 50%,rgba(24,35,24,.88) 100%)" }}
-        />
-        <div className="kha-ex-hero-content relative z-[2] w-full px-16 pb-[4.5rem] flex justify-between items-end gap-8 flex-wrap">
-          <div style={{ maxWidth: "560px" }}>
-            <div
-              className="kha-fade-1 flex items-center gap-[.6rem]"
-              style={{ fontSize: ".72rem", letterSpacing: ".32em", textTransform: "uppercase", color: "#c8a96a", marginBottom: ".9rem" }}
-            >
-              <span style={{ width: "28px", height: "1px", background: "#c8a96a", display: "inline-block" }}></span>
-              Mysuru Homestays Association
-            </div>
-            <h1
-              className="kha-fade-2"
-              style={{ fontFamily: cg, fontSize: "clamp(2.8rem,5vw,4.4rem)", fontWeight: 300, lineHeight: 1.08, color: "#fdfaf4", marginBottom: "1rem" }}
-            >
-              Explore{" "}
-              <em style={{ fontStyle: "italic", color: "#e0c88a" }}>Every</em>{" "}
-              Homestay
-              <br />
-              Across Mysuru, Karnataka
-            </h1>
-            <p
-              className="kha-fade-3"
-              style={{ fontSize: ".97rem", fontWeight: 300, lineHeight: 1.8, color: "rgba(244,239,229,.72)" }}
-            >
-              Verified homestays across Mysuru district. Filter by region, price, amenities — then connect with hosts directly.
-            </p>
-          </div>
-          <div className="kha-fade-4 flex gap-10 items-center">
-            {[["9", "Homestays"], ["3", "Taluks"], ["2", "Regions"]].map(([num, lbl], i) => (
-              <React.Fragment key={lbl}>
-                {i > 0 && <div style={{ width: "1px", height: "40px", background: "rgba(200,169,106,.25)" }} />}
-                <div className="text-center">
-                  <span style={{ fontFamily: cg, fontSize: "2.6rem", fontWeight: 300, color: "#c8a96a", lineHeight: 1, display: "block" }}>{num}</span>
-                  <span style={{ fontSize: ".65rem", letterSpacing: ".22em", textTransform: "uppercase", color: "#7a9e6e", marginTop: ".3rem", display: "block" }}>{lbl}</span>
-                </div>
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* ════ BREADCRUMB ════ */}
-      <div
-        className="flex items-center gap-[.6rem] px-16 py-[.9rem]"
-        style={{ background: "#1f2e1f", borderBottom: "1px solid rgba(200,169,106,.1)" }}
-      >
-        <a href="/" style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(244,239,229,.42)", textDecoration: "none" }}>
-          Home
-        </a>
-        <span style={{ color: "rgba(200,169,106,.3)" }}>›</span>
-        <span style={{ fontSize: ".72rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#c8a96a" }}>
-          Explore Homestays
-        </span>
-      </div>
 
       {/* ════ BROWSE ════ */}
-      <section className="kha-browse-section px-16 pb-20 bg-[#182318]" id="khaExpBrowse" style={{ paddingTop: "3rem" }}>
-
-        {fPlace && (() => {
-          const place = TOURIST_PLACES.find((p) => p.key === fPlace);
-          return (
-            <div
-              className="max-w-[1300px] mx-auto mb-4 flex items-center gap-3 px-5 py-3"
-              style={{ background: "rgba(200,169,106,.07)", border: "1px solid rgba(200,169,106,.2)" }}
-            >
-              <MapPin size={14} style={{ color: "#c8a96a", flexShrink: 0 }} />
-              <span style={{ fontSize: ".82rem", color: "#c8a96a", letterSpacing: ".04em" }}>
-                Showing homestays nearest to <strong>{place.label}</strong> — sorted by distance
-              </span>
-              <button
-                onClick={() => setFPlace("")}
-                style={{ marginLeft: "auto", background: "transparent", border: "none", color: "rgba(200,169,106,.55)", fontSize: ".75rem", cursor: "none", letterSpacing: ".1em", textTransform: "uppercase" }}
+      <section
+        className="kha-browse-section my-20 px-16 pb-20 bg-[#182318]"
+        id="khaExpBrowse"
+        style={{ paddingTop: "3rem" }}
+      >
+        {fPlace &&
+          (() => {
+            const place = TOURIST_PLACES.find((p) => p.key === fPlace);
+            return (
+              <div
+                className="max-w-[1300px] mx-auto mb-4 flex items-center gap-3 px-5 py-3"
+                style={{
+                  background: "rgba(200,169,106,.07)",
+                  border: "1px solid rgba(200,169,106,.2)",
+                }}
               >
-                ✕ Clear
-              </button>
-            </div>
-          );
-        })()}
+                <MapPin size={14} style={{ color: "#c8a96a", flexShrink: 0 }} />
+                <span
+                  style={{
+                    fontSize: ".82rem",
+                    color: "#c8a96a",
+                    letterSpacing: ".04em",
+                  }}
+                >
+                  Showing homestays nearest to <strong>{place.label}</strong> —
+                  sorted by distance
+                </span>
+                <button
+                  onClick={() => setFPlace("")}
+                  style={{
+                    marginLeft: "auto",
+                    background: "transparent",
+                    border: "none",
+                    color: "rgba(200,169,106,.55)",
+                    fontSize: ".75rem",
+                    cursor: "none",
+                    letterSpacing: ".1em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  ✕ Clear
+                </button>
+              </div>
+            );
+          })()}
 
         {/* Cards */}
         {filtered.length === 0 ? (
           <div className="max-w-[1300px] mx-auto text-center py-20">
-            <h3 style={{ fontFamily: cg, fontSize: "2.4rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".8rem" }}>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "2.4rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                marginBottom: ".8rem",
+              }}
+            >
               No homestays found
             </h3>
             <p style={{ fontSize: ".95rem", color: "rgba(244,239,229,.5)" }}>
-              Try adjusting your filters — there are wonderful stays waiting to be discovered.
+              Try adjusting your filters — there are wonderful stays waiting to
+              be discovered.
             </p>
           </div>
         ) : (
           <div className="max-w-[1300px] mx-auto grid gap-6 kha-exp-card-grid">
             {visible.map((h) => (
-              <HsCard key={h.id} h={h} onOpen={openDetail} distance={h._distance} />
+              <HsCard
+                key={h.id}
+                h={h}
+                onOpen={openDetail}
+                distance={h._distance}
+              />
             ))}
           </div>
         )}
@@ -1235,7 +1950,16 @@ const Explore = () => {
           <div className="max-w-[1300px] mx-auto text-center mt-14">
             <button
               className="kha-btn-load inline-flex items-center gap-[.8rem] px-[2.8rem] py-[.9rem] transition-all duration-300"
-              style={{ border: "1px solid rgba(200,169,106,.3)", color: "#c8a96a", fontFamily: jost, fontSize: ".75rem", letterSpacing: ".22em", textTransform: "uppercase", background: "transparent", cursor: "none" }}
+              style={{
+                border: "1px solid rgba(200,169,106,.3)",
+                color: "#c8a96a",
+                fontFamily: jost,
+                fontSize: ".75rem",
+                letterSpacing: ".22em",
+                textTransform: "uppercase",
+                background: "transparent",
+                cursor: "none",
+              }}
               onClick={() => setVisibleCount((v) => v + 6)}
             >
               Load More Homestays
@@ -1247,7 +1971,11 @@ const Explore = () => {
       {/* ════ PROMO BAND ════ */}
       <div
         className="px-16 py-14 mt-16"
-        style={{ background: "#2e4a2e", borderTop: "1px solid rgba(200,169,106,.15)", borderBottom: "1px solid rgba(200,169,106,.15)" }}
+        style={{
+          background: "#2e4a2e",
+          borderTop: "1px solid rgba(200,169,106,.15)",
+          borderBottom: "1px solid rgba(200,169,106,.15)",
+        }}
       >
         <div
           className="kha-promo-inner max-w-[1100px] mx-auto grid gap-16 items-center"
@@ -1255,35 +1983,101 @@ const Explore = () => {
         >
           <div className="kha-reveal">
             <span className="kha-eyebrow">Why Book Through KHA</span>
-            <h3 style={{ fontFamily: cg, fontSize: "2.4rem", fontWeight: 300, color: "#f4efe5", lineHeight: 1.2, marginBottom: "1rem" }}>
+            <h3
+              style={{
+                fontFamily: cg,
+                fontSize: "2.4rem",
+                fontWeight: 300,
+                color: "#f4efe5",
+                lineHeight: 1.2,
+                marginBottom: "1rem",
+              }}
+            >
               Every Stay is{" "}
-              <em style={{ fontStyle: "italic", color: "#e0c88a" }}>Verified</em>,
+              <em style={{ fontStyle: "italic", color: "#e0c88a" }}>
+                Verified
+              </em>
+              ,
               <br />
               Every Host Trusted
             </h3>
             <div className="flex items-center gap-[.8rem] my-6">
-              <div style={{ height: "1px", background: "#c8a96a", opacity: 0.35, width: "50px" }} />
+              <div
+                style={{
+                  height: "1px",
+                  background: "#c8a96a",
+                  opacity: 0.35,
+                  width: "50px",
+                }}
+              />
               <div className="kha-divider-gem" />
-              <div style={{ height: "1px", background: "#c8a96a", opacity: 0.35, width: "50px" }} />
+              <div
+                style={{
+                  height: "1px",
+                  background: "#c8a96a",
+                  opacity: 0.35,
+                  width: "50px",
+                }}
+              />
             </div>
-            <p style={{ fontSize: ".95rem", lineHeight: 1.9, color: "rgba(244,239,229,.62)", fontWeight: 300 }}>
-              All homestays listed on this platform are registered, verified, and operated by honorable members of the Mysuru District Homestay Owners Association (R). Book directly — no OTA commissions, no hidden charges.
+            <p
+              style={{
+                fontSize: ".95rem",
+                lineHeight: 1.9,
+                color: "rgba(244,239,229,.62)",
+                fontWeight: 300,
+              }}
+            >
+              All homestays listed on this platform are registered, verified,
+              and operated by honorable members of the Mysuru District Homestay
+              Owners Association (R). Book directly — no OTA commissions, no
+              hidden charges.
             </p>
           </div>
           <div className="kha-reveal kha-d1 flex flex-col gap-[1.1rem]">
             {[
-              { icon: <Smartphone size={24} />, title: "Direct Contact, Zero Fees", desc: "No commissions. WhatsApp or website — you negotiate directly with the host." },
-              { icon: <Leaf size={24} />, title: "Sustainability Committed", desc: "All MDHOA members follow responsible and eco-conscious tourism practices." },
+              {
+                icon: <Smartphone size={24} />,
+                title: "Direct Contact, Zero Fees",
+                desc: "No commissions. WhatsApp or website — you negotiate directly with the host.",
+              },
+              {
+                icon: <Leaf size={24} />,
+                title: "Sustainability Committed",
+                desc: "All MDHOA members follow responsible and eco-conscious tourism practices.",
+              },
             ].map((f) => (
               <div
                 key={f.title}
                 className="kha-promo-feat flex items-start gap-4 px-5 py-[1.1rem] bg-[#182318]"
-                style={{ border: "1px solid rgba(200,169,106,.1)", color: "#c8a96a" }}
+                style={{
+                  border: "1px solid rgba(200,169,106,.1)",
+                  color: "#c8a96a",
+                }}
               >
                 <span style={{ flexShrink: 0 }}>{f.icon}</span>
                 <div>
-                  <span style={{ fontSize: ".8rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#c8a96a", display: "block", marginBottom: ".2rem" }}>{f.title}</span>
-                  <span style={{ fontSize: ".88rem", lineHeight: 1.6, color: "rgba(244,239,229,.58)" }}>{f.desc}</span>
+                  <span
+                    style={{
+                      fontSize: ".8rem",
+                      letterSpacing: ".14em",
+                      textTransform: "uppercase",
+                      color: "#c8a96a",
+                      display: "block",
+                      marginBottom: ".2rem",
+                    }}
+                  >
+                    {f.title}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: ".88rem",
+                      lineHeight: 1.6,
+                      color: "rgba(244,239,229,.58)",
+                    }}
+                  >
+                    {f.desc}
+                  </span>
                 </div>
               </div>
             ))}
@@ -1317,38 +2111,135 @@ const Explore = () => {
               <a href="#" className="kha-back-btn" onClick={closeDetail}>
                 <ArrowLeft size={13} /> Back to Explore
               </a>
-              <div style={{ width: "1px", height: "16px", background: "rgba(200,169,106,.2)", flexShrink: 0 }} />
-              <div style={{ fontFamily: cg, fontSize: "1.12rem", fontWeight: 300, color: "#c8a96a" }}>
+              <div
+                style={{
+                  width: "1px",
+                  height: "16px",
+                  background: "rgba(200,169,106,.2)",
+                  flexShrink: 0,
+                }}
+              />
+              <div
+                style={{
+                  fontFamily: cg,
+                  fontSize: "1.12rem",
+                  fontWeight: 300,
+                  color: "#c8a96a",
+                }}
+              >
                 {currentHs.name}
               </div>
-              <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: ".5rem" }}>
+              <div
+                style={{
+                  marginLeft: "auto",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: ".5rem",
+                }}
+              >
                 <Stars rating={currentHs.rating} sz={13} />
-                <span style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}>{currentHs.rating}</span>
-                <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.35)" }}>({currentHs.reviews} reviews)</span>
+                <span
+                  style={{
+                    fontSize: ".84rem",
+                    color: "#c8a96a",
+                    fontWeight: 500,
+                  }}
+                >
+                  {currentHs.rating}
+                </span>
+                <span
+                  style={{ fontSize: ".74rem", color: "rgba(244,239,229,.35)" }}
+                >
+                  ({currentHs.reviews} reviews)
+                </span>
               </div>
             </div>
 
             {/* Hero strip */}
-            <div style={{ position: "relative", height: "300px", overflow: "hidden" }}>
+            <div
+              style={{
+                position: "relative",
+                height: "300px",
+                overflow: "hidden",
+              }}
+            >
               <img
                 src={currentHs.img}
                 alt={currentHs.name}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,rgba(24,35,24,.05) 0%,rgba(24,35,24,.85) 100%)" }} />
-              <div style={{ position: "absolute", bottom: "2rem", left: "3rem", right: "3rem" }}>
-                <div style={{ display: "flex", gap: ".55rem", marginBottom: ".65rem", flexWrap: "wrap" }}>
-                  <Badge bg="rgba(24,35,24,.72)" border="rgba(200,169,106,.38)" color="#c8a96a">{currentHs.type}</Badge>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background:
+                    "linear-gradient(to bottom,rgba(24,35,24,.05) 0%,rgba(24,35,24,.85) 100%)",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "2rem",
+                  left: "3rem",
+                  right: "3rem",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    gap: ".55rem",
+                    marginBottom: ".65rem",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Badge
+                    bg="rgba(24,35,24,.72)"
+                    border="rgba(200,169,106,.38)"
+                    color="#c8a96a"
+                  >
+                    {currentHs.type}
+                  </Badge>
                   {currentHs.hasWebsite ? (
-                    <Badge bg="rgba(46,74,46,.82)" border="rgba(122,158,110,.42)" color="#adc49a">Has Website</Badge>
+                    <Badge
+                      bg="rgba(46,74,46,.82)"
+                      border="rgba(122,158,110,.42)"
+                      color="#adc49a"
+                    >
+                      Has Website
+                    </Badge>
                   ) : (
-                    <Badge bg="rgba(37,211,102,.15)" border="rgba(37,211,102,.4)" color="#4ade80">WhatsApp Booking</Badge>
+                    <Badge
+                      bg="rgba(37,211,102,.15)"
+                      border="rgba(37,211,102,.4)"
+                      color="#4ade80"
+                    >
+                      WhatsApp Booking
+                    </Badge>
                   )}
                 </div>
-                <div style={{ fontFamily: cg, fontSize: "clamp(1.8rem,4vw,2.9rem)", fontWeight: 300, color: "#fdfaf4", lineHeight: 1.1, marginBottom: ".4rem" }}>
+                <div
+                  style={{
+                    fontFamily: cg,
+                    fontSize: "clamp(1.8rem,4vw,2.9rem)",
+                    fontWeight: 300,
+                    color: "#fdfaf4",
+                    lineHeight: 1.1,
+                    marginBottom: ".4rem",
+                  }}
+                >
                   {currentHs.name}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: ".55rem", fontSize: ".82rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#adc49a" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".55rem",
+                    fontSize: ".82rem",
+                    letterSpacing: ".14em",
+                    textTransform: "uppercase",
+                    color: "#adc49a",
+                  }}
+                >
                   <MapPin size={12} />
                   {currentHs.taluk} · {currentHs.district} District, Mysore
                 </div>
@@ -1358,58 +2249,220 @@ const Explore = () => {
             {/* Body — two column */}
             <div
               className="dp-inner"
-              style={{ maxWidth: "1350px", margin: "0 auto", padding: "3rem 3rem 6rem" }}
+              style={{
+                maxWidth: "1350px",
+                margin: "0 auto",
+                padding: "3rem 3rem 6rem",
+              }}
             >
               <div
-                style={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: "2.5rem", alignItems: "start" }}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "420px 1fr",
+                  gap: "2.5rem",
+                  alignItems: "start",
+                }}
                 className="kha-detail-two-col"
               >
                 {/* LEFT: About + Host */}
                 <div style={{ position: "sticky", top: "80px" }}>
                   {/* About block */}
-                  <div style={{ padding: "1.6rem 1.8rem", background: "rgba(31,46,31,.5)", border: "1px solid rgba(200,169,106,.12)", marginBottom: "1.4rem" }}>
+                  <div
+                    style={{
+                      padding: "1.6rem 1.8rem",
+                      background: "rgba(31,46,31,.5)",
+                      border: "1px solid rgba(200,169,106,.12)",
+                      marginBottom: "1.4rem",
+                    }}
+                  >
                     <span
-                      style={{ display: "inline-flex", alignItems: "center", gap: ".45rem", fontSize: ".66rem", letterSpacing: ".28em", textTransform: "uppercase", color: "#c8a96a", marginBottom: ".7rem" }}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: ".45rem",
+                        fontSize: ".66rem",
+                        letterSpacing: ".28em",
+                        textTransform: "uppercase",
+                        color: "#c8a96a",
+                        marginBottom: ".7rem",
+                      }}
                     >
-                      <span style={{ width: "16px", height: "1px", background: "#c8a96a", display: "inline-block" }} />
+                      <span
+                        style={{
+                          width: "16px",
+                          height: "1px",
+                          background: "#c8a96a",
+                          display: "inline-block",
+                        }}
+                      />
                       About
                     </span>
-                    <h3 style={{ fontFamily: cg, fontSize: "1.35rem", fontWeight: 300, color: "#f4efe5", marginBottom: ".3rem", lineHeight: 1.2 }}>
+                    <h3
+                      style={{
+                        fontFamily: cg,
+                        fontSize: "1.35rem",
+                        fontWeight: 300,
+                        color: "#f4efe5",
+                        marginBottom: ".3rem",
+                        lineHeight: 1.2,
+                      }}
+                    >
                       {currentHs.name}
                     </h3>
-                    <p style={{ fontSize: ".78rem", letterSpacing: ".08em", color: "#7a9e6e", marginBottom: ".75rem", display: "flex", alignItems: "center", gap: ".35rem" }}>
-                      <MapPin size={11} style={{ color: "#c8a96a", flexShrink: 0 }} />
+                    <p
+                      style={{
+                        fontSize: ".78rem",
+                        letterSpacing: ".08em",
+                        color: "#7a9e6e",
+                        marginBottom: ".75rem",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".35rem",
+                      }}
+                    >
+                      <MapPin
+                        size={11}
+                        style={{ color: "#c8a96a", flexShrink: 0 }}
+                      />
                       <span>{currentHs.location}</span>
                     </p>
-                    <p style={{ fontSize: ".75rem", color: "rgba(200,169,106,.7)", marginBottom: ".75rem" }}>
-                      (Government of Karnataka, Dept of Tourism Approved Homestay)
+                    <p
+                      style={{
+                        fontSize: ".75rem",
+                        color: "rgba(200,169,106,.7)",
+                        marginBottom: ".75rem",
+                      }}
+                    >
+                      (Government of Karnataka, Dept of Tourism Approved
+                      Homestay)
                     </p>
-                    <p style={{ fontSize: ".87rem", lineHeight: 1.85, color: "rgba(244,239,229,.62)", fontWeight: 300, margin: "0 0 1.1rem" }}>
+                    <p
+                      style={{
+                        fontSize: ".87rem",
+                        lineHeight: 1.85,
+                        color: "rgba(244,239,229,.62)",
+                        fontWeight: 300,
+                        margin: "0 0 1.1rem",
+                      }}
+                    >
                       {currentHs.desc}
                     </p>
                   </div>
 
                   {/* Host block */}
-                  <div style={{ padding: "1.6rem 1.8rem", background: "rgba(31,46,31,.65)", border: "1px solid rgba(200,169,106,.12)" }}>
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: ".45rem", fontSize: ".66rem", letterSpacing: ".28em", textTransform: "uppercase", color: "#c8a96a", marginBottom: ".9rem" }}>
-                      <span style={{ width: "16px", height: "1px", background: "#c8a96a", display: "inline-block" }} />
+                  <div
+                    style={{
+                      padding: "1.6rem 1.8rem",
+                      background: "rgba(31,46,31,.65)",
+                      border: "1px solid rgba(200,169,106,.12)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: ".45rem",
+                        fontSize: ".66rem",
+                        letterSpacing: ".28em",
+                        textTransform: "uppercase",
+                        color: "#c8a96a",
+                        marginBottom: ".9rem",
+                      }}
+                    >
+                      <span
+                        style={{
+                          width: "16px",
+                          height: "1px",
+                          background: "#c8a96a",
+                          display: "inline-block",
+                        }}
+                      />
                       Your Host
                     </span>
-                    <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: ".9rem" }}>
-                      <div style={{ width: "58px", height: "58px", borderRadius: "50%", border: "2px solid rgba(200,169,106,.3)", overflow: "hidden", flexShrink: 0 }}>
-                        <img src={currentHs.host.avatar} alt={currentHs.host.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1rem",
+                        marginBottom: ".9rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "58px",
+                          height: "58px",
+                          borderRadius: "50%",
+                          border: "2px solid rgba(200,169,106,.3)",
+                          overflow: "hidden",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <img
+                          src={currentHs.host.avatar}
+                          alt={currentHs.host.name}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
                       </div>
                       <div>
-                        <div style={{ fontFamily: cg, fontSize: "1.18rem", fontWeight: 300, color: "#f4efe5", lineHeight: 1.2 }}>{currentHs.host.name}</div>
-                        <div style={{ fontSize: ".66rem", letterSpacing: ".15em", textTransform: "uppercase", color: "#7a9e6e", marginTop: ".12rem" }}>{currentHs.host.since}</div>
+                        <div
+                          style={{
+                            fontFamily: cg,
+                            fontSize: "1.18rem",
+                            fontWeight: 300,
+                            color: "#f4efe5",
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {currentHs.host.name}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: ".66rem",
+                            letterSpacing: ".15em",
+                            textTransform: "uppercase",
+                            color: "#7a9e6e",
+                            marginTop: ".12rem",
+                          }}
+                        >
+                          {currentHs.host.since}
+                        </div>
                       </div>
                     </div>
-                    <p style={{ fontSize: ".86rem", lineHeight: 1.8, color: "rgba(244,239,229,.58)", fontWeight: 300, margin: "0 0 1.1rem" }}>
+                    <p
+                      style={{
+                        fontSize: ".86rem",
+                        lineHeight: 1.8,
+                        color: "rgba(244,239,229,.58)",
+                        fontWeight: 300,
+                        margin: "0 0 1.1rem",
+                      }}
+                    >
                       {currentHs.host.desc}
                     </p>
-                    <div style={{ display: "flex", alignItems: "center", gap: ".6rem", padding: ".7rem 1rem", background: "rgba(200,169,106,.07)", border: "1px solid rgba(200,169,106,.14)" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: ".6rem",
+                        padding: ".7rem 1rem",
+                        background: "rgba(200,169,106,.07)",
+                        border: "1px solid rgba(200,169,106,.14)",
+                      }}
+                    >
                       <Stars rating={currentHs.rating} sz={14} />
-                      <span style={{ fontSize: ".9rem", color: "#c8a96a", fontWeight: 500 }}>{currentHs.rating}</span>
+                      <span
+                        style={{
+                          fontSize: ".9rem",
+                          color: "#c8a96a",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {currentHs.rating}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1418,23 +2471,69 @@ const Explore = () => {
                 <div>
                   <div style={{ marginBottom: "1.6rem" }}>
                     <span
-                      style={{ display: "inline-flex", alignItems: "center", gap: ".55rem", fontSize: ".7rem", letterSpacing: ".3em", textTransform: "uppercase", color: "#c8a96a", marginBottom: ".55rem" }}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: ".55rem",
+                        fontSize: ".7rem",
+                        letterSpacing: ".3em",
+                        textTransform: "uppercase",
+                        color: "#c8a96a",
+                        marginBottom: ".55rem",
+                      }}
                     >
-                      <span style={{ width: "20px", height: "1px", background: "#c8a96a", display: "inline-block" }} />
+                      <span
+                        style={{
+                          width: "20px",
+                          height: "1px",
+                          background: "#c8a96a",
+                          display: "inline-block",
+                        }}
+                      />
                       Choose Your Room
                     </span>
-                    <h2 style={{ fontFamily: cg, fontSize: "clamp(1.7rem,3vw,2.5rem)", fontWeight: 300, color: "#f4efe5", lineHeight: 1.15 }}>
+                    <h2
+                      style={{
+                        fontFamily: cg,
+                        fontSize: "clamp(1.7rem,3vw,2.5rem)",
+                        fontWeight: 300,
+                        color: "#f4efe5",
+                        lineHeight: 1.15,
+                      }}
+                    >
                       3 Unique Stays Available
                     </h2>
-                    <p style={{ fontSize: ".86rem", color: "rgba(244,239,229,.42)", marginTop: ".35rem", fontWeight: 300 }}>
-                      All rooms include home-cooked meals and direct WhatsApp booking with the host family. Click any room to see full details.
+                    <p
+                      style={{
+                        fontSize: ".86rem",
+                        color: "rgba(244,239,229,.42)",
+                        marginTop: ".35rem",
+                        fontWeight: 300,
+                      }}
+                    >
+                      All rooms include home-cooked meals and direct WhatsApp
+                      booking with the host family. Click any room to see full
+                      details.
                     </p>
                   </div>
 
-                  <div style={{ height: "1px", background: "linear-gradient(to right,rgba(200,169,106,.28),transparent)", marginBottom: "1.8rem" }} />
+                  <div
+                    style={{
+                      height: "1px",
+                      background:
+                        "linear-gradient(to right,rgba(200,169,106,.28),transparent)",
+                      marginBottom: "1.8rem",
+                    }}
+                  />
 
-                  <div style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}>
-                    {ROOM_TYPES.map((room, i) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "1.2rem",
+                    }}
+                  >
+                    {ROOM_TYPES[currentHs.id]?.map((room, i) => (
                       <RoomListCard
                         key={room.key}
                         room={room}
