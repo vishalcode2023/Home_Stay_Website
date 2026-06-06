@@ -51,7 +51,6 @@ const Homerules = () => {
           color: "#c8a96a", marginBottom: "1rem",
         }}>
           <span style={{ width: "22px", height: "1px", background: "#c8a96a", display: "inline-block" }} />
-          Kukkeshree Homestay — Mysuru
         </div>
 
         {/* Heading */}
