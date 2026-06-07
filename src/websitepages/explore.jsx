@@ -472,11 +472,120 @@ const ROOM_TYPES = {
       ],
       imgs: [
         "/images/krac-dayvisit-2.jpg",
-        "/images/krac-dayvisit-1.jpg",
+        "/images/Sliverhomestay1.jpg",
         "/images/krac-dayvisit-3.jpg",
         "/images/krac-dayvisit-4.jpg",
         "/images/krac-dayvisit-5.jpg",
         "/images/krac-dayvisit-6.jpg",
+      ],
+    },
+  ],
+
+  4: [
+    {
+      key: "nature_cottage",
+      name: "The Serene Nature Cottages",
+      tag: "Category 1",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 2,
+      sqft: null,
+      desc: "For smaller groups or standalone travelers searching for an intimate nature retreat, 1000 Silvers presents independent Nature Cottages. These standalone structural units balance modern climate comfort with a direct view of the farm's chess-patterned flagstone lawns.",
+      amenities: [
+        "Four-poster canopy bed with double bunk beds",
+        "Full air conditioning",
+        "Wall-mounted Smart TV",
+        "Mini-refrigerator",
+        "Dressing area",
+        "Private brick-lined veranda sit-out",
+        "View of chess-patterned flagstone lawns",
+      ],
+      imgs: [
+        "/images/Sliverhomestay1.jpg",
+        "/images/Sliverhomestay2.jpg",
+        "/images/Sliverhomestay3.jpg",
+        "/images/Sliverhomestay4.jpg",
+        "/images/Sliverhomestay5.jpg",
+        "/images/Sliverhomestay6.jpg",
+      ],
+    },
+    {
+      key: "ac_villa",
+      name: "Premium 2 BHK AC Villa",
+      tag: "Category 2",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1.8,
+      guests: 8,
+      beds: 6,
+      sqft: null,
+      desc: "Purposefully engineered for guest clusters, family staycations, and group gatherings as a single, fully integrated booking. The villa blends vast social seating interiors with serene green window views and accommodates up to 8 guests.",
+      amenities: [
+        "2 king-size beds & 4 bunk beds",
+        "Full air conditioning",
+        "Sunlit luxury seating hall",
+        "Traditional wooden sofas & premium accent carpets",
+        "Wall-mounted Smart LED TV",
+        "WiFi",
+        "Green window views",
+      ],
+      imgs: [
+        "/images/Sliverhomestay7.jpg",
+        "/images/Sliverhomestay8.jpg",
+        "/images/Sliverhomestay10.jpg",
+        "/images/Sliverhomestay4.jpg",
+        "/images/Sliverhomestay5.jpg",
+      ],
+    },
+    {
+      key: "event_venue",
+      name: "Elite Event & Celebration Venue",
+      tag: "Events & Functions",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: null,
+      guests: null,
+      beds: 0,
+      sqft: null,
+      desc: "Beyond standard holiday stays, 1000 Silvers acts as a premier venue for private or corporate retreats, birthday bashes, pre-wedding cocktail functions, and social reunions. Our extensive infrastructure is configured to host vibrant family events flawlessly.",
+      amenities: [
+        "Grand Outdoor Event Lawns",
+        "Bonfire Pit & Karaoke Stage",
+        "Gourmet Culinary Serving Window",
+        "High-Power Sound Speakers",
+        "Stage Mood Lighting",
+        "Custom Gazebos",
+        "Banquet Seating Layouts",
+        "Formal Stage Frames",
+      ],
+      eventFeatures: [
+        {
+          title: "Grand Outdoor Event Lawns",
+          desc: "Vast perfectly manicured grass lawns ready to accommodate dynamic banquet seating layouts, custom gazebos, and formal stage frames for group programs.",
+        },
+        {
+          title: "Bonfire Pit & Karaoke Stage",
+          desc: "Unwind under the Mysuru starlight by our specialized brick sunken fire pit, flanked by an integrated presentation audio setup, high-power sound speakers, and vibrant stage mood lighting blocks.",
+        },
+        {
+          title: "Gourmet Culinary Serving Window",
+          desc: "A modern counter server hub linking kitchen setups directly with outdoor paths for fluid catering transitions.",
+        },
+      ],
+      imgs: [
+        "/images/event1.png",
+        "/images/event.png",
+        "/images/event3.png",
+        "/images/Sliverhomestay4.jpg",
+        "/images/Sliverhomestay5.jpg",
       ],
     },
   ],
@@ -637,6 +746,40 @@ const HS = [
       },
     ],
   },
+  {
+    id: 4,
+    lat: 12.18, // HD Kote Road, Mysuru — update with exact coords
+    lng: 76.47,
+    name: "1000 Silvers Farm Stay",
+    taluk: "HD Kote",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null, // not mentioned in portfolio — update with actual price
+    rating: null,
+    reviews: null,
+    amenities: [
+      "Premium Indoor Games Pavilion",
+      "Children's Playground & Open Gym",
+      "High Wooden Watchtower (Machan)",
+      "Bonfire Pit & Karaoke Stage",
+      "Grand Outdoor Event Lawns",
+      "Gourmet Culinary Serving Window",
+    ],
+    hasWebsite: false,
+    phone: "9444866776",
+    img: "/images/Sliverhomestay1.jpg",
+    imgs: [],
+    type: "Farm Stay",
+    location: "HD Kote Road, Mysuru • Along the HD Kote and Mysore Highway",
+    desc: "1000 Silvers Farm Stay is a tranquil, pet-friendly retreat located in the countryside of Mysore, India, specifically situated along the HD Kote and Mysore highway. It is designed as an exclusive farmhouse experience, often catering to individual groups to ensure privacy. Approved by the Tourism Department.",
+    host: {
+      name: "Harsha",
+      since: "Estate Owner",
+      avatar: null,
+      desc: "Direct reservations via Harsha — estate owner and host at 1000 Silvers Farm Stay.",
+    },
+    guestReviews: [],
+  },
 ];
 
 /* ─── Stars helper ──────────────────────────────────────────────────────── */
@@ -763,7 +906,9 @@ function HsCard({ h, onOpen, distance }) {
               lineHeight: 1,
             }}
           >
-            ₹{h.price.toLocaleString("en-IN")}
+            {h.price != null
+              ? `₹${h.price.toLocaleString("en-IN")}`
+              : "Contact for Price"}
           </span>
           <span
             style={{
@@ -884,7 +1029,10 @@ function HsCard({ h, onOpen, distance }) {
 
 /* ─── Room List Card (inside detail slide) ──────────────────────────────── */
 function RoomListCard({ room, h, onOpen, index }) {
-  const price = Math.round((h.price * room.multiplier) / 100) * 100;
+  const price =
+    h.price != null && room.multiplier != null
+      ? Math.round((h.price * room.multiplier) / 100) * 100
+      : null;
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768,
@@ -1039,17 +1187,23 @@ function RoomListCard({ room, h, onOpen, index }) {
               lineHeight: 1,
             }}
           >
-            ₹{price.toLocaleString("en-IN")}
-            <span
-              style={{
-                fontSize: ".72rem",
-                color: "rgba(244,239,229,.38)",
-                marginLeft: ".35rem",
-                fontFamily: jost,
-              }}
-            >
-              /night
-            </span>
+            {price != null ? (
+              <>
+                ₹{price.toLocaleString("en-IN")}
+                <span
+                  style={{
+                    fontSize: ".72rem",
+                    color: "rgba(244,239,229,.38)",
+                    marginLeft: ".35rem",
+                    fontFamily: jost,
+                  }}
+                >
+                  /night
+                </span>
+              </>
+            ) : (
+              <span style={{ fontSize: "1rem" }}>Contact for Price</span>
+            )}
           </div>
         </div>
       </div>
@@ -1168,10 +1322,12 @@ function RoomListCard({ room, h, onOpen, index }) {
 /* ─── Room Full Detail ──────────────────────────────────────────────────── */
 // ✅ REPLACE WITH
 function RoomDetail({ h, roomKey, onBack }) {
-  if (!h || !roomKey) return null;                                  // guard FIRST
+  if (!h || !roomKey) return null; // guard FIRST
   const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
   if (!room) return null;
-  const price = Math.round((h.price * room.multiplier) / 100) * 100;
+  const price = h.price != null && room.multiplier != null
+  ? Math.round((h.price * room.multiplier) / 100) * 100
+  : null;
   const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
@@ -1613,7 +1769,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                     display: "block",
                   }}
                 >
-                  ₹{price.toLocaleString("en-IN")}
+                  {price != null ? `₹${price.toLocaleString("en-IN")}` : "Contact for Price"}
                 </span>
                 <span
                   style={{

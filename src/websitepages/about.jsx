@@ -438,7 +438,7 @@ const About = () => {
                   </div>
                 </div>
                 <p style={{ fontSize: ".87rem", lineHeight: 1.8, color: "rgba(244,239,229,.58)", fontWeight: 300, marginBottom: "1.1rem" }}>
-                  Nanjunda handles the day-to-day operations of the association, coordinates member registrations, and liaises with government bodies to keep all listing certifications current. His homestay on the Kabini banks has been a model for responsible wildlife tourism.
+                  Krishan Kanth handles the day-to-day operations of the association, coordinates member registrations, and liaises with government bodies to keep all listing certifications current. His homestay on the Kabini banks has been a model for responsible wildlife tourism.
                 </p>
                 <div
                   style={{ paddingTop: ".8rem", borderTop: "1px solid rgba(200,169,106,.1)", fontSize: ".7rem", letterSpacing: ".14em", color: "rgba(200,169,106,.55)" }}
