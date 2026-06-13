@@ -283,6 +283,7 @@ const AICONS = {
 };
 
 const ROOM_TYPES = {
+  // Kukkeshree — id: 1
   1: [
     {
       key: "deluxe",
@@ -375,6 +376,8 @@ const ROOM_TYPES = {
       ],
     },
   ],
+
+  // Sky House — id: 2
   2: [
     {
       key: "1bhk_garden",
@@ -446,6 +449,8 @@ const ROOM_TYPES = {
       ],
     },
   ],
+
+  // Kracadawna — id: 3
   3: [
     {
       key: "dragonfly",
@@ -532,6 +537,7 @@ const ROOM_TYPES = {
       ],
     },
   ],
+
   4: [
     {
       key: "nature_cottage",
@@ -640,6 +646,7 @@ const ROOM_TYPES = {
       ],
     },
   ],
+
   5: [
     {
       key: "second_floor_2bhk",
@@ -664,7 +671,14 @@ const ROOM_TYPES = {
         "Restaurants within 5–8 min walk",
         "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
       ],
-      imgs: [],
+      imgs: [
+        "/images/mol.png",
+        "/images/mol1.png",
+        "/images/mol2.png",
+        "/images/mol3.png",
+        "/images/mol4.png",
+        "/images/mol5.png",
+      ],
     },
     {
       key: "first_floor_2bhk",
@@ -688,9 +702,18 @@ const ROOM_TYPES = {
         "Restaurants within 5–8 min walk",
         "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
       ],
-      imgs: [],
+      imgs: [
+        "/images/mol6.png",
+        "/images/mol7.png",
+        "/images/mol8.png",
+        "/images/mol9.png",
+        "/images/mol10.png",
+        "/images/mol11.png",
+      ],
     },
   ],
+
+  // Aastha Homestay — id: 6
   6: [
     {
       key: "family_room",
@@ -717,9 +740,18 @@ const ROOM_TYPES = {
         "Evening campfire setup (weather permitting)",
         "Securely fenced 1-acre property",
       ],
-      imgs: [],
+      imgs: [
+        "/images/ask.png",
+        "/images/ask1.png",
+        "/images/ask2.png",
+        "/images/ask3.png",
+        "/images/ask4.png",
+        "/images/ask5.png",
+      ],
     },
   ],
+
+  // Bolak Homestay — id: 7
   7: [
     {
       key: "heritage_suite",
@@ -744,7 +776,13 @@ const ROOM_TYPES = {
         "Smart TV",
         "WiFi",
       ],
-      imgs: [],
+      imgs: [
+        "/images/bol.png",
+        "/images/bol1.png",
+        "/images/bol2.png",
+        "/images/bol3.png",
+        "/images/bol.png",
+      ],
     },
     {
       key: "royal_balcony_suite",
@@ -769,7 +807,13 @@ const ROOM_TYPES = {
         "WiFi",
         "Near Mysuru Palace (8.6 km), Chamundi Hills (14.0 km), Devaraja Bazaar (7.8 km)",
       ],
-      imgs: [],
+      imgs: [
+        "/images/bol.png",
+        "/images/bol1.png",
+        "/images/bol2.png",
+        "/images/bol3.png",
+        "/images/bol.png",
+      ],
     },
   ],
 };
@@ -973,7 +1017,7 @@ const HS = [
     amenities: ["Free WiFi", "TV", "Fully Equipped Kitchen", "Solar Geyser"],
     hasWebsite: false,
     phone: null,
-    img: "",
+    img: "/images/mol.png",
     imgs: [],
     type: "Family Homestay",
     location:
@@ -1007,7 +1051,7 @@ const HS = [
     ],
     hasWebsite: false,
     phone: "9480568332",
-    img: "",
+    img: "/images/ask.png",
     imgs: [],
     type: "Farm Homestay",
     location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
@@ -1039,7 +1083,7 @@ const HS = [
     ],
     hasWebsite: true,
     phone: "9448336870",
-    img: "",
+    img: "/images/bol.png",
     imgs: [],
     type: "Premium Villa Homestay",
     location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
