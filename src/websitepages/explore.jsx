@@ -33,7 +33,7 @@ const STYLES = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {  background:#182318; color:#f4efe5; overflow-x:hidden; cursor:none; }
+  body { background:#182318; color:#f4efe5; overflow-x:hidden; cursor:none; }
   ::-webkit-scrollbar { width:3px; }
   ::-webkit-scrollbar-track { background:#182318; }
   ::-webkit-scrollbar-thumb { background:#c8a96a; }
@@ -65,8 +65,14 @@ const STYLES = `
   .kha-reveal.in { opacity:1; transform:translateY(0); }
   .kha-d1{transition-delay:.12s;} .kha-d2{transition-delay:.24s;} .kha-d3{transition-delay:.36s;}
 
-  /* Detail slide (homestay list → room list) */
-  #khaExpDetailPage { position:fixed; inset:0; z-index:2000; background:#182318; overflow-y:auto; transform:translateX(100%); transition:transform .65s cubic-bezier(.22,1,.36,1); }
+  /* ── Detail slide ── */
+  #khaExpDetailPage {
+    position:fixed; inset:0; z-index:2000; background:#182318;
+    overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch;
+    transform:translateX(100%);
+    transition:transform .52s cubic-bezier(.25,.46,.45,.94);
+    will-change:transform;
+  }
   #khaExpDetailPage.open { transform:translateX(0); }
   #khaExpDetailPage.open .kha-dp-hero-img { transform:scale(1); }
   .kha-dp-hero-img { transform:scale(1.04); transition:transform 8s ease; }
@@ -77,8 +83,14 @@ const STYLES = `
   .kha-gal-img:hover img { transform:scale(1.07); }
   .kha-gal-img img { transition:transform .6s; }
 
-  /* Room full detail slide */
-  #khaExpRoomPage { position:fixed; inset:0; z-index:3000; background:#182318; overflow-y:auto; transform:translateX(100%); transition:transform .6s cubic-bezier(.22,1,.36,1); }
+  /* ── Room full detail slide ── */
+  #khaExpRoomPage {
+    position:fixed; inset:0; z-index:3000; background:#182318;
+    overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch;
+    transform:translateX(100%);
+    transition:transform .48s cubic-bezier(.25,.46,.45,.94);
+    will-change:transform;
+  }
   #khaExpRoomPage.open { transform:translateX(0); }
 
   /* Room list cards */
@@ -97,7 +109,7 @@ const STYLES = `
   .kha-amen-item:hover { border-color:rgba(200,169,106,.3); }
 
   /* Back btn */
-  .kha-back-btn { display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; color:rgba(244,239,229,.72); font-size:.76rem; letter-spacing:.2em; text-transform:uppercase; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.22); padding:.5rem 1.4rem; transition:color .3s,border-color .3s; cursor:none; }
+  .kha-back-btn { display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; color:rgba(244,239,229,.72); font-size:.76rem; letter-spacing:.2em; text-transform:uppercase; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.22); padding:.5rem 1.4rem; transition:color .3s,border-color .3s; cursor:none; white-space:nowrap; flex-shrink:0; }
   .kha-back-btn:hover { color:#c8a96a; border-color:#c8a96a; }
   .kha-btn-wa-room { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(37,211,102,.18); border:1px solid rgba(37,211,102,.42); color:#4ade80; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; }
   .kha-btn-wa-room:hover { background:rgba(37,211,102,.32); }
@@ -105,7 +117,7 @@ const STYLES = `
   .kha-btn-web-room:hover { background:rgba(200,169,106,.28); }
 
   /* Detail two-col */
-  .kha-detail-two-col { grid-template-columns: 420px 1fr; }
+  .kha-detail-two-col { grid-template-columns:420px 1fr; }
 
   .kha-exp-card-grid { grid-template-columns:repeat(3,1fr); }
   .kha-promo-feat { transition:border-color .3s; }
@@ -116,8 +128,19 @@ const STYLES = `
   .kha-btn-load:hover::after { width:44px; }
   .kha-btn-load:hover { border-color:#c8a96a !important; background:rgba(200,169,106,.08) !important; }
 
+  /* Topbar */
+  .dp-topbar { padding:.85rem 3rem; }
+
+  /* Booking sticky */
+  .kha-booking-sticky { position:sticky; top:80px; }
+
+  /* Detail left sticky */
+  .kha-detail-left-sticky { position:sticky; top:80px; }
+
+  /* ─── TABLET ─────────────────── */
   @media(max-width:900px){
-    body { cursor:auto; } .kha-cur { display:none; } .kha-cuf { display:none; }
+    body { cursor:auto; }
+    .kha-cur,.kha-cuf { display:none; }
     .kha-ex-hero-content { padding:0 1.5rem 2.5rem; flex-direction:column; align-items:flex-start; }
     .kha-exp-card-grid { grid-template-columns:1fr 1fr !important; gap:1rem !important; }
     .kha-dp-body { padding:2rem 1.5rem 5rem !important; }
@@ -126,23 +149,58 @@ const STYLES = `
     .kha-dp-amen-grid { grid-template-columns:1fr 1fr !important; }
     .kha-promo-inner { grid-template-columns:1fr !important; }
     .kha-detail-two-col { grid-template-columns:1fr !important; }
+    .kha-detail-left-sticky { position:static !important; }
     .kha-mosaic { grid-template-rows:180px 140px !important; }
     #khaExpDetailPage .dp-inner, #khaExpRoomPage .dp-inner { padding:2rem 1.5rem 5rem !important; }
     .dp-topbar { padding:.8rem 1.5rem !important; }
   }
+
+  /* ─── MOBILE ─────────────────── */
   @media(max-width:768px){
     .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
-    .kha-exp-card-grid { grid-template-columns:repeat(2,1fr) !important; gap:1rem !important; }
-    .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 120px 120px !important; }
+    .kha-exp-card-grid { grid-template-columns:repeat(2,1fr) !important; gap:.85rem !important; }
+
+    .kha-mosaic {
+      grid-template-columns:1fr 1fr !important;
+      grid-template-rows:190px 120px 120px !important;
+    }
     .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
+
+    /* Room detail — single col, booking card un-sticks */
+    .kha-detail-grid { grid-template-columns:1fr !important; gap:1.5rem !important; }
+    .kha-booking-sticky { position:static !important; top:auto !important; }
+
+    /* Topbar tighter on mobile */
+    .dp-topbar { padding:.6rem 1rem !important; gap:.65rem !important; }
+    .kha-back-btn { padding:.4rem .9rem !important; font-size:.67rem !important; letter-spacing:.1em !important; }
+
+    /* Hero strip shorter */
+    .kha-hero-strip { height:210px !important; }
+    .kha-hero-strip-content { left:1.2rem !important; right:1.2rem !important; bottom:1.2rem !important; }
   }
+
+  /* ─── SMALL MOBILE ───────────── */
   @media(max-width:600px){
     .kha-exp-card-grid { grid-template-columns:1fr !important; }
+    .kha-nearby-grid { grid-template-columns:1fr !important; }
+    .kha-amenity-grid { grid-template-columns:1fr !important; }
+    .kha-room-list-card-inner { grid-template-columns:1fr !important; }
+    .kha-promo-inner { gap:2rem !important; }
+
+    .kha-mosaic {
+      grid-template-columns:1fr 1fr !important;
+      grid-template-rows:160px 110px 110px !important;
+    }
   }
+
   @media(max-width:480px){
-    .kha-mosaic { grid-template-columns:1fr !important; grid-template-rows:repeat(6,150px) !important; }
-    .kha-mosaic-main { grid-row:auto !important; grid-column:auto !important; }
-    .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
+    .px-16 { padding-left:.75rem !important; padding-right:.75rem !important; }
+    .kha-exp-card-grid { grid-template-columns:1fr !important; }
+    .kha-mosaic {
+      grid-template-columns:1fr !important;
+      grid-template-rows:repeat(6,140px) !important;
+    }
+    .kha-mosaic-main { grid-column:auto !important; }
   }
 `;
 
@@ -224,9 +282,7 @@ const AICONS = {
   "Private Bathroom": <Bath size={17} />,
 };
 
-/* ─── 3 Room Types (same as Home page) ──────────────────────────────────── */
 const ROOM_TYPES = {
-  // Kukkeshree — id: 1
   1: [
     {
       key: "deluxe",
@@ -319,8 +375,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Sky House — id: 2
   2: [
     {
       key: "1bhk_garden",
@@ -392,8 +446,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Kracadawna — id: 3
   3: [
     {
       key: "dragonfly",
@@ -480,7 +532,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
   4: [
     {
       key: "nature_cottage",
@@ -589,6 +640,138 @@ const ROOM_TYPES = {
       ],
     },
   ],
+  5: [
+    {
+      key: "second_floor_2bhk",
+      name: "Second Floor 2BHK",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 2,
+      sqft: null,
+      desc: "A fully furnished second-floor 2BHK designed for families seeking comfort, privacy, and convenience. Spacious and well-ventilated with a unique blend of modern and vintage charm, along with a beautiful sit-out area. Suitable for both short-term and long-term stays.",
+      amenities: [
+        "2-bedroom with one attached bathroom (accessible from both rooms with safety lock)",
+        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, hot water kettle, and utensils",
+        "Solar + Gas geyser",
+        "TV & WiFi",
+        "Spacious and beautiful lounge area",
+        "AC available at additional charge",
+        "Restaurants within 5–8 min walk",
+        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+      ],
+      imgs: [],
+    },
+    {
+      key: "first_floor_2bhk",
+      name: "Moodalamane 1 – First Floor 2BHK",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1,
+      guests: 8,
+      beds: 2,
+      sqft: null,
+      desc: "A bright, airy, and peaceful first-floor 2BHK homestay. Well-ventilated and naturally lit, perfect for families looking for a calm and homely stay. Located in a safe residential locality. Up to 4 additional guests can be accommodated at extra charges.",
+      amenities: [
+        "2-bedroom with one attached bathroom and one common washroom",
+        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, and electric kettle",
+        "Solar + Gas geyser",
+        "TV & WiFi",
+        "Air cooler and ceiling fan in one room; ceiling and pedestal fan in other room",
+        "Restaurants within 5–8 min walk",
+        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+      ],
+      imgs: [],
+    },
+  ],
+  6: [
+    {
+      key: "family_room",
+      name: "Family Room",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1,
+      guests: 3,
+      beds: 1,
+      sqft: null,
+      desc: "Spacious and well-appointed family rooms set across a lush 1-acre property with mango groves, coconut trees, and sapota. Features a charming all-round verandah, sprawling garden, and in-house dining. 3 identical rooms available. Check-in: 12:00 PM | Check-out: 11:00 AM.",
+      amenities: [
+        "1 Queen size bed + 1 sofa-cum-bed",
+        "Accommodates up to 3 guests",
+        "Air Conditioning",
+        "In-house kitchen and dining serving delicious cuisine",
+        "Breakfast included",
+        "All-round verandah",
+        "Sprawling garden area",
+        "Outdoor sports: cricket, badminton, and others",
+        "Evening campfire setup (weather permitting)",
+        "Securely fenced 1-acre property",
+      ],
+      imgs: [],
+    },
+  ],
+  7: [
+    {
+      key: "heritage_suite",
+      name: "The Heritage Suite",
+      tag: "AC Suite",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 2,
+      beds: 1,
+      sqft: null,
+      desc: "A spotless, minimalist AC suite featuring joined platform twin beds forming a vast King setup, set on mirror-sheen dark vitrified floors with pristine white linens. Designed around 'Pure Illumination' — large open casement layouts maximizing natural daylight and fresh air flow.",
+      amenities: [
+        "King-size platform bed setup with pristine white linens",
+        "Air Conditioning",
+        "Mirror-sheen dark vitrified floors",
+        "Modular kitchenette with electric kettle, induction, water pitcher, granite counter",
+        "Private 2-seater dining table",
+        "Pristine western restroom with high-pressure hot water",
+        "Smart TV",
+        "WiFi",
+      ],
+      imgs: [],
+    },
+    {
+      key: "royal_balcony_suite",
+      name: "Royal Balcony Suite",
+      tag: "Non-AC Suite",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 0.8,
+      guests: 2,
+      beds: 1,
+      sqft: null,
+      desc: "A non-AC suite with a sleek hardwood wardrobe and wall-mounted Smart TV, opening outwards to a wide covered terrace verandah. Positioned in a peaceful high-end block in Bogadi, close to prominent dining streets and heritage landmarks. Hosted personally by Rohini Chengappa.",
+      amenities: [
+        "Matching hardwood wardrobe",
+        "Wall-mounted Smart TV",
+        "Wide covered terrace verandah",
+        "Modular kitchenette with electric kettle, induction, granite counter",
+        "Private 2-seater dining table",
+        "Pristine western restroom with high-pressure hot water",
+        "WiFi",
+        "Near Mysuru Palace (8.6 km), Chamundi Hills (14.0 km), Devaraja Bazaar (7.8 km)",
+      ],
+      imgs: [],
+    },
+  ],
 };
 
 /* ── Homestay data ── */
@@ -641,11 +824,9 @@ const HS = [
       },
     ],
   },
-
-  // HS[1] — Sky House Homestay
   {
     id: 2,
-    lat: 12.3156, // Mysuru city — update with exact coords
+    lat: 12.3156,
     lng: 76.6553,
     name: "Sky House Homestay",
     taluk: "Mysuru",
@@ -656,7 +837,7 @@ const HS = [
     reviews: 32,
     amenities: ["Free WiFi", "Air Conditioning"],
     hasWebsite: false,
-    phone: "9480100003", // update with actual number
+    phone: "9480100003",
     img: "/images/skyhouse-1bhk-1.jpg",
     imgs: [
       "/images/skyhouse1.jpg",
@@ -671,7 +852,7 @@ const HS = [
       "Mysuru City • Close to Mysore Palace, Chamundi Hills & Brindavan Gardens",
     desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms.",
     host: {
-      name: "B S Krishan Kanth", // update with actual name
+      name: "B S Krishan Kanth",
       since: "Host since 2023",
       avatar: "/images/hon.png",
       desc: "A welcoming Mysuru family offering a true home-away-from-home experience for all guests.",
@@ -691,11 +872,9 @@ const HS = [
       },
     ],
   },
-
-  // HS[2] — Kracadawna Wilderness Farm
   {
     id: 3,
-    lat: 12.02, // Nugu Valley, H.D. Kote — update with exact coords
+    lat: 12.02,
     lng: 76.33,
     name: "Kracadawna Wilderness Farm",
     taluk: "H.D. Kote",
@@ -748,13 +927,13 @@ const HS = [
   },
   {
     id: 4,
-    lat: 12.18, // HD Kote Road, Mysuru — update with exact coords
+    lat: 12.18,
     lng: 76.47,
     name: "1000 Silvers Farm Stay",
     taluk: "HD Kote",
     district: "Mysuru",
     region: "mysuru",
-    price: null, // not mentioned in portfolio — update with actual price
+    price: null,
     rating: null,
     reviews: null,
     amenities: [
@@ -777,6 +956,99 @@ const HS = [
       since: "Estate Owner",
       avatar: null,
       desc: "Direct reservations via Harsha — estate owner and host at 1000 Silvers Farm Stay.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 5,
+    lat: 12.295,
+    lng: 76.638,
+    name: "Moodalamane Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: null,
+    reviews: null,
+    amenities: ["Free WiFi", "TV", "Fully Equipped Kitchen", "Solar Geyser"],
+    hasWebsite: false,
+    phone: null,
+    img: "",
+    imgs: [],
+    type: "Family Homestay",
+    location:
+      "L137, Adithya, KHB 2nd Stage, Kuvempunagar, Mysuru, Karnataka 570023 • 4.5 km from Zoo and Mysuru Palace",
+    desc: "Moodalamane Homestay offers a peaceful and comfortable stay designed especially for families. A residential-style homestay where guests enjoy privacy, safety, and a homely atmosphere. The owner resides on the ground floor, ensuring safety and support. Only families are allowed. Perfect for short-term and long-term stays.",
+    host: {
+      name: "Owner",
+      since: "Host",
+      avatar: null,
+      desc: "A caring and responsible Mysuru family committed to safe, verified, and peaceful family tourism.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 6,
+    lat: 12.355,
+    lng: 76.62,
+    name: "Aastha Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: 5.0,
+    reviews: 124,
+    amenities: [
+      "Meals Included",
+      "Private Garden",
+      "Outdoor Sports",
+      "Bonfire",
+      "Air Conditioning",
+    ],
+    hasWebsite: false,
+    phone: "9480568332",
+    img: "",
+    imgs: [],
+    type: "Farm Homestay",
+    location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
+    desc: "Aastha Homestay is a home away from home spread across 1 acre with mango groves, coconut trees, and sapota. Securely fenced with an all-round verandah. Guests enjoy delicious home-cooked meals, outdoor sports, evening campfires, and a lush garden atmosphere.",
+    host: {
+      name: "Vishu Kumar B G",
+      since: "Host",
+      avatar: null,
+      desc: "Vishu Kumar and Sangeetha Vishu warmly welcome guests to their charming family property.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 7,
+    lat: 12.32,
+    lng: 76.61,
+    name: "Bolak Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: null,
+    reviews: null,
+    amenities: [
+      "Free WiFi",
+      "Air Conditioning",
+      "Smart TV",
+      "Self Catering Kitchen",
+    ],
+    hasWebsite: true,
+    phone: "9448336870",
+    img: "",
+    imgs: [],
+    type: "Premium Villa Homestay",
+    location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
+    desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout.",
+    host: {
+      name: "Rohini Chengappa",
+      since: "Host",
+      avatar: null,
+      desc: "Rohini personally manages the property, ensuring professional and caring hospitality for every guest.",
     },
     guestReviews: [],
   },
@@ -808,6 +1080,46 @@ function Badge({ children, bg, border, color }) {
     >
       {children}
     </span>
+  );
+}
+
+/* ─── Avatar fallback ───────────────────────────────────────────────────── */
+function Avatar({ src, name, size = 58 }) {
+  return (
+    <div
+      style={{
+        width: size,
+        height: size,
+        borderRadius: "50%",
+        border: "2px solid rgba(200,169,106,.3)",
+        overflow: "hidden",
+        flexShrink: 0,
+      }}
+    >
+      {src ? (
+        <img
+          src={src}
+          alt={name}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        />
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            background: "rgba(200,169,106,.15)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "1.2rem",
+            color: "#c8a96a",
+            fontFamily: cg,
+          }}
+        >
+          {name?.charAt(0) ?? "?"}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -976,15 +1288,27 @@ function HsCard({ h, onOpen, distance }) {
             marginBottom: ".85rem",
           }}
         >
-          <Stars rating={h.rating} sz={13} />
-          <span
-            style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}
-          >
-            {h.rating}
-          </span>
-          <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}>
-            ({h.reviews})
-          </span>
+          {h.rating && (
+            <>
+              <Stars rating={h.rating} sz={13} />
+              <span
+                style={{
+                  fontSize: ".84rem",
+                  color: "#c8a96a",
+                  fontWeight: 500,
+                }}
+              >
+                {h.rating}
+              </span>
+            </>
+          )}
+          {h.reviews && (
+            <span
+              style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}
+            >
+              ({h.reviews})
+            </span>
+          )}
         </div>
         <div
           style={{
@@ -1027,7 +1351,7 @@ function HsCard({ h, onOpen, distance }) {
   );
 }
 
-/* ─── Room List Card (inside detail slide) ──────────────────────────────── */
+/* ─── Room List Card ────────────────────────────────────────────────────── */
 function RoomListCard({ room, h, onOpen, index }) {
   const price =
     h.price != null && room.multiplier != null
@@ -1035,11 +1359,11 @@ function RoomListCard({ room, h, onOpen, index }) {
       : null;
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.innerWidth < 768,
+    () => typeof window !== "undefined" && window.innerWidth < 640,
   );
 
   useEffect(() => {
-    const fn = () => setIsMobile(window.innerWidth < 768);
+    const fn = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener("resize", fn);
     return () => window.removeEventListener("resize", fn);
   }, []);
@@ -1049,6 +1373,7 @@ function RoomListCard({ room, h, onOpen, index }) {
 
   return (
     <div
+      className="kha-room-list-card-inner"
       onClick={() => onOpen(room.key)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -1063,7 +1388,7 @@ function RoomListCard({ room, h, onOpen, index }) {
           ? `0 24px 64px rgba(0,0,0,.5), 0 0 0 1px ${room.tagBorder}`
           : "0 4px 20px rgba(0,0,0,.25)",
         transition: "all .4s cubic-bezier(.22,1,.36,1)",
-        cursor: "none",
+        cursor: "pointer",
         position: "relative",
       }}
     >
@@ -1089,7 +1414,7 @@ function RoomListCard({ room, h, onOpen, index }) {
         style={{
           position: "relative",
           overflow: "hidden",
-          height: isMobile ? "200px" : "440px",
+          height: isMobile ? "210px" : "360px",
         }}
       >
         <img
@@ -1100,8 +1425,8 @@ function RoomListCard({ room, h, onOpen, index }) {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            transform: hovered ? "scale(1.08)" : "scale(1)",
-            transition: "transform .8s cubic-bezier(.22,1,.36,1)",
+            transform: hovered ? "scale(1.06)" : "scale(1)",
+            transition: "transform .7s cubic-bezier(.22,1,.36,1)",
           }}
         />
         <div
@@ -1109,17 +1434,7 @@ function RoomListCard({ room, h, onOpen, index }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(120deg,rgba(24,35,24,.1) 0%,rgba(24,35,24,.65) 100%)",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "90px",
-            background: `linear-gradient(to top,rgba(28,45,28,1),transparent)`,
+              "linear-gradient(to bottom,rgba(24,35,24,.08) 0%,rgba(24,35,24,.6) 100%)",
           }}
         />
 
@@ -1130,7 +1445,7 @@ function RoomListCard({ room, h, onOpen, index }) {
             top: "-.5rem",
             right: ".8rem",
             fontFamily: cg,
-            fontSize: isMobile ? "4.5rem" : "6rem",
+            fontSize: isMobile ? "4rem" : "5.5rem",
             fontWeight: 300,
             lineHeight: 1,
             color: room.accentColor,
@@ -1165,7 +1480,7 @@ function RoomListCard({ room, h, onOpen, index }) {
           </span>
         </div>
 
-        {/* Price over image */}
+        {/* Price */}
         <div style={{ position: "absolute", bottom: ".85rem", left: ".95rem" }}>
           <div
             style={{
@@ -1189,7 +1504,7 @@ function RoomListCard({ room, h, onOpen, index }) {
           >
             {price != null ? (
               <>
-                ₹{price.toLocaleString("en-IN")}
+                {`₹${price.toLocaleString("en-IN")}`}
                 <span
                   style={{
                     fontSize: ".72rem",
@@ -1212,24 +1527,26 @@ function RoomListCard({ room, h, onOpen, index }) {
       <div
         style={{
           padding: isMobile
-            ? "1.3rem 1.2rem 1.4rem"
+            ? "1.2rem 1.1rem 1.3rem"
             : "1.7rem 2rem 1.7rem 1.8rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           gap: ".85rem",
+          minWidth: 0,
         }}
       >
         <div>
           <div
             style={{
               fontFamily: cg,
-              fontSize: isMobile ? "1.5rem" : "1.85rem",
+              fontSize: isMobile ? "1.4rem" : "1.85rem",
               fontWeight: 300,
               color: hovered ? "#fdfaf4" : "#e8e2d4",
-              lineHeight: 1.1,
+              lineHeight: 1.15,
               marginBottom: ".5rem",
               transition: "color .3s",
+              wordBreak: "break-word",
             }}
           >
             {room.name}
@@ -1244,39 +1561,37 @@ function RoomListCard({ room, h, onOpen, index }) {
               display: "-webkit-box",
               WebkitLineClamp: isMobile ? 3 : 2,
               WebkitBoxOrient: "vertical",
-              marginBottom: ".85rem",
               margin: "0 0 .85rem",
             }}
           >
             {room.desc}
           </p>
           <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
-            {room.amenities
-              .slice(0, isMobile ? 3 : room.amenities.length)
-              .map((a) => (
-                <span
-                  key={a}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: ".28rem",
-                    fontSize: ".68rem",
-                    letterSpacing: ".05em",
-                    color: "rgba(244,239,229,.5)",
-                    padding: ".24rem .7rem",
-                    background: hovered
-                      ? "rgba(200,169,106,.1)"
-                      : "rgba(200,169,106,.05)",
-                    border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
-                    transition: "all .3s",
-                  }}
-                >
-                  <span style={{ color: room.accentColor, opacity: 0.85 }}>
-                    {AICONS[a] || <Leaf size={11} />}
-                  </span>
-                  {a}
+            {room.amenities.slice(0, isMobile ? 3 : 5).map((a) => (
+              <span
+                key={a}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: ".28rem",
+                  fontSize: ".67rem",
+                  letterSpacing: ".04em",
+                  color: "rgba(244,239,229,.5)",
+                  padding: ".24rem .65rem",
+                  background: hovered
+                    ? "rgba(200,169,106,.1)"
+                    : "rgba(200,169,106,.05)",
+                  border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
+                  transition: "all .3s",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span style={{ color: room.accentColor, opacity: 0.85 }}>
+                  {AICONS[a] || <Leaf size={11} />}
                 </span>
-              ))}
+                {a}
+              </span>
+            ))}
           </div>
         </div>
 
@@ -1298,7 +1613,7 @@ function RoomListCard({ room, h, onOpen, index }) {
               display: "inline-flex",
               alignItems: "center",
               gap: ".5rem",
-              padding: isMobile ? ".55rem 1.2rem" : ".65rem 1.5rem",
+              padding: isMobile ? ".6rem 1.2rem" : ".65rem 1.5rem",
               background: hovered ? room.accentColor : "transparent",
               border: `1px solid ${room.tagBorder}`,
               color: hovered ? "#182318" : room.tagColor,
@@ -1320,14 +1635,14 @@ function RoomListCard({ room, h, onOpen, index }) {
 }
 
 /* ─── Room Full Detail ──────────────────────────────────────────────────── */
-// ✅ REPLACE WITH
 function RoomDetail({ h, roomKey, onBack }) {
-  if (!h || !roomKey) return null; // guard FIRST
+  if (!h || !roomKey) return null;
   const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
   if (!room) return null;
-  const price = h.price != null && room.multiplier != null
-  ? Math.round((h.price * room.multiplier) / 100) * 100
-  : null;
+  const price =
+    h.price != null && room.multiplier != null
+      ? Math.round((h.price * room.multiplier) / 100) * 100
+      : null;
   const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
@@ -1348,11 +1663,10 @@ function RoomDetail({ h, roomKey, onBack }) {
           background: "rgba(24,35,24,.96)",
           backdropFilter: "blur(20px)",
           borderBottom: "1px solid rgba(200,169,106,.15)",
-          padding: ".85rem 3rem",
           display: "flex",
           alignItems: "center",
-          gap: "1.2rem",
-          flexWrap: "wrap",
+          gap: "1rem",
+          flexWrap: "nowrap",
         }}
       >
         <a
@@ -1379,11 +1693,16 @@ function RoomDetail({ h, roomKey, onBack }) {
             letterSpacing: ".18em",
             textTransform: "uppercase",
             color: "rgba(244,239,229,.35)",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            flex: 1,
+            minWidth: 0,
           }}
         >
           {h.name}
         </span>
-        <div style={{ marginLeft: "auto" }}>
+        <div style={{ flexShrink: 0 }}>
           <span
             style={{
               padding: ".25rem .85rem",
@@ -1405,7 +1724,7 @@ function RoomDetail({ h, roomKey, onBack }) {
         style={{
           maxWidth: "1160px",
           margin: "0 auto",
-          padding: "3rem 3rem 6rem 1rem",
+          padding: "2.5rem 1.5rem 6rem",
         }}
       >
         {/* Heading */}
@@ -1428,11 +1747,12 @@ function RoomDetail({ h, roomKey, onBack }) {
           <div
             style={{
               fontFamily: cg,
-              fontSize: "clamp(2rem,4vw,3.1rem)",
+              fontSize: "clamp(1.7rem,5vw,3.1rem)",
               fontWeight: 300,
               color: "#fdfaf4",
               lineHeight: 1.1,
               marginBottom: ".3rem",
+              wordBreak: "break-word",
             }}
           >
             {room.name}
@@ -1462,13 +1782,13 @@ function RoomDetail({ h, roomKey, onBack }) {
           ))}
         </div>
 
-        {/* 2-col layout */}
+        {/* 2-col layout — stacks to 1 col on mobile via kha-detail-grid */}
         <div
           className="kha-detail-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 330px",
-            gap: "3rem",
+            gap: "2.5rem",
             alignItems: "start",
           }}
         >
@@ -1509,6 +1829,7 @@ function RoomDetail({ h, roomKey, onBack }) {
               What's Included
             </h3>
             <div
+              className="kha-amenity-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit,minmax(172px,1fr))",
@@ -1545,6 +1866,7 @@ function RoomDetail({ h, roomKey, onBack }) {
               Nearby Attractions
             </h3>
             <div
+              className="kha-nearby-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
@@ -1568,6 +1890,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                       background: "rgba(31,46,31,.6)",
                       border: "1px solid rgba(200,169,106,.08)",
                       transition: "border-color .2s",
+                      gap: ".4rem",
                     }}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.borderColor =
@@ -1585,20 +1908,30 @@ function RoomDetail({ h, roomKey, onBack }) {
                         display: "flex",
                         alignItems: "center",
                         gap: ".4rem",
+                        minWidth: 0,
+                        overflow: "hidden",
                       }}
                     >
                       <MapPin
                         size={10}
                         style={{ color: "#c8a96a", flexShrink: 0 }}
                       />
-                      {p.label}
+                      <span
+                        style={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {p.label}
+                      </span>
                     </span>
                     <span
                       style={{
                         fontSize: ".69rem",
                         fontWeight: 700,
                         whiteSpace: "nowrap",
-                        marginLeft: ".5rem",
+                        flexShrink: 0,
                         padding: ".15rem .5rem",
                         color:
                           p.dist <= 30
@@ -1645,23 +1978,8 @@ function RoomDetail({ h, roomKey, onBack }) {
                 marginBottom: "2.5rem",
               }}
             >
-              <div
-                style={{
-                  width: "58px",
-                  height: "58px",
-                  borderRadius: "50%",
-                  border: "2px solid rgba(200,169,106,.3)",
-                  overflow: "hidden",
-                  flexShrink: 0,
-                }}
-              >
-                <img
-                  src={h.host.avatar}
-                  alt={h.host.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-              <div>
+              <Avatar src={h.host.avatar} name={h.host.name} />
+              <div style={{ minWidth: 0 }}>
                 <div
                   style={{
                     fontFamily: cg,
@@ -1714,7 +2032,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                 overflow: "hidden",
                 border: "1px solid rgba(200,169,106,.15)",
                 marginBottom: "2.5rem",
-                height: "420px",
+                height: "360px",
               }}
             >
               <iframe
@@ -1730,13 +2048,13 @@ function RoomDetail({ h, roomKey, onBack }) {
           </div>
 
           {/* Right — sticky booking card */}
-          <div style={{ position: "sticky", top: "80px" }}>
+          <div className="kha-booking-sticky">
             <div
               style={{
                 background: "rgba(31,46,31,.9)",
                 border: "1px solid rgba(200,169,106,.24)",
                 backdropFilter: "blur(20px)",
-                padding: "1.8rem 2rem",
+                padding: "1.8rem 1.6rem",
               }}
             >
               <div
@@ -1769,7 +2087,9 @@ function RoomDetail({ h, roomKey, onBack }) {
                     display: "block",
                   }}
                 >
-                  {price != null ? `₹${price.toLocaleString("en-IN")}` : "Contact for Price"}
+                  {price != null
+                    ? `₹${price.toLocaleString("en-IN")}`
+                    : "Contact for Price"}
                 </span>
                 <span
                   style={{
@@ -1815,7 +2135,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                   ["Room", room.name],
                   ["Property", h.name],
                   ["District", h.district],
-                  ["Guests", `Up to ${room.guests}`],
+                  ["Guests", room.guests ? `Up to ${room.guests}` : "—"],
                   [
                     "Booking",
                     h.hasWebsite ? "Website + WhatsApp" : "WhatsApp Only",
@@ -1846,6 +2166,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                         fontSize: ".84rem",
                         color: "rgba(244,239,229,.68)",
                         textAlign: "right",
+                        wordBreak: "break-word",
                       }}
                     >
                       {v}
@@ -1945,13 +2266,11 @@ const Explore = () => {
     return () => obs.disconnect();
   });
 
-  /* State */
   const [detailId, setDetailId] = useState(null);
   const [roomKey, setRoomKey] = useState(null);
   const [visibleCount, setVisibleCount] = useState(9);
   const [fPlace, setFPlace] = useState("");
 
-  /* Escape key */
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -1969,7 +2288,6 @@ const Explore = () => {
     return () => document.removeEventListener("keydown", onKey);
   }, [detailId, roomKey]);
 
-  /* Filtered list */
   const getFiltered = () => {
     const place = TOURIST_PLACES.find((p) => p.key === fPlace);
     let list = HS.map((h) => ({
@@ -1983,7 +2301,6 @@ const Explore = () => {
   const visible = filtered.slice(0, visibleCount);
   const hasMore = filtered.length > visibleCount;
 
-  /* Open / close detail */
   const openDetail = (id) => {
     setDetailId(id);
     setRoomKey(null);
@@ -1999,8 +2316,6 @@ const Explore = () => {
     setRoomKey(null);
     document.body.style.overflow = "";
   };
-
-  /* Open / close room */
   const openRoom = (key) => {
     setRoomKey(key);
     setTimeout(
@@ -2021,8 +2336,6 @@ const Explore = () => {
       <Navbar />
       <FloatBookButton />
 
-      {/* ════ BREADCRUMB ════ */}
-
       {/* ════ BROWSE ════ */}
       <section
         className="kha-browse-section my-20 px-16 pb-20 bg-[#182318]"
@@ -2038,6 +2351,7 @@ const Explore = () => {
                 style={{
                   background: "rgba(200,169,106,.07)",
                   border: "1px solid rgba(200,169,106,.2)",
+                  flexWrap: "wrap",
                 }}
               >
                 <MapPin size={14} style={{ color: "#c8a96a", flexShrink: 0 }} />
@@ -2059,7 +2373,7 @@ const Explore = () => {
                     border: "none",
                     color: "rgba(200,169,106,.55)",
                     fontSize: ".75rem",
-                    cursor: "none",
+                    cursor: "pointer",
                     letterSpacing: ".1em",
                     textTransform: "uppercase",
                   }}
@@ -2070,7 +2384,6 @@ const Explore = () => {
             );
           })()}
 
-        {/* Cards */}
         {filtered.length === 0 ? (
           <div className="max-w-[1300px] mx-auto text-center py-20">
             <h3
@@ -2114,7 +2427,7 @@ const Explore = () => {
                 letterSpacing: ".22em",
                 textTransform: "uppercase",
                 background: "transparent",
-                cursor: "none",
+                cursor: "pointer",
               }}
               onClick={() => setVisibleCount((v) => v + 6)}
             >
@@ -2153,8 +2466,7 @@ const Explore = () => {
               <em style={{ fontStyle: "italic", color: "#e0c88a" }}>
                 Verified
               </em>
-              ,
-              <br />
+              ,<br />
               Every Host Trusted
             </h3>
             <div className="flex items-center gap-[.8rem] my-6">
@@ -2257,11 +2569,10 @@ const Explore = () => {
                 background: "rgba(24,35,24,.96)",
                 backdropFilter: "blur(20px)",
                 borderBottom: "1px solid rgba(200,169,106,.15)",
-                padding: ".85rem 3rem",
                 display: "flex",
                 alignItems: "center",
-                gap: "1.2rem",
-                flexWrap: "wrap",
+                gap: "1rem",
+                flexWrap: "nowrap",
               }}
             >
               <a href="#" className="kha-back-btn" onClick={closeDetail}>
@@ -2278,41 +2589,54 @@ const Explore = () => {
               <div
                 style={{
                   fontFamily: cg,
-                  fontSize: "1.12rem",
+                  fontSize: "1.1rem",
                   fontWeight: 300,
                   color: "#c8a96a",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  flex: 1,
+                  minWidth: 0,
                 }}
               >
                 {currentHs.name}
               </div>
-              <div
-                style={{
-                  marginLeft: "auto",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: ".5rem",
-                }}
-              >
-                <Stars rating={currentHs.rating} sz={13} />
-                <span
+              {currentHs.rating && (
+                <div
                   style={{
-                    fontSize: ".84rem",
-                    color: "#c8a96a",
-                    fontWeight: 500,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: ".5rem",
+                    flexShrink: 0,
                   }}
                 >
-                  {currentHs.rating}
-                </span>
-                <span
-                  style={{ fontSize: ".74rem", color: "rgba(244,239,229,.35)" }}
-                >
-                  ({currentHs.reviews} reviews)
-                </span>
-              </div>
+                  <Stars rating={currentHs.rating} sz={13} />
+                  <span
+                    style={{
+                      fontSize: ".84rem",
+                      color: "#c8a96a",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {currentHs.rating}
+                  </span>
+                  {currentHs.reviews && (
+                    <span
+                      style={{
+                        fontSize: ".74rem",
+                        color: "rgba(244,239,229,.35)",
+                      }}
+                    >
+                      ({currentHs.reviews})
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Hero strip */}
             <div
+              className="kha-hero-strip"
               style={{
                 position: "relative",
                 height: "300px",
@@ -2333,6 +2657,7 @@ const Explore = () => {
                 }}
               />
               <div
+                className="kha-hero-strip-content"
                 style={{
                   position: "absolute",
                   bottom: "2rem",
@@ -2376,7 +2701,7 @@ const Explore = () => {
                 <div
                   style={{
                     fontFamily: cg,
-                    fontSize: "clamp(1.8rem,4vw,2.9rem)",
+                    fontSize: "clamp(1.4rem,5vw,2.9rem)",
                     fontWeight: 300,
                     color: "#fdfaf4",
                     lineHeight: 1.1,
@@ -2394,21 +2719,22 @@ const Explore = () => {
                     letterSpacing: ".14em",
                     textTransform: "uppercase",
                     color: "#adc49a",
+                    flexWrap: "wrap",
                   }}
                 >
-                  <MapPin size={12} />
+                  <MapPin size={12} style={{ flexShrink: 0 }} />
                   {currentHs.taluk} · {currentHs.district} District, Mysore
                 </div>
               </div>
             </div>
 
-            {/* Body — two column */}
+            {/* Body */}
             <div
               className="dp-inner"
               style={{
                 maxWidth: "1350px",
                 margin: "0 auto",
-                padding: "3rem 3rem 6rem",
+                padding: "2.5rem 1.5rem 6rem",
               }}
             >
               <div
@@ -2421,7 +2747,10 @@ const Explore = () => {
                 className="kha-detail-two-col"
               >
                 {/* LEFT: About + Host */}
-                <div style={{ position: "sticky", top: "80px" }}>
+                <div
+                  className="kha-detail-left-sticky"
+                  style={{ position: "sticky", top: "80px" }}
+                >
                   {/* About block */}
                   <div
                     style={{
@@ -2472,13 +2801,17 @@ const Explore = () => {
                         color: "#7a9e6e",
                         marginBottom: ".75rem",
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: "flex-start",
                         gap: ".35rem",
                       }}
                     >
                       <MapPin
                         size={11}
-                        style={{ color: "#c8a96a", flexShrink: 0 }}
+                        style={{
+                          color: "#c8a96a",
+                          flexShrink: 0,
+                          marginTop: "2px",
+                        }}
                       />
                       <span>{currentHs.location}</span>
                     </p>
@@ -2543,27 +2876,11 @@ const Explore = () => {
                         marginBottom: ".9rem",
                       }}
                     >
-                      <div
-                        style={{
-                          width: "58px",
-                          height: "58px",
-                          borderRadius: "50%",
-                          border: "2px solid rgba(200,169,106,.3)",
-                          overflow: "hidden",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <img
-                          src={currentHs.host.avatar}
-                          alt={currentHs.host.name}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
-                      </div>
-                      <div>
+                      <Avatar
+                        src={currentHs.host.avatar}
+                        name={currentHs.host.name}
+                      />
+                      <div style={{ minWidth: 0 }}>
                         <div
                           style={{
                             fontFamily: cg,
@@ -2599,27 +2916,29 @@ const Explore = () => {
                     >
                       {currentHs.host.desc}
                     </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: ".6rem",
-                        padding: ".7rem 1rem",
-                        background: "rgba(200,169,106,.07)",
-                        border: "1px solid rgba(200,169,106,.14)",
-                      }}
-                    >
-                      <Stars rating={currentHs.rating} sz={14} />
-                      <span
+                    {currentHs.rating && (
+                      <div
                         style={{
-                          fontSize: ".9rem",
-                          color: "#c8a96a",
-                          fontWeight: 500,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: ".6rem",
+                          padding: ".7rem 1rem",
+                          background: "rgba(200,169,106,.07)",
+                          border: "1px solid rgba(200,169,106,.14)",
                         }}
                       >
-                        {currentHs.rating}
-                      </span>
-                    </div>
+                        <Stars rating={currentHs.rating} sz={14} />
+                        <span
+                          style={{
+                            fontSize: ".9rem",
+                            color: "#c8a96a",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {currentHs.rating}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -2651,13 +2970,14 @@ const Explore = () => {
                     <h2
                       style={{
                         fontFamily: cg,
-                        fontSize: "clamp(1.7rem,3vw,2.5rem)",
+                        fontSize: "clamp(1.5rem,3vw,2.5rem)",
                         fontWeight: 300,
                         color: "#f4efe5",
                         lineHeight: 1.15,
                       }}
                     >
-                      3 Unique Stays Available
+                      {ROOM_TYPES[currentHs.id]?.length ?? 0} Unique Stays
+                      Available
                     </h2>
                     <p
                       style={{
@@ -2667,9 +2987,8 @@ const Explore = () => {
                         fontWeight: 300,
                       }}
                     >
-                      All rooms include home-cooked meals and direct WhatsApp
-                      booking with the host family. Click any room to see full
-                      details.
+                      Direct WhatsApp booking with the host family. Tap any room
+                      to see full details.
                     </p>
                   </div>
 

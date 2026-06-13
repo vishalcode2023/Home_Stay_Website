@@ -105,9 +105,9 @@ const STYLES = `
   .kha-trust-icon img { width:62px; height:62px; object-fit:contain; }
 
   /* Detail + Room slides */
-  #khaDetailPage { position:fixed; inset:0; z-index:2000; background:#182318; overflow-y:auto; transform:translateX(100%); transition:transform .65s cubic-bezier(.22,1,.36,1); }
+  #khaDetailPage { position:fixed; inset:0; z-index:2000; background:#182318; overflow-y:auto; overflow-x:hidden; transform:translateX(100%); transition:transform .65s cubic-bezier(.22,1,.36,1); }
   #khaDetailPage.open { transform:translateX(0); }
-  #khaRoomPage { position:fixed; inset:0; z-index:3000; background:#182318; overflow-y:auto; transform:translateX(100%); transition:transform .6s cubic-bezier(.22,1,.36,1); }
+  #khaRoomPage { position:fixed; inset:0; z-index:3000; background:#182318; overflow-y:auto; overflow-x:hidden; transform:translateX(100%); transition:transform .6s cubic-bezier(.22,1,.36,1); }
   #khaRoomPage.open { transform:translateX(0); }
 
   /* Room list cards */
@@ -142,7 +142,16 @@ const STYLES = `
   .kha-cred-outer { padding: 5.5rem 4rem; }
 
   /* Detail two-col */
-  .kha-detail-two-col { grid-template-columns: 450px 1fr; }
+  .kha-detail-two-col { grid-template-columns: 420px 1fr; }
+
+  /* ─── Detail page topbar ─── */
+  .dp-topbar { padding: .85rem 3rem; }
+
+  /* ─── Detail page inner ─── */
+  .dp-inner-wrap { padding: 3rem 3rem 6rem; }
+
+  /* ─── Room detail inner ─── */
+  .rdp-inner { padding: 3rem 3rem 6rem 1rem; }
 
   @media(max-width:900px){
     body { cursor:auto !important; }
@@ -157,8 +166,30 @@ const STYLES = `
     .kha-hero { margin-top:0 !important; padding-top:90px; box-sizing:border-box; height:auto !important; min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; }
     .kha-hero-card { position:relative !important; bottom:auto !important; left:auto !important; max-width:none !important; margin:auto 1rem 2.5rem !important; padding:1.4rem !important; }
     .kha-hero-book-btn { display:none !important; }
-    #khaDetailPage .dp-inner, #khaRoomPage .dp-inner { padding:2rem 1.5rem 5rem !important; }
-    .dp-topbar { padding:.8rem 1.5rem !important; }
+
+    /* Detail page topbar */
+    .dp-topbar { padding:.75rem 1.2rem !important; gap:.7rem !important; }
+    .dp-topbar-name { font-size:.95rem !important; }
+    .dp-topbar-ratings { display:none !important; }
+
+    /* Detail page inner padding */
+    .dp-inner-wrap { padding:1.5rem 1rem 5rem !important; }
+    .rdp-inner { padding:1.5rem 1rem 5rem !important; }
+
+    /* Detail two-col — stack vertically on mobile */
+    .kha-detail-two-col { grid-template-columns:1fr !important; gap:1.5rem !important; }
+
+    /* Left sticky col — unstick on mobile */
+    .kha-detail-left-sticky { position:static !important; top:auto !important; }
+
+    /* Room detail right col grid */
+    .kha-room-detail-grid { grid-template-columns:1fr !important; gap:1.5rem !important; }
+    .kha-room-booking-sticky { position:static !important; top:auto !important; }
+
+    /* Hero strip in detail */
+    .kha-detail-hero-strip { height:220px !important; }
+    .kha-detail-hero-bottom { left:1.2rem !important; right:1.2rem !important; bottom:1.2rem !important; }
+
     .kha-rl-card { grid-template-columns:1fr !important; }
     .kha-rl-card-img { height:200px !important; }
     .kha-cred-outer { padding:3rem 0 !important; }
@@ -166,7 +197,21 @@ const STYLES = `
     .kha-cred-logo { margin:0 auto !important; }
     .kha-cred-text { font-size:1.15rem !important; }
     .kha-browse-section { padding-left:1.2rem !important; padding-right:1.2rem !important; padding-top:4rem !important; padding-bottom:4rem !important; }
+
+    /* Mosaic on mobile */
+    .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 120px !important; }
+    .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
+
+    /* Room nearby attractions — 1 col */
+    .kha-nearby-grid { grid-template-columns:1fr !important; }
+
+    /* Amenity grid */
+    .kha-amen-grid { grid-template-columns:1fr !important; }
+
+    /* Booking card full width on mobile */
+    .kha-booking-card { width:100% !important; }
   }
+
   @media(max-width:768px){
     body { cursor:auto !important; }
     .kha-cur,.kha-cuf { display:none !important; }
@@ -180,7 +225,17 @@ const STYLES = `
     .kha-cred-inner { grid-template-columns:1fr !important; gap:1.2rem !important; padding:1.5rem !important; text-align:center; }
     .kha-cred-logo { margin:0 auto !important; }
     .kha-cred-text { font-size:1.05rem !important; }
+
+    /* Detail page topbar compact */
+    .dp-topbar { padding:.65rem 1rem !important; }
+    .dp-topbar-back-text { display:none !important; }
+    .dp-topbar-back-icon { display:inline-flex !important; }
+
+    /* Inner padding tighter */
+    .dp-inner-wrap { padding:1.2rem .9rem 5rem !important; }
+    .rdp-inner { padding:1.2rem .9rem 5rem !important; }
   }
+
   @media(max-width:560px){
     body { cursor:auto !important; }
     .kha-cur,.kha-cuf { display:none !important; }
@@ -188,7 +243,11 @@ const STYLES = `
     .kha-browse-section { padding-left:.9rem !important; padding-right:.9rem !important; padding-top:3rem !important; padding-bottom:3rem !important; }
     .kha-cred-inner { padding:1.2rem !important; }
     .kha-cred-text { font-size:1rem !important; }
+    .dp-inner-wrap { padding:1rem .75rem 5rem !important; }
+    .rdp-inner { padding:1rem .75rem 5rem !important; }
+    .kha-detail-hero-strip { height:180px !important; }
   }
+
   @media(max-width:480px){
     body { cursor:auto !important; }
     .kha-cur,.kha-cuf { display:none !important; }
@@ -625,6 +684,176 @@ const ROOM_TYPES = {
       ],
     },
   ],
+
+  5: [
+    {
+      key: "second_floor_2bhk",
+      name: "Second Floor 2BHK",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 2,
+      sqft: null,
+      desc: "A fully furnished second-floor 2BHK designed for families seeking comfort, privacy, and convenience. Spacious and well-ventilated with a unique blend of modern and vintage charm, along with a beautiful sit-out area. Suitable for both short-term and long-term stays.",
+      amenities: [
+        "2-bedroom with one attached bathroom (accessible from both rooms with safety lock)",
+        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, hot water kettle, and utensils",
+        "Solar + Gas geyser",
+        "TV & WiFi",
+        "Spacious and beautiful lounge area",
+        "AC available at additional charge",
+        "Restaurants within 5–8 min walk",
+        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+      ],
+      imgs: [
+        "/images/mol.png",
+        "/images/mol1.png",
+        "/images/mol2.png",
+        "/images/mol3.png",
+        "/images/mol4.png",
+        "/images/mol5.png",
+      ],
+    },
+    {
+      key: "first_floor_2bhk",
+      name: "Moodalamane 1 – First Floor 2BHK",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1,
+      guests: 8,
+      beds: 2,
+      sqft: null,
+      desc: "A bright, airy, and peaceful first-floor 2BHK homestay. Well-ventilated and naturally lit, perfect for families looking for a calm and homely stay. Located in a safe residential locality. Up to 4 additional guests can be accommodated at extra charges.",
+      amenities: [
+        "2-bedroom with one attached bathroom and one common washroom",
+        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, and electric kettle",
+        "Solar + Gas geyser",
+        "TV & WiFi",
+        "Air cooler and ceiling fan in one room; ceiling and pedestal fan in other room",
+        "Restaurants within 5–8 min walk",
+        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+      ],
+      imgs: [
+        "/images/mol6.png",
+        "/images/mol7.png",
+        "/images/mol8.png",
+        "/images/mol9.png",
+        "/images/mol10.png",
+        "/images/mol11.png",
+      ],
+    },
+  ],
+
+  // Aastha Homestay — id: 6
+  6: [
+    {
+      key: "family_room",
+      name: "Family Room",
+      tag: "Best for Families",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 1,
+      guests: 3,
+      beds: 1,
+      sqft: null,
+      desc: "Spacious and well-appointed family rooms set across a lush 1-acre property with mango groves, coconut trees, and sapota. Features a charming all-round verandah, sprawling garden, and in-house dining. 3 identical rooms available. Check-in: 12:00 PM | Check-out: 11:00 AM.",
+      amenities: [
+        "1 Queen size bed + 1 sofa-cum-bed",
+        "Accommodates up to 3 guests",
+        "Air Conditioning",
+        "In-house kitchen and dining serving delicious cuisine",
+        "Breakfast included",
+        "All-round verandah",
+        "Sprawling garden area",
+        "Outdoor sports: cricket, badminton, and others",
+        "Evening campfire setup (weather permitting)",
+        "Securely fenced 1-acre property",
+      ],
+      imgs: [
+        "/images/ask.png",
+        "/images/ask1.png",
+        "/images/ask2.png",
+        "/images/ask3.png",
+        "/images/ask4.png",
+        "/images/ask5.png",
+      ],
+    },
+  ],
+
+  // Bolak Homestay — id: 7
+  7: [
+    {
+      key: "heritage_suite",
+      name: "The Heritage Suite",
+      tag: "AC Suite",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 2,
+      beds: 1,
+      sqft: null,
+      desc: "A spotless, minimalist AC suite featuring joined platform twin beds forming a vast King setup, set on mirror-sheen dark vitrified floors with pristine white linens. Designed around 'Pure Illumination' — large open casement layouts maximizing natural daylight and fresh air flow.",
+      amenities: [
+        "King-size platform bed setup with pristine white linens",
+        "Air Conditioning",
+        "Mirror-sheen dark vitrified floors",
+        "Modular kitchenette with electric kettle, induction, water pitcher, granite counter",
+        "Private 2-seater dining table",
+        "Pristine western restroom with high-pressure hot water",
+        "Smart TV",
+        "WiFi",
+      ],
+      imgs: [
+        "/images/bol.png",
+        "/images/bol1.png",
+        "/images/bol2.png",
+        "/images/bol3.png",
+        "/images/bol.png",
+      ],
+    },
+    {
+      key: "royal_balcony_suite",
+      name: "Royal Balcony Suite",
+      tag: "Non-AC Suite",
+      tagBg: "rgba(122,158,110,.15)",
+      tagBorder: "rgba(122,158,110,.4)",
+      tagColor: "#adc49a",
+      accentColor: "#7a9e6e",
+      multiplier: 0.8,
+      guests: 2,
+      beds: 1,
+      sqft: null,
+      desc: "A non-AC suite with a sleek hardwood wardrobe and wall-mounted Smart TV, opening outwards to a wide covered terrace verandah. Positioned in a peaceful high-end block in Bogadi, close to prominent dining streets and heritage landmarks. Hosted personally by Rohini Chengappa.",
+      amenities: [
+        "Matching hardwood wardrobe",
+        "Wall-mounted Smart TV",
+        "Wide covered terrace verandah",
+        "Modular kitchenette with electric kettle, induction, granite counter",
+        "Private 2-seater dining table",
+        "Pristine western restroom with high-pressure hot water",
+        "WiFi",
+        "Near Mysuru Palace (8.6 km), Chamundi Hills (14.0 km), Devaraja Bazaar (7.8 km)",
+      ],
+      imgs: [
+        "/images/bol.png",
+        "/images/bol1.png",
+        "/images/bol2.png",
+        "/images/bol3.png",
+        "/images/bol.png",
+      ],
+    },
+  ],
 };
 
 /* ── Homestay data ── */
@@ -677,11 +906,9 @@ const HS = [
       },
     ],
   },
-
-  // HS[1] — Sky House Homestay
   {
     id: 2,
-    lat: 12.3156, // Mysuru city — update with exact coords
+    lat: 12.3156,
     lng: 76.6553,
     name: "Sky House Homestay",
     taluk: "Mysuru",
@@ -692,7 +919,7 @@ const HS = [
     reviews: 32,
     amenities: ["Free WiFi", "Air Conditioning"],
     hasWebsite: false,
-    phone: "9480100003", // update with actual number
+    phone: "9480100003",
     img: "/images/skyhouse-1bhk-1.jpg",
     imgs: [
       "/images/skyhouse1.jpg",
@@ -707,7 +934,7 @@ const HS = [
       "Mysuru City • Close to Mysore Palace, Chamundi Hills & Brindavan Gardens",
     desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms.",
     host: {
-      name: "B S Krishan Kanth", // update with actual name
+      name: "B S Krishan Kanth",
       since: "Host since 2023",
       avatar: "/images/hon.png",
       desc: "A welcoming Mysuru family offering a true home-away-from-home experience for all guests.",
@@ -727,11 +954,9 @@ const HS = [
       },
     ],
   },
-
-  // HS[2] — Kracadawna Wilderness Farm
   {
     id: 3,
-    lat: 12.02, // Nugu Valley, H.D. Kote — update with exact coords
+    lat: 12.02,
     lng: 76.33,
     name: "Kracadawna Wilderness Farm",
     taluk: "H.D. Kote",
@@ -784,13 +1009,13 @@ const HS = [
   },
   {
     id: 4,
-    lat: 12.18, // HD Kote Road, Mysuru — update with exact coords
+    lat: 12.18,
     lng: 76.47,
     name: "1000 Silvers Farm Stay",
     taluk: "HD Kote",
     district: "Mysuru",
     region: "mysuru",
-    price: null, // not mentioned in portfolio — update with actual price
+    price: null,
     rating: null,
     reviews: null,
     amenities: [
@@ -816,22 +1041,116 @@ const HS = [
     },
     guestReviews: [],
   },
+  {
+    id: 5,
+    lat: 12.295,
+    lng: 76.638,
+    name: "Moodalamane Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: null,
+    reviews: null,
+    amenities: ["Free WiFi", "TV", "Fully Equipped Kitchen", "Solar Geyser"],
+    hasWebsite: false,
+    phone: null,
+    img: "/images/mol.png",
+    imgs: [],
+    type: "Family Homestay",
+    location:
+      "L137, Adithya, KHB 2nd Stage, Kuvempunagar, Mysuru, Karnataka 570023 • 4.5 km from Zoo and Mysuru Palace",
+    desc: "Moodalamane Homestay offers a peaceful and comfortable stay designed especially for families. A residential-style homestay where guests enjoy privacy, safety, and a homely atmosphere. The owner resides on the ground floor, ensuring safety and support. Only families are allowed. Perfect for short-term and long-term stays.",
+    host: {
+      name: "Owner",
+      since: "Host",
+      avatar: null,
+      desc: "A caring and responsible Mysuru family committed to safe, verified, and peaceful family tourism.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 6,
+    lat: 12.355,
+    lng: 76.62,
+    name: "Aastha Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: 5.0,
+    reviews: 124,
+    amenities: [
+      "Meals Included",
+      "Private Garden",
+      "Outdoor Sports",
+      "Bonfire",
+      "Air Conditioning",
+    ],
+    hasWebsite: false,
+    phone: "9480568332",
+    img: "/images/ask.png",
+    imgs: [],
+    type: "Farm Homestay",
+    location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
+    desc: "Aastha Homestay is a home away from home spread across 1 acre with mango groves, coconut trees, and sapota. Securely fenced with an all-round verandah. Guests enjoy delicious home-cooked meals, outdoor sports, evening campfires, and a lush garden atmosphere.",
+    host: {
+      name: "Vishu Kumar B G",
+      since: "Host",
+      avatar: null,
+      desc: "Vishu Kumar and Sangeetha Vishu warmly welcome guests to their charming family property.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 7,
+    lat: 12.32,
+    lng: 76.61,
+    name: "Bolak Homestay",
+    taluk: "Mysuru",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: null,
+    reviews: null,
+    amenities: [
+      "Free WiFi",
+      "Air Conditioning",
+      "Smart TV",
+      "Self Catering Kitchen",
+    ],
+    hasWebsite: true,
+    phone: "9448336870",
+    img: "/images/bol.png",
+    imgs: [],
+    type: "Premium Villa Homestay",
+    location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
+    desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout.",
+    host: {
+      name: "Rohini Chengappa",
+      since: "Host",
+      avatar: null,
+      desc: "Rohini personally manages the property, ensuring professional and caring hospitality for every guest.",
+    },
+    guestReviews: [],
+  },
 ];
 
 const HERO_VIDEO = "/herovideo.mp4";
 const MARQUEE_IMGS = [
   "/images/skyhouse-2bhk-1.jpg",
   "/images/nela1.jpg",
-  "/images/skyhouse-1bhk-1.jpg", // ← replace skyhouse2.jpg with correct name
+  "/images/skyhouse-1bhk-1.jpg",
   "/images/nela3.jpg",
   "/images/krac-dragonfly-1.jpg",
   "/images/krac-dragonfly-2.jpg",
   "/images/krac-dragonfly-3.jpg",
-  "/images/mad1.png", // ← add an 8th so the loop is cleaner
+  "/images/mad1.png",
 ];
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
 function Stars({ rating, sz = 14 }) {
+  if (!rating) return null;
   return (
     <span style={{ display: "inline-flex", gap: "2px" }}>
       {Array.from({ length: Math.floor(rating) }, (_, i) => (
@@ -877,7 +1196,6 @@ function HsCard({ h, onOpen }) {
           loading="lazy"
           className="kha-card-img w-full h-full object-cover"
         />
-
         <div
           style={{
             position: "absolute",
@@ -914,8 +1232,6 @@ function HsCard({ h, onOpen }) {
             </Badge>
           )}
         </div>
-
-        {/* Hover overlay */}
         <div
           className="kha-price-overlay absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 transition-opacity duration-300"
           style={{
@@ -1014,23 +1330,21 @@ function HsCard({ h, onOpen }) {
           }}
         >
           <Stars rating={h.rating} sz={13} />
-          <span
-            style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}
-          >
-            {h.rating}
-          </span>
-          <span style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}>
-            ({h.reviews})
-          </span>
+          {h.rating && (
+            <span
+              style={{ fontSize: ".84rem", color: "#c8a96a", fontWeight: 500 }}
+            >
+              {h.rating}
+            </span>
+          )}
+          {h.reviews && (
+            <span
+              style={{ fontSize: ".74rem", color: "rgba(244,239,229,.38)" }}
+            >
+              ({h.reviews})
+            </span>
+          )}
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: ".8rem",
-            flexWrap: "wrap",
-            marginBottom: ".9rem",
-          }}
-        ></div>
         <div
           style={{
             borderTop: "1px solid rgba(200,169,106,.1)",
@@ -1118,7 +1432,7 @@ function RoomListCard({ room, h, onOpen, index }) {
           ? `0 24px 64px rgba(0,0,0,.5), 0 0 0 1px ${room.tagBorder}`
           : "0 4px 20px rgba(0,0,0,.25)",
         transition: "all .4s cubic-bezier(.22,1,.36,1)",
-        cursor: "none",
+        cursor: "pointer",
         position: "relative",
       }}
     >
@@ -1126,7 +1440,7 @@ function RoomListCard({ room, h, onOpen, index }) {
       <div
         style={{
           position: "absolute",
-          left: isMobile ? 0 : 0,
+          left: 0,
           top: 0,
           right: isMobile ? 0 : "auto",
           bottom: isMobile ? "auto" : 0,
@@ -1177,8 +1491,6 @@ function RoomListCard({ room, h, onOpen, index }) {
             background: `linear-gradient(to top,rgba(28,45,28,1),transparent)`,
           }}
         />
-
-        {/* Watermark number */}
         <div
           style={{
             position: "absolute",
@@ -1197,8 +1509,6 @@ function RoomListCard({ room, h, onOpen, index }) {
         >
           {String(index + 1).padStart(2, "0")}
         </div>
-
-        {/* Tag pill */}
         <div style={{ position: "absolute", top: ".85rem", left: ".85rem" }}>
           <span
             style={{
@@ -1219,8 +1529,6 @@ function RoomListCard({ room, h, onOpen, index }) {
             {room.tag}
           </span>
         </div>
-
-        {/* Price over image */}
         <div style={{ position: "absolute", bottom: ".85rem", left: ".95rem" }}>
           <div
             style={{
@@ -1272,7 +1580,6 @@ function RoomListCard({ room, h, onOpen, index }) {
         }}
       >
         <div>
-          {/* Room name */}
           <div
             style={{
               fontFamily: cg,
@@ -1286,8 +1593,6 @@ function RoomListCard({ room, h, onOpen, index }) {
           >
             {room.name}
           </div>
-
-          {/* Description */}
           <p
             style={{
               fontSize: ".86rem",
@@ -1304,8 +1609,6 @@ function RoomListCard({ room, h, onOpen, index }) {
           >
             {room.desc}
           </p>
-
-          {/* Amenity pills */}
           <div style={{ display: "flex", gap: ".4rem", flexWrap: "wrap" }}>
             {room.amenities
               .slice(0, isMobile ? 3 : room.amenities.length)
@@ -1336,12 +1639,12 @@ function RoomListCard({ room, h, onOpen, index }) {
           </div>
         </div>
 
-        {/* Bottom — CTA */}
+        {/* Bottom CTA */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: isMobile ? "space-between" : "space-between",
+            justifyContent: "space-between",
             flexWrap: "wrap",
             gap: ".6rem",
             paddingTop: ".9rem",
@@ -1380,17 +1683,19 @@ function RoomDetail({ h, roomKey, onBack }) {
   if (!h || !roomKey) return null;
   const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
   if (!room) return null;
-  const price = Math.round((h.price * room.multiplier) / 100) * 100;
+  const price =
+    h.price != null
+      ? Math.round((h.price * room.multiplier) / 100) * 100
+      : null;
   const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
 
-  const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : [];
+  const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
   const sixImgs = roomImgs.length > 0 ? roomImgs.slice(0, 6) : [h.img];
-
   const allAmens = [...new Set([...room.amenities])];
 
   return (
     <div id="khaRoomPage" className={roomKey ? "open" : ""}>
-      {/* Top bar */}
+      {/* ── Top bar ── */}
       <div
         className="dp-topbar"
         style={{
@@ -1400,7 +1705,6 @@ function RoomDetail({ h, roomKey, onBack }) {
           background: "rgba(24,35,24,.96)",
           backdropFilter: "blur(20px)",
           borderBottom: "1px solid rgba(200,169,106,.15)",
-          padding: ".85rem 3rem",
           display: "flex",
           alignItems: "center",
           gap: "1.2rem",
@@ -1415,7 +1719,8 @@ function RoomDetail({ h, roomKey, onBack }) {
             onBack();
           }}
         >
-          <ArrowLeft size={13} /> Back to Rooms
+          <ArrowLeft size={13} />
+          <span className="dp-topbar-back-text">Back to Rooms</span>
         </a>
         <div
           style={{
@@ -1426,11 +1731,16 @@ function RoomDetail({ h, roomKey, onBack }) {
           }}
         ></div>
         <span
+          className="dp-topbar-name"
           style={{
             fontSize: ".7rem",
             letterSpacing: ".18em",
             textTransform: "uppercase",
             color: "rgba(244,239,229,.35)",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            maxWidth: "160px",
           }}
         >
           {h.name}
@@ -1453,13 +1763,10 @@ function RoomDetail({ h, roomKey, onBack }) {
         </div>
       </div>
 
+      {/* ── Content ── */}
       <div
-        className="dp-inner"
-        style={{
-          maxWidth: "1160px",
-          margin: "0 auto",
-          padding: "3rem 3rem 6rem 1rem",
-        }}
+        className="rdp-inner"
+        style={{ maxWidth: "1160px", margin: "0 auto" }}
       >
         {/* Heading block */}
         <div style={{ marginBottom: "2rem" }}>
@@ -1481,7 +1788,7 @@ function RoomDetail({ h, roomKey, onBack }) {
           <div
             style={{
               fontFamily: cg,
-              fontSize: "clamp(2rem,4vw,3.1rem)",
+              fontSize: "clamp(1.8rem,4vw,3.1rem)",
               fontWeight: 300,
               color: "#fdfaf4",
               lineHeight: 1.1,
@@ -1503,7 +1810,7 @@ function RoomDetail({ h, roomKey, onBack }) {
           </div>
         </div>
 
-        {/* 6-image mosaic */}
+        {/* Mosaic */}
         <div className="kha-mosaic">
           <div className="kha-mosaic-main">
             <img src={sixImgs[0]} alt="main" />
@@ -1515,9 +1822,9 @@ function RoomDetail({ h, roomKey, onBack }) {
           ))}
         </div>
 
-        {/* 2-col layout */}
+        {/* 2-col layout — stacks on mobile via CSS class */}
         <div
-          className="kha-detail-grid"
+          className="kha-room-detail-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 330px",
@@ -1561,8 +1868,8 @@ function RoomDetail({ h, roomKey, onBack }) {
             >
               What's Included
             </h3>
-
             <div
+              className="kha-amen-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit,minmax(172px,1fr))",
@@ -1599,6 +1906,7 @@ function RoomDetail({ h, roomKey, onBack }) {
               Nearby Attractions
             </h3>
             <div
+              className="kha-nearby-grid"
               style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr",
@@ -1639,6 +1947,9 @@ function RoomDetail({ h, roomKey, onBack }) {
                         display: "flex",
                         alignItems: "center",
                         gap: ".4rem",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
                       }}
                     >
                       <MapPin
@@ -1654,6 +1965,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                         whiteSpace: "nowrap",
                         marginLeft: ".5rem",
                         padding: ".15rem .5rem",
+                        flexShrink: 0,
                         color:
                           p.dist <= 30
                             ? "#4ade80"
@@ -1709,11 +2021,31 @@ function RoomDetail({ h, roomKey, onBack }) {
                   flexShrink: 0,
                 }}
               >
-                <img
-                  src={h.host.avatar}
-                  alt={h.host.name}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
+                {h.host.avatar ? (
+                  <img
+                    src={h.host.avatar}
+                    alt={h.host.name}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      background: "rgba(200,169,106,.15)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "1.4rem",
+                    }}
+                  >
+                    🏡
+                  </div>
+                )}
               </div>
               <div>
                 <div
@@ -1751,15 +2083,6 @@ function RoomDetail({ h, roomKey, onBack }) {
               </div>
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: ".85rem",
-              }}
-            ></div>
-            {/* Location Map */}
-
             <h3
               style={{
                 fontFamily: cg,
@@ -1771,13 +2094,12 @@ function RoomDetail({ h, roomKey, onBack }) {
             >
               Property Location
             </h3>
-
             <div
               style={{
                 overflow: "hidden",
                 border: "1px solid rgba(200,169,106,.15)",
                 marginBottom: "2.5rem",
-                height: "420px",
+                height: "320px",
               }}
             >
               <iframe
@@ -1793,8 +2115,12 @@ function RoomDetail({ h, roomKey, onBack }) {
           </div>
 
           {/* Right — sticky booking card */}
-          <div style={{ position: "sticky", top: "80px" }}>
+          <div
+            className="kha-room-booking-sticky"
+            style={{ position: "sticky", top: "80px" }}
+          >
             <div
+              className="kha-booking-card"
               style={{
                 background: "rgba(31,46,31,.9)",
                 border: "1px solid rgba(200,169,106,.24)",
@@ -1832,7 +2158,9 @@ function RoomDetail({ h, roomKey, onBack }) {
                     display: "block",
                   }}
                 >
-                  ₹{price.toLocaleString("en-IN")}
+                  {price != null
+                    ? `₹${price.toLocaleString("en-IN")}`
+                    : "Contact for Price"}
                 </span>
                 <span
                   style={{
@@ -1909,6 +2237,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                         fontSize: ".84rem",
                         color: "rgba(244,239,229,.68)",
                         textAlign: "right",
+                        wordBreak: "break-word",
                       }}
                     >
                       {v}
@@ -2188,7 +2517,6 @@ const Home = () => {
             Association (R). Book directly — no OTA commissions, no hidden
             charges.
           </p>
-
           <a
             href="#browse"
             className="kha-hero-book-btn inline-flex items-center gap-[.7rem] mt-4 px-8 py-[.82rem] font-semibold"
@@ -2400,7 +2728,6 @@ const Home = () => {
         id="browse"
       >
         <div className="kha-reveal max-w-[1300px] mx-auto mb-10">
-          {/* <span className="kha-eyebrow">Explore</span> */}
           <h2
             style={{
               fontFamily: cg,
@@ -2480,16 +2807,8 @@ const Home = () => {
         >
           <div className="kha-reveal grid grid-cols-2 gap-[1.1rem]">
             {[
-              {
-                src: "/mysuru.jpg",
-                label: "Mysuru",
-                cls: "kha-arch-1",
-              },
-              {
-                src: "/bandipura.jpg",
-                label: "Bandipura",
-                cls: "kha-arch-2",
-              },
+              { src: "/mysuru.jpg", label: "Mysuru", cls: "kha-arch-1" },
+              { src: "/bandipura.jpg", label: "Bandipura", cls: "kha-arch-2" },
             ].map(({ src, label, cls }) => (
               <div
                 key={label}
@@ -2725,7 +3044,6 @@ const Home = () => {
               }}
             ></div>
           </div>
-
           <a
             href="/explore"
             className="kha-cta-anim-btn kha-reveal kha-d2 inline-flex items-center gap-[.8rem] px-[2.6rem] py-[.9rem] font-semibold"
@@ -2776,7 +3094,6 @@ const Home = () => {
                 background: "rgba(24,35,24,.96)",
                 backdropFilter: "blur(20px)",
                 borderBottom: "1px solid rgba(200,169,106,.15)",
-                padding: ".85rem 3rem",
                 display: "flex",
                 alignItems: "center",
                 gap: "1.2rem",
@@ -2784,7 +3101,8 @@ const Home = () => {
               }}
             >
               <a href="#" className="kha-back-btn" onClick={closeHs}>
-                <ArrowLeft size={13} /> Back to Explore
+                <ArrowLeft size={13} />
+                <span className="dp-topbar-back-text">Back to Explore</span>
               </a>
               <div
                 style={{
@@ -2795,16 +3113,22 @@ const Home = () => {
                 }}
               ></div>
               <div
+                className="dp-topbar-name"
                 style={{
                   fontFamily: cg,
                   fontSize: "1.12rem",
                   fontWeight: 300,
                   color: "#c8a96a",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "180px",
                 }}
               >
                 {currentHs.name}
               </div>
               <div
+                className="dp-topbar-ratings"
                 style={{
                   marginLeft: "auto",
                   display: "flex",
@@ -2813,25 +3137,33 @@ const Home = () => {
                 }}
               >
                 <Stars rating={currentHs.rating} sz={13} />
-                <span
-                  style={{
-                    fontSize: ".84rem",
-                    color: "#c8a96a",
-                    fontWeight: 500,
-                  }}
-                >
-                  {currentHs.rating}
-                </span>
-                <span
-                  style={{ fontSize: ".74rem", color: "rgba(244,239,229,.35)" }}
-                >
-                  ({currentHs.reviews} reviews)
-                </span>
+                {currentHs.rating && (
+                  <span
+                    style={{
+                      fontSize: ".84rem",
+                      color: "#c8a96a",
+                      fontWeight: 500,
+                    }}
+                  >
+                    {currentHs.rating}
+                  </span>
+                )}
+                {currentHs.reviews && (
+                  <span
+                    style={{
+                      fontSize: ".74rem",
+                      color: "rgba(244,239,229,.35)",
+                    }}
+                  >
+                    ({currentHs.reviews} reviews)
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Hero strip */}
             <div
+              className="kha-detail-hero-strip"
               style={{
                 position: "relative",
                 height: "300px",
@@ -2852,6 +3184,7 @@ const Home = () => {
                 }}
               ></div>
               <div
+                className="kha-detail-hero-bottom"
                 style={{
                   position: "absolute",
                   bottom: "2rem",
@@ -2895,7 +3228,7 @@ const Home = () => {
                 <div
                   style={{
                     fontFamily: cg,
-                    fontSize: "clamp(1.8rem,4vw,2.9rem)",
+                    fontSize: "clamp(1.5rem,4vw,2.9rem)",
                     fontWeight: 300,
                     color: "#fdfaf4",
                     lineHeight: 1.1,
@@ -2921,26 +3254,28 @@ const Home = () => {
               </div>
             </div>
 
-            {/* ════ ROOM LIST BODY — two column layout ════ */}
+            {/* ════ ROOM LIST BODY ════ */}
             <div
-              className="dp-inner"
+              className="dp-inner-wrap"
               style={{
                 maxWidth: "1350px",
                 margin: "0 auto",
-                padding: "3rem 3rem 6rem",
               }}
             >
               <div
+                className="kha-detail-two-col"
                 style={{
                   display: "grid",
                   gridTemplateColumns: "420px 1fr",
                   gap: "2.5rem",
                   alignItems: "start",
                 }}
-                className="kha-detail-two-col"
               >
                 {/* ── LEFT: About + Host ── */}
-                <div style={{ position: "sticky", top: "80px" }}>
+                <div
+                  className="kha-detail-left-sticky"
+                  style={{ position: "sticky", top: "80px" }}
+                >
                   {/* About block */}
                   <div
                     style={{
@@ -2991,20 +3326,31 @@ const Home = () => {
                         color: "#7a9e6e",
                         marginBottom: ".75rem",
                         display: "flex",
-                        alignItems: "center",
+                        alignItems: "flex-start",
                         gap: ".35rem",
                       }}
                     >
                       <MapPin
                         size={11}
-                        style={{ color: "#c8a96a", flexShrink: 0 }}
+                        style={{
+                          color: "#c8a96a",
+                          flexShrink: 0,
+                          marginTop: "2px",
+                        }}
                       />
-                      <span>
-                        Vijayanagar 4th Stage, near NPS School • 2 km from Ring
-                        Road • 15 minutes from Mysore Palace
-                      </span>
+                      <span>{currentHs.location}</span>
                     </p>
-                    (Government of Karnataka,Dept of Tourism Approved Homestay)
+                    <p
+                      style={{
+                        fontSize: ".72rem",
+                        color: "rgba(200,169,106,.6)",
+                        marginBottom: ".75rem",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      (Government of Karnataka, Dept of Tourism Approved
+                      Homestay)
+                    </p>
                     <p
                       style={{
                         fontSize: ".87rem",
@@ -3066,15 +3412,31 @@ const Home = () => {
                           flexShrink: 0,
                         }}
                       >
-                        <img
-                          src={currentHs.host.avatar}
-                          alt={currentHs.host.name}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                          }}
-                        />
+                        {currentHs.host.avatar ? (
+                          <img
+                            src={currentHs.host.avatar}
+                            alt={currentHs.host.name}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                            }}
+                          />
+                        ) : (
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              background: "rgba(200,169,106,.15)",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: "1.4rem",
+                            }}
+                          >
+                            🏡
+                          </div>
+                        )}
                       </div>
                       <div>
                         <div
@@ -3112,27 +3474,29 @@ const Home = () => {
                     >
                       {currentHs.host.desc}
                     </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: ".6rem",
-                        padding: ".7rem 1rem",
-                        background: "rgba(200,169,106,.07)",
-                        border: "1px solid rgba(200,169,106,.14)",
-                      }}
-                    >
-                      <Stars rating={currentHs.rating} sz={14} />
-                      <span
+                    {currentHs.rating && (
+                      <div
                         style={{
-                          fontSize: ".9rem",
-                          color: "#c8a96a",
-                          fontWeight: 500,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: ".6rem",
+                          padding: ".7rem 1rem",
+                          background: "rgba(200,169,106,.07)",
+                          border: "1px solid rgba(200,169,106,.14)",
                         }}
                       >
-                        {currentHs.rating}
-                      </span>
-                    </div>
+                        <Stars rating={currentHs.rating} sz={14} />
+                        <span
+                          style={{
+                            fontSize: ".9rem",
+                            color: "#c8a96a",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {currentHs.rating}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
