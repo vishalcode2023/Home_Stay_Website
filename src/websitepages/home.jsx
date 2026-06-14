@@ -2497,9 +2497,13 @@ const Home = () => {
               Homestays"
             </p>
             <div className="kha-cred-logos">
-              <img src="/gov-logo.png" alt="Karnataka Tourism" />
               <img src="/mha.jpg" alt="MDHOA Logo" />
               <img src="/image.png" alt="Government of Karnataka" />
+              <img
+                src="/gov-logo.png"
+                alt="Karnataka Tourism"
+                className="w-full max-w-md mx-auto rounded-xl object-cover"
+              />
               <img src="/mysurubrand.png" alt="Government of Karnataka" />
             </div>
           </div>
