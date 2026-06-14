@@ -286,7 +286,7 @@ const Navbar = () => {
           {/* Logo */}
           <a href="/" className="flex items-center gap-3 no-underline">
             <img
-              src="/mha.jpg"
+              src="https://res.cloudinary.com/dmapa99lk/image/upload/v1781418996/mha_g5sluu.png"
               alt="MHA Logo"
               className="kha-logo-img w-[65px] h-[65px] object-contain shrink-0"
             />

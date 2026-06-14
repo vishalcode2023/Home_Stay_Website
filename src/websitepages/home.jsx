@@ -2497,7 +2497,7 @@ const Home = () => {
               Homestays"
             </p>
             <div className="kha-cred-logos">
-              <img src="/mha.jpg" alt="MDHOA Logo" />
+              <img src="https://res.cloudinary.com/dmapa99lk/image/upload/v1781418996/mha_g5sluu.png" alt="MDHOA Logo" />
               <img src="/image.png" alt="Government of Karnataka" />
               <img
                 src="/gov-logo.png"
@@ -2575,7 +2575,7 @@ const Home = () => {
               desc: "All homestays are officially approved by the Department of Tourism, Government of Karnataka.",
             },
             {
-              icon: "/mha.jpg",
+              icon: "https://res.cloudinary.com/dmapa99lk/image/upload/v1781418996/mha_g5sluu.png",
               title: "Mysuru District Homestay Owners Association(R)",
               desc: "Every homestay is an official verified member offering Government-approved stays with direct booking.",
             },
