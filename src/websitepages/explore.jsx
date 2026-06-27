@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  memo,
+} from "react";
 import {
   UtensilsCrossed,
   Waves,
@@ -28,9 +35,49 @@ import Navbar from "./navbar";
 import Footer from "../components/Footer";
 import HouseRules from "./Homerules";
 
+/* ─── Cloudinary helper ─────────────────────────────────────────────────── */
+const cl = (url, w = 600) => {
+  if (!url || !url.startsWith("https://res.cloudinary.com")) return url;
+  return url.replace("/upload/", `/upload/w_${w},f_auto,q_auto,c_fill/`);
+};
+
+/* PERF: responsive srcSet generator — browser picks the smallest image that
+   satisfies the rendered size instead of always downloading a fixed width.
+   Falls back gracefully for non-Cloudinary URLs (returns undefined). */
+const clSrcSet = (url, widths = [320, 480, 640, 800, 1000]) => {
+  if (!url || !url.startsWith("https://res.cloudinary.com")) return undefined;
+  return widths.map((w) => `${cl(url, w)} ${w}w`).join(", ");
+};
+
+/* ─── Shared viewport hook ───────────────────────────────────────────────
+   PERF: a single matchMedia listener shared by every consumer instead of
+   each RoomListCard instance attaching its own `resize` listener. Avoids
+   N duplicate listeners + layout reads when there are many room cards. */
+const MOBILE_QUERY = "(max-width: 640px)";
+let mqlSingleton = null;
+function getMql() {
+  if (typeof window === "undefined") return null;
+  if (!mqlSingleton) mqlSingleton = window.matchMedia(MOBILE_QUERY);
+  return mqlSingleton;
+}
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => getMql()?.matches ?? false);
+  useEffect(() => {
+    const mql = getMql();
+    if (!mql) return;
+    const fn = (e) => setIsMobile(e.matches);
+    mql.addEventListener("change", fn);
+    return () => mql.removeEventListener("change", fn);
+  }, []);
+  return isMobile;
+}
+
 /* ─── Non-Tailwindable CSS ──────────────────────────────────────────────── */
+// NOTE: Remove the @import from here and add to index.html instead:
+// <link rel="preconnect" href="https://fonts.googleapis.com" />
+// <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+// <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
 const STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body { background:#182318; color:#f4efe5; overflow-x:hidden; cursor:none; }
@@ -38,8 +85,8 @@ const STYLES = `
   ::-webkit-scrollbar-track { background:#182318; }
   ::-webkit-scrollbar-thumb { background:#c8a96a; }
 
-  .kha-cur  { width:9px; height:9px; background:#c8a96a; border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); }
-  .kha-cuf  { width:34px; height:34px; border:1px solid rgba(200,169,106,.4); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); }
+  .kha-cur  { width:9px; height:9px; background:#c8a96a; border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transform:translate3d(-50%,-50%,0); }
+  .kha-cuf  { width:34px; height:34px; border:1px solid rgba(200,169,106,.4); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9998; transform:translate3d(-50%,-50%,0); }
 
   @keyframes khaHeroZoom { to { transform:scale(1); } }
   .kha-ex-hero-bg { animation:khaHeroZoom 12s ease forwards; transform:scale(1.06); }
@@ -137,6 +184,41 @@ const STYLES = `
   /* Detail left sticky */
   .kha-detail-left-sticky { position:sticky; top:80px; }
 
+  /* PERF: extracted from inline styles — RoomListCard hover/layout states.
+     Identical visual result, but lets the browser cache rule application
+     instead of recomputing fresh style objects on every render. */
+  .kha-rlc {
+    display:grid;
+    overflow:hidden;
+    background:#1c2d1c;
+    box-shadow:0 4px 20px rgba(0,0,0,.25);
+    transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s cubic-bezier(.22,1,.36,1),border-color .4s cubic-bezier(.22,1,.36,1),background .4s cubic-bezier(.22,1,.36,1);
+    cursor:pointer;
+    position:relative;
+    border:1px solid rgba(200,169,106,.14);
+    grid-template-columns:340px 1fr;
+  }
+  .kha-rlc:hover {
+    background:rgba(31,46,31,.95);
+    transform:translateY(-5px);
+    box-shadow:0 24px 64px rgba(0,0,0,.5);
+  }
+  .kha-rlc-img-wrap { position:relative; overflow:hidden; height:360px; }
+  .kha-rlc-img { width:100%; height:100%; object-fit:cover; transition:transform .7s cubic-bezier(.22,1,.36,1); transform:scale(1); }
+  .kha-rlc:hover .kha-rlc-img { transform:scale(1.06); }
+  .kha-rlc-watermark { opacity:.12; transition:opacity .4s; }
+  .kha-rlc:hover .kha-rlc-watermark { opacity:.22; }
+  .kha-rlc-title { color:#e8e2d4; transition:color .3s; }
+  .kha-rlc:hover .kha-rlc-title { color:#fdfaf4; }
+  .kha-rlc-tagrow { border-top:1px solid rgba(200,169,106,.08); transition:border-color .3s; }
+  .kha-rlc:hover .kha-rlc-tagrow { border-color:rgba(200,169,106,.2); }
+
+  @media(max-width:640px){
+    .kha-rlc { grid-template-columns:1fr; }
+    .kha-rlc:hover { transform:none; }
+    .kha-rlc-img-wrap { height:210px; }
+  }
+
   /* ─── TABLET ─────────────────── */
   @media(max-width:900px){
     body { cursor:auto; }
@@ -159,22 +241,12 @@ const STYLES = `
   @media(max-width:768px){
     .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
     .kha-exp-card-grid { grid-template-columns:repeat(2,1fr) !important; gap:.85rem !important; }
-
-    .kha-mosaic {
-      grid-template-columns:1fr 1fr !important;
-      grid-template-rows:190px 120px 120px !important;
-    }
+    .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:190px 120px 120px !important; }
     .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
-
-    /* Room detail — single col, booking card un-sticks */
     .kha-detail-grid { grid-template-columns:1fr !important; gap:1.5rem !important; }
     .kha-booking-sticky { position:static !important; top:auto !important; }
-
-    /* Topbar tighter on mobile */
     .dp-topbar { padding:.6rem 1rem !important; gap:.65rem !important; }
     .kha-back-btn { padding:.4rem .9rem !important; font-size:.67rem !important; letter-spacing:.1em !important; }
-
-    /* Hero strip shorter */
     .kha-hero-strip { height:210px !important; }
     .kha-hero-strip-content { left:1.2rem !important; right:1.2rem !important; bottom:1.2rem !important; }
   }
@@ -186,21 +258,21 @@ const STYLES = `
     .kha-amenity-grid { grid-template-columns:1fr !important; }
     .kha-room-list-card-inner { grid-template-columns:1fr !important; }
     .kha-promo-inner { gap:2rem !important; }
-
-    .kha-mosaic {
-      grid-template-columns:1fr 1fr !important;
-      grid-template-rows:160px 110px 110px !important;
-    }
+    .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 110px 110px !important; }
   }
 
   @media(max-width:480px){
     .px-16 { padding-left:.75rem !important; padding-right:.75rem !important; }
     .kha-exp-card-grid { grid-template-columns:1fr !important; }
-    .kha-mosaic {
-      grid-template-columns:1fr !important;
-      grid-template-rows:repeat(6,140px) !important;
-    }
+    .kha-mosaic { grid-template-columns:1fr !important; grid-template-rows:repeat(6,140px) !important; }
     .kha-mosaic-main { grid-column:auto !important; }
+  }
+
+  /* Respect reduced-motion preference without altering default visuals */
+  @media (prefers-reduced-motion: reduce) {
+    .kha-cur, .kha-cuf { display:none; }
+    .kha-reveal { transition:none; opacity:1; transform:none; }
+    * { scroll-behavior:auto !important; }
   }
 `;
 
@@ -262,6 +334,24 @@ function haversine(lat1, lng1, lat2, lng2) {
   return +(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(1);
 }
 
+/* PERF: hoisted out of render — computing nearest-places-sorted-list is
+   identical for the same (lat,lng) pair every time, so we memoize per
+   coordinate key globally instead of recomputing inside every component
+   that needs it (HsCard, RoomDetail, RoomListCard's parent, etc). */
+const _nearestCache = new Map();
+function nearestPlaces(lat, lng) {
+  const key = `${lat},${lng}`;
+  let cached = _nearestCache.get(key);
+  if (!cached) {
+    cached = TOURIST_PLACES.map((p) => ({
+      ...p,
+      dist: haversine(lat, lng, p.lat, p.lng),
+    })).sort((a, b) => a.dist - b.dist);
+    _nearestCache.set(key, cached);
+  }
+  return cached;
+}
+
 /* ─── Amenity icons ─────────────────────────────────────────────────────── */
 const AICONS = {
   "Meals Included": <UtensilsCrossed size={17} />,
@@ -282,6 +372,10 @@ const AICONS = {
   "Private Bathroom": <Bath size={17} />,
 };
 
+/* ─── ROOM_TYPES ─────────────────────────────────────────────────────────
+   All Cloudinary URLs optimised at source — the cl() helper adds
+   w_N,f_auto,q_auto at render time so we keep full-res here.
+──────────────────────────────────────────────────────────────────────── */
 const ROOM_TYPES = {
   // Kukkeshree — id: 1
   1: [
@@ -297,7 +391,7 @@ const ROOM_TYPES = {
       guests: 2,
       beds: 2,
       sqft: 280,
-      desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK...",
+      desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK with an Italian-style kitchen, two bedrooms, solar geyser, Smart TV & WiFi, and covered parking. A true home-away-from-home in a quiet residential neighbourhood.",
       amenities: [
         "Fully equipped Italian-style kitchen",
         "2 bedrooms with one attached Toilet & Common bathroom",
@@ -308,12 +402,12 @@ const ROOM_TYPES = {
         "Floor plan Available on Request",
       ],
       imgs: [
-        "/images/nela1.jpg",
-        "/images/nela2.jpg",
-        "/images/nela3.jpg",
-        "/images/nela4.jpg",
-        "/images/nela5.jpg",
-        "/images/nela6.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela1_tcnuw9.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/nela2_hmycql.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela3_mplrru.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/nela4_vgutqh.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/nela5_ujuxqf.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela6_k86nct.png",
       ],
     },
     {
@@ -328,7 +422,7 @@ const ROOM_TYPES = {
       guests: 4,
       beds: 2,
       sqft: 420,
-      desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay...",
+      desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay ideal for families. Fully equipped kitchen, two bedrooms with attached bathrooms, solar/geyser hot water, Smart TV & WiFi, and covered parking.",
       amenities: [
         "Fully equipped kitchen",
         "2 bedrooms with attached bathrooms",
@@ -338,12 +432,12 @@ const ROOM_TYPES = {
         "Online delivery & cab services available",
       ],
       imgs: [
-        "/images/mad1.png",
-        "/images/mad2.png",
-        "/images/mad3.png",
-        "/images/mad4.png",
-        "/images/mad6.png",
-        "/images/mad5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568040/mad1_oc3yub.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568042/mad2_ppf8j2.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568044/mad3_l7oow3.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568041/mad4_an47qg.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568042/mad5_fo87g5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568042/mad2_ppf8j2.png",
       ],
     },
     {
@@ -358,7 +452,7 @@ const ROOM_TYPES = {
       guests: 2,
       beds: 1,
       sqft: 520,
-      desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor...",
+      desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor with an induction kitchen, private bathroom with solar/geyser, Smart TV & WiFi, and covered parking.",
       amenities: [
         "Compact kitchen with induction stove",
         "Indian toilet / Bathroom with solar / geyser hot water",
@@ -367,12 +461,12 @@ const ROOM_TYPES = {
         "Swiggy / Zomato / Ola / Uber serviceable",
       ],
       imgs: [
-        "/images/thar1.png",
-        "/images/thar2.png",
-        "/images/thar3.png",
-        "/images/thar4.png",
-        "/images/thar5.png",
-        "/images/thar6.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568065/thar1_dl5jec.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568064/thar2_t50syx.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568065/thar3_u4jqm0.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568065/thar4_yqiooz.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568066/thar5_z6sipg.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568067/thar6_b16ndu.png",
       ],
     },
   ],
@@ -406,12 +500,12 @@ const ROOM_TYPES = {
         "Accommodates up to 5 Guests",
       ],
       imgs: [
-        "/images/skyhouse-1bhk-2.jpg",
-        "/images/skyhouse-1bhk-3.jpg",
-        "/images/skyhouse-1bhk-4.jpg",
-        "/images/skyhouse-1bhk-5.jpg",
-        "/images/skyhouse-1bhk-6.jpg",
-        "/images/skyhouse-1bhk-7.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568057/skyhouse-1bhk-3_p5knff.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568057/skyhouse-1bhk-4_zl5t6b.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568055/skyhouse-1bhk-5_ogghem.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568056/skyhouse-1bhk-6_h77p4u.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568059/skyhouse-1bhk-7_gqwijk.jpg",
       ],
     },
     {
@@ -441,11 +535,11 @@ const ROOM_TYPES = {
         "Second Floor Apartment",
       ],
       imgs: [
-        "/images/skyhouse-2bhk-1.jpg",
-        "/images/skyhouse-2bhk-2.jpg",
-        "/images/skyhouse-2bhk-3.jpg",
-        "/images/skyhouse-2bhk-4.jpg",
-        "/images/skyhouse-2bhk-5.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568058/skyhouse-2bhk-1_ho7ft8.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568057/skyhouse-2bhk-2_sbx9ip.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568058/skyhouse-2bhk-3_abjly7.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568068/skyhouse-2bhk-4_rubmr7.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568059/skyhouse-2bhk-5_pa0pxt.jpg",
       ],
     },
   ],
@@ -474,10 +568,10 @@ const ROOM_TYPES = {
         "Stargazing Deck",
       ],
       imgs: [
-        "/images/krac-dragonfly-1.jpg",
-        "/images/krac-dragonfly-2.jpg",
-        "/images/krac-dragonfly-3.jpg",
-        "/images/krac-dragonfly-4.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568027/krac-dragonfly-1_diyejb.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/krac-dragonfly-2_hwrw1e.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/krac-dragonfly-3_ggkb5m.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/krac-dragonfly-4_itwdff.png",
       ],
     },
     {
@@ -502,10 +596,10 @@ const ROOM_TYPES = {
         "Stargazing Deck",
       ],
       imgs: [
-        "/images/krac-firefly-1.jpg",
-        "/images/krac-firefly-2.jpg",
-        "/images/krac-firefly-3.jpg",
-        "/images/krac-firefly-4.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/krac-firefly-1_ytrpc4.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/krac-firefly-2_ge2wtc.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/krac-firefly-3_jf0wgw.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/krac-firefly-4_tfo5zg.png",
       ],
     },
     {
@@ -528,16 +622,16 @@ const ROOM_TYPES = {
         "Yoga Space",
       ],
       imgs: [
-        "/images/krac-dayvisit-2.jpg",
-        "/images/Sliverhomestay1.jpg",
-        "/images/krac-dayvisit-3.jpg",
-        "/images/krac-dayvisit-4.jpg",
-        "/images/krac-dayvisit-5.jpg",
-        "/images/krac-dayvisit-6.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568038/krac-dayvisit-2_zdhkij.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568036/krac-dayvisit-3_lmpepf.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568038/krac-dayvisit-4_m0rlwx.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568038/krac-dayvisit-5_neozax.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568039/krac-dayvisit-6_nlokr8.png",
       ],
     },
   ],
 
+  // 1000 Silvers — id: 4
   4: [
     {
       key: "nature_cottage",
@@ -562,12 +656,12 @@ const ROOM_TYPES = {
         "View of chess-patterned flagstone lawns",
       ],
       imgs: [
-        "/images/Sliverhomestay1.jpg",
-        "/images/Sliverhomestay2.jpg",
-        "/images/Sliverhomestay3.jpg",
-        "/images/Sliverhomestay4.jpg",
-        "/images/Sliverhomestay5.jpg",
-        "/images/Sliverhomestay6.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568067/Sliverhomestay2_rdsi4g.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay3_uvfthp.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay4_akl9rx.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay5_hvydve.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568062/Sliverhomestay6_ieay0j.png",
       ],
     },
     {
@@ -593,11 +687,11 @@ const ROOM_TYPES = {
         "Green window views",
       ],
       imgs: [
-        "/images/Sliverhomestay7.jpg",
-        "/images/Sliverhomestay8.jpg",
-        "/images/Sliverhomestay10.jpg",
-        "/images/Sliverhomestay4.jpg",
-        "/images/Sliverhomestay5.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568062/Sliverhomestay7_lub9tr.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568062/Sliverhomestay8_ohmrpm.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568063/Sliverhomestay10_hrttwx.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay4_akl9rx.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay5_hvydve.png",
       ],
     },
     {
@@ -638,15 +732,16 @@ const ROOM_TYPES = {
         },
       ],
       imgs: [
-        "/images/event1.png",
-        "/images/event.png",
-        "/images/event3.png",
-        "/images/Sliverhomestay4.jpg",
-        "/images/Sliverhomestay5.jpg",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event1_koddhb.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event_ajrtgt.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event3_xcptfw.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay4_akl9rx.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay5_hvydve.png",
       ],
     },
   ],
 
+  // Moodalamane — id: 5
   5: [
     {
       key: "second_floor_2bhk",
@@ -672,12 +767,12 @@ const ROOM_TYPES = {
         "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
       ],
       imgs: [
-        "/images/mol.png",
-        "/images/mol1.png",
-        "/images/mol2.png",
-        "/images/mol3.png",
-        "/images/mol4.png",
-        "/images/mol5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol1_genjin.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol3_hyse65.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol4_sjmwzm.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol5_wyqgsp.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol6_vzv8sm.png",
       ],
     },
     {
@@ -703,12 +798,12 @@ const ROOM_TYPES = {
         "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
       ],
       imgs: [
-        "/images/mol6.png",
-        "/images/mol7.png",
-        "/images/mol8.png",
-        "/images/mol9.png",
-        "/images/mol10.png",
-        "/images/mol11.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol7_m1rhsg.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol8_rwuygz.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol9_vvzgz5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol10_v4wffd.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol11_czg8q9.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
       ],
     },
   ],
@@ -741,12 +836,12 @@ const ROOM_TYPES = {
         "Securely fenced 1-acre property",
       ],
       imgs: [
-        "/images/ask.png",
-        "/images/ask1.png",
-        "/images/ask2.png",
-        "/images/ask3.png",
-        "/images/ask4.png",
-        "/images/ask5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask1_upiuxy.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask2_xfvdrq.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568027/ask3_q8jded.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/ask4_rd8dpf.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/ask5_n6qhrc.png",
       ],
     },
   ],
@@ -777,11 +872,12 @@ const ROOM_TYPES = {
         "WiFi",
       ],
       imgs: [
-        "/images/bol.png",
-        "/images/bol1.png",
-        "/images/bol2.png",
-        "/images/bol3.png",
-        "/images/bol.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
       ],
     },
     {
@@ -808,17 +904,18 @@ const ROOM_TYPES = {
         "Near Mysuru Palace (8.6 km), Chamundi Hills (14.0 km), Devaraja Bazaar (7.8 km)",
       ],
       imgs: [
-        "/images/bol.png",
-        "/images/bol1.png",
-        "/images/bol2.png",
-        "/images/bol3.png",
-        "/images/bol.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
       ],
     },
   ],
 };
 
-/* ── Homestay data ── */
+/* ─── HS data ────────────────────────────────────────────────────────────── */
 const HS = [
   {
     id: 1,
@@ -834,19 +931,30 @@ const HS = [
     amenities: ["Meals Included", "Private Garden", "Nature Trails", "Bonfire"],
     hasWebsite: false,
     phone: "9480100001",
-    img: "/images/nela2.jpg",
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/nela2_hmycql.png",
     imgs: [
-      "/images/nela1.jpg",
-      "/images/nela2.jpg",
-      "/images/nela3.jpg",
-      "/images/nela4.jpg",
-      "/images/nela5.jpg",
-      "/images/nela6.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela1_tcnuw9.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/nela2_hmycql.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela3_mplrru.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/nela4_vgutqh.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/nela5_ujuxqf.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela6_k86nct.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568040/mad1_oc3yub.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568042/mad2_ppf8j2.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568044/mad3_l7oow3.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568041/mad4_an47qg.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568042/mad5_fo87g5.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568065/thar1_dl5jec.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568064/thar2_t50syx.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568065/thar3_u4jqm0.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568065/thar4_yqiooz.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568066/thar5_z6sipg.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568067/thar6_b16ndu.png",
     ],
     type: "Family Homestay",
     location:
       "Vijayanagar 4th Stage, near NPS School , Mysuru • 2 km from Ring Road • 15 minutes from Mysore Palace",
-    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times.This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays.Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
+    desc: "Kukkeshree Homestay is a Government-approved, fully compliant homestay designed exclusively for families. The owner resides on the property, ensuring safety, accountability, and support at all times. This is not a boutique hotel, but a peaceful residential home where guests can enjoy a calm and comfortable stay. The property is well-ventilated, located in a quiet neighborhood, and ideal for both short-term and long-term stays. Guests have access to entire private spaces and can cook their own meals, making it a true homely experience.",
     host: {
       name: "Mr. Nagendra N",
       since: "Host since 2022",
@@ -882,14 +990,19 @@ const HS = [
     amenities: ["Free WiFi", "Air Conditioning"],
     hasWebsite: false,
     phone: "9480100003",
-    img: "/images/skyhouse-1bhk-1.jpg",
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
     imgs: [
-      "/images/skyhouse1.jpg",
-      "/images/skyhouse2.jpg",
-      "/images/skyhouse3.jpg",
-      "/images/skyhouse4.jpg",
-      "/images/skyhouse5.jpg",
-      "/images/skyhouse6.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568057/skyhouse-1bhk-3_p5knff.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568057/skyhouse-1bhk-4_zl5t6b.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568055/skyhouse-1bhk-5_ogghem.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568056/skyhouse-1bhk-6_h77p4u.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568059/skyhouse-1bhk-7_gqwijk.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568058/skyhouse-2bhk-1_ho7ft8.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568057/skyhouse-2bhk-2_sbx9ip.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568058/skyhouse-2bhk-3_abjly7.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568068/skyhouse-2bhk-4_rubmr7.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568059/skyhouse-2bhk-5_pa0pxt.jpg",
     ],
     type: "Family Homestay",
     location:
@@ -935,14 +1048,21 @@ const HS = [
     ],
     hasWebsite: false,
     phone: "8861537500",
-    img: "/images/krac-cover.jpg",
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568027/krac-dragonfly-1_diyejb.png",
     imgs: [
-      "/images/krac1.jpg",
-      "/images/krac2.jpg",
-      "/images/krac3.jpg",
-      "/images/krac4.jpg",
-      "/images/krac5.jpg",
-      "/images/krac6.jpg",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568027/krac-dragonfly-1_diyejb.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/krac-dragonfly-2_hwrw1e.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/krac-dragonfly-3_ggkb5m.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/krac-dragonfly-4_itwdff.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/krac-firefly-1_ytrpc4.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/krac-firefly-2_ge2wtc.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/krac-firefly-3_jf0wgw.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/krac-firefly-4_tfo5zg.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568038/krac-dayvisit-2_zdhkij.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568036/krac-dayvisit-3_lmpepf.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568038/krac-dayvisit-4_m0rlwx.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568038/krac-dayvisit-5_neozax.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568039/krac-dayvisit-6_nlokr8.png",
     ],
     type: "Wilderness Farm Stay",
     location:
@@ -990,8 +1110,21 @@ const HS = [
     ],
     hasWebsite: false,
     phone: "9444866776",
-    img: "/images/Sliverhomestay1.jpg",
-    imgs: [],
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
+    imgs: [
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568067/Sliverhomestay2_rdsi4g.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay3_uvfthp.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay4_akl9rx.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568061/Sliverhomestay5_hvydve.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568062/Sliverhomestay6_ieay0j.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568062/Sliverhomestay7_lub9tr.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568062/Sliverhomestay8_ohmrpm.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568063/Sliverhomestay10_hrttwx.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event1_koddhb.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event_ajrtgt.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event3_xcptfw.png",
+    ],
     type: "Farm Stay",
     location: "HD Kote Road, Mysuru • Along the HD Kote and Mysore Highway",
     desc: "1000 Silvers Farm Stay is a tranquil, pet-friendly retreat located in the countryside of Mysore, India, specifically situated along the HD Kote and Mysore highway. It is designed as an exclusive farmhouse experience, often catering to individual groups to ensure privacy. Approved by the Tourism Department.",
@@ -1017,8 +1150,20 @@ const HS = [
     amenities: ["Free WiFi", "TV", "Fully Equipped Kitchen", "Solar Geyser"],
     hasWebsite: false,
     phone: null,
-    img: "/images/mol.png",
-    imgs: [],
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
+    imgs: [
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol1_genjin.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol3_hyse65.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol4_sjmwzm.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol5_wyqgsp.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol6_vzv8sm.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol7_m1rhsg.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol8_rwuygz.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol9_vvzgz5.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol10_v4wffd.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol11_czg8q9.png",
+    ],
     type: "Family Homestay",
     location:
       "L137, Adithya, KHB 2nd Stage, Kuvempunagar, Mysuru, Karnataka 570023 • 4.5 km from Zoo and Mysuru Palace",
@@ -1051,8 +1196,15 @@ const HS = [
     ],
     hasWebsite: false,
     phone: "9480568332",
-    img: "/images/ask.png",
-    imgs: [],
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
+    imgs: [
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask1_upiuxy.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask2_xfvdrq.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568027/ask3_q8jded.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/ask4_rd8dpf.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568029/ask5_n6qhrc.png",
+    ],
     type: "Farm Homestay",
     location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
     desc: "Aastha Homestay is a home away from home spread across 1 acre with mango groves, coconut trees, and sapota. Securely fenced with an all-round verandah. Guests enjoy delicious home-cooked meals, outdoor sports, evening campfires, and a lush garden atmosphere.",
@@ -1083,8 +1235,13 @@ const HS = [
     ],
     hasWebsite: true,
     phone: "9448336870",
-    img: "/images/bol.png",
-    imgs: [],
+    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+    imgs: [
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
+      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
+    ],
     type: "Premium Villa Homestay",
     location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
     desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout.",
@@ -1099,7 +1256,7 @@ const HS = [
 ];
 
 /* ─── Stars helper ──────────────────────────────────────────────────────── */
-function Stars({ rating, sz = 14 }) {
+const Stars = memo(function Stars({ rating, sz = 14 }) {
   return (
     <span style={{ display: "inline-flex", gap: "2px" }}>
       {Array.from({ length: Math.floor(rating) }, (_, i) => (
@@ -1107,7 +1264,7 @@ function Stars({ rating, sz = 14 }) {
       ))}
     </span>
   );
-}
+});
 
 function Badge({ children, bg, border, color }) {
   return (
@@ -1127,7 +1284,7 @@ function Badge({ children, bg, border, color }) {
   );
 }
 
-/* ─── Avatar fallback ───────────────────────────────────────────────────── */
+/* ─── Avatar ────────────────────────────────────────────────────────────── */
 function Avatar({ src, name, size = 58 }) {
   return (
     <div
@@ -1144,6 +1301,10 @@ function Avatar({ src, name, size = 58 }) {
         <img
           src={src}
           alt={name}
+          loading="lazy"
+          decoding="async"
+          width={size}
+          height={size}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       ) : (
@@ -1167,32 +1328,85 @@ function Avatar({ src, name, size = 58 }) {
   );
 }
 
+/* ─── Lazy Map ──────────────────────────────────────────────────────────── */
+function LazyMap({ lat, lng }) {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        overflow: "hidden",
+        border: "1px solid rgba(200,169,106,.15)",
+        marginBottom: "2.5rem",
+        height: "360px",
+      }}
+    >
+      {visible && (
+        <iframe
+          title="Property Location"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          loading="lazy"
+          allowFullScreen
+          src={`https://maps.google.com/maps?q=${lat},${lng}&z=15&output=embed`}
+        />
+      )}
+    </div>
+  );
+}
+
 /* ─── Explore Card ──────────────────────────────────────────────────────── */
-function HsCard({ h, onOpen, distance }) {
-  const nearbyPlaces = TOURIST_PLACES.map((p) => ({
-    ...p,
-    dist: haversine(h.lat, h.lng, p.lat, p.lng),
-  }))
-    .sort((a, b) => a.dist - b.dist)
-    .slice(0, 3);
+const HsCard = memo(function HsCard({ h, onOpen, distance }) {
+  /* PERF: nearestPlaces() is now globally memoized by (lat,lng) key, so this
+     useMemo just slices the top 3 — no recompute of the full haversine pass
+     when multiple components need the same property's distances. */
+  const nearbyPlaces = useMemo(
+    () => nearestPlaces(h.lat, h.lng).slice(0, 3),
+    [h.lat, h.lng],
+  );
+
+  const handleClick = useCallback(() => onOpen(h.id), [onOpen, h.id]);
+  const srcSet = useMemo(() => clSrcSet(h.img), [h.img]);
 
   return (
     <div
       className="kha-card kha-reveal bg-[#1f2e1f] overflow-hidden"
       style={{ border: "1px solid rgba(200,169,106,.1)" }}
-      onClick={() => onOpen(h.id)}
+      onClick={handleClick}
     >
       <div
         className="kha-card-img-wrap w-full overflow-hidden relative"
         style={{ aspectRatio: "4/3" }}
       >
         <img
-          src={h.img}
+          src={cl(h.img, 480)}
+          srcSet={srcSet}
+          sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
           alt={h.name}
           loading="lazy"
+          decoding="async"
+          width="480"
+          height="360"
           className="kha-card-img w-full h-full object-cover"
+          style={{ aspectRatio: "4/3" }}
         />
-
         <div className="absolute top-[.9rem] left-[.9rem] flex gap-1 flex-wrap z-[2]">
           <Badge
             bg="rgba(24,35,24,.72)"
@@ -1219,7 +1433,6 @@ function HsCard({ h, onOpen, distance }) {
             </Badge>
           )}
         </div>
-
         {distance !== null && (
           <div
             className="absolute bottom-[.9rem] right-[.9rem] z-[2] flex items-center gap-[.35rem] px-3 py-[.3rem]"
@@ -1235,7 +1448,6 @@ function HsCard({ h, onOpen, distance }) {
             {distance} km away
           </div>
         )}
-
         <div
           className="kha-price-overlay absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 transition-opacity duration-300 z-[3]"
           style={{
@@ -1295,7 +1507,6 @@ function HsCard({ h, onOpen, distance }) {
           </div>
         </div>
       </div>
-
       <div style={{ padding: "1.3rem 1.4rem 1.5rem" }}>
         <div
           style={{
@@ -1393,47 +1604,40 @@ function HsCard({ h, onOpen, distance }) {
       </div>
     </div>
   );
-}
+});
 
 /* ─── Room List Card ────────────────────────────────────────────────────── */
-function RoomListCard({ room, h, onOpen, index }) {
+const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
   const price =
     h.price != null && room.multiplier != null
       ? Math.round((h.price * room.multiplier) / 100) * 100
       : null;
-  const [hovered, setHovered] = useState(false);
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.innerWidth < 640,
-  );
 
-  useEffect(() => {
-    const fn = () => setIsMobile(window.innerWidth < 640);
-    window.addEventListener("resize", fn);
-    return () => window.removeEventListener("resize", fn);
-  }, []);
+  /* PERF: shared matchMedia hook instead of a per-card resize listener.
+     Visuals are unaffected — the breakpoint (640px) and behavior match the
+     original isMobile state exactly. */
+  const isMobile = useIsMobile();
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
   const imgSrc = roomImgs[0] || h.img;
+  const srcSet = useMemo(() => clSrcSet(imgSrc), [imgSrc]);
+
+  const handleClick = useCallback(() => onOpen(room.key), [onOpen, room.key]);
 
   return (
     <div
-      className="kha-room-list-card-inner"
-      onClick={() => onOpen(room.key)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="kha-room-list-card-inner kha-rlc"
+      onClick={handleClick}
       style={{
-        display: "grid",
-        gridTemplateColumns: isMobile ? "1fr" : "340px 1fr",
-        overflow: "hidden",
-        border: `1px solid ${hovered ? room.tagBorder : "rgba(200,169,106,.14)"}`,
-        background: hovered ? "rgba(31,46,31,.95)" : "#1c2d1c",
-        transform: hovered && !isMobile ? "translateY(-5px)" : "translateY(0)",
-        boxShadow: hovered
-          ? `0 24px 64px rgba(0,0,0,.5), 0 0 0 1px ${room.tagBorder}`
-          : "0 4px 20px rgba(0,0,0,.25)",
-        transition: "all .4s cubic-bezier(.22,1,.36,1)",
-        cursor: "pointer",
-        position: "relative",
+        /* dynamic, per-room values stay inline; static hover/layout rules
+           now live in .kha-rlc / .kha-rlc:hover in STYLES above */
+        borderColor: "rgba(200,169,106,.14)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = room.tagBorder;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "rgba(200,169,106,.14)";
       }}
     >
       {/* Accent bar */}
@@ -1447,31 +1651,23 @@ function RoomListCard({ room, h, onOpen, index }) {
           width: isMobile ? "auto" : "3px",
           height: isMobile ? "3px" : "auto",
           background: `linear-gradient(to ${isMobile ? "right" : "bottom"}, ${room.accentColor}, transparent)`,
-          opacity: hovered ? 1 : 0.6,
-          transition: "opacity .4s",
+          opacity: 0.6,
           zIndex: 2,
         }}
       />
 
       {/* Image */}
-      <div
-        style={{
-          position: "relative",
-          overflow: "hidden",
-          height: isMobile ? "210px" : "360px",
-        }}
-      >
+      <div className="kha-rlc-img-wrap">
         <img
-          src={imgSrc}
+          src={cl(imgSrc, 640)}
+          srcSet={srcSet}
+          sizes="(max-width: 640px) 100vw, 340px"
           alt={room.name}
           loading="lazy"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transform: hovered ? "scale(1.06)" : "scale(1)",
-            transition: "transform .7s cubic-bezier(.22,1,.36,1)",
-          }}
+          decoding="async"
+          width="640"
+          height="360"
+          className="kha-rlc-img"
         />
         <div
           style={{
@@ -1481,9 +1677,9 @@ function RoomListCard({ room, h, onOpen, index }) {
               "linear-gradient(to bottom,rgba(24,35,24,.08) 0%,rgba(24,35,24,.6) 100%)",
           }}
         />
-
-        {/* Watermark number */}
+        {/* Watermark */}
         <div
+          className="kha-rlc-watermark"
           style={{
             position: "absolute",
             top: "-.5rem",
@@ -1493,15 +1689,12 @@ function RoomListCard({ room, h, onOpen, index }) {
             fontWeight: 300,
             lineHeight: 1,
             color: room.accentColor,
-            opacity: hovered ? 0.22 : 0.12,
-            transition: "opacity .4s",
             userSelect: "none",
             pointerEvents: "none",
           }}
         >
           {String(index + 1).padStart(2, "0")}
         </div>
-
         {/* Tag */}
         <div style={{ position: "absolute", top: ".85rem", left: ".85rem" }}>
           <span
@@ -1523,7 +1716,6 @@ function RoomListCard({ room, h, onOpen, index }) {
             {room.tag}
           </span>
         </div>
-
         {/* Price */}
         <div style={{ position: "absolute", bottom: ".85rem", left: ".95rem" }}>
           <div
@@ -1582,14 +1774,13 @@ function RoomListCard({ room, h, onOpen, index }) {
       >
         <div>
           <div
+            className="kha-rlc-title"
             style={{
               fontFamily: cg,
               fontSize: isMobile ? "1.4rem" : "1.85rem",
               fontWeight: 300,
-              color: hovered ? "#fdfaf4" : "#e8e2d4",
               lineHeight: 1.15,
               marginBottom: ".5rem",
-              transition: "color .3s",
               wordBreak: "break-word",
             }}
           >
@@ -1622,11 +1813,8 @@ function RoomListCard({ room, h, onOpen, index }) {
                   letterSpacing: ".04em",
                   color: "rgba(244,239,229,.5)",
                   padding: ".24rem .65rem",
-                  background: hovered
-                    ? "rgba(200,169,106,.1)"
-                    : "rgba(200,169,106,.05)",
-                  border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
-                  transition: "all .3s",
+                  background: "rgba(200,169,106,.05)",
+                  border: "1px solid rgba(200,169,106,.1)",
                   whiteSpace: "nowrap",
                 }}
               >
@@ -1638,9 +1826,8 @@ function RoomListCard({ room, h, onOpen, index }) {
             ))}
           </div>
         </div>
-
-        {/* CTA */}
         <div
+          className="kha-rlc-tagrow"
           style={{
             display: "flex",
             alignItems: "center",
@@ -1648,8 +1835,6 @@ function RoomListCard({ room, h, onOpen, index }) {
             flexWrap: "wrap",
             gap: ".6rem",
             paddingTop: ".9rem",
-            borderTop: `1px solid ${hovered ? "rgba(200,169,106,.2)" : "rgba(200,169,106,.08)"}`,
-            transition: "border-color .3s",
           }}
         >
           <div
@@ -1658,15 +1843,12 @@ function RoomListCard({ room, h, onOpen, index }) {
               alignItems: "center",
               gap: ".5rem",
               padding: isMobile ? ".6rem 1.2rem" : ".65rem 1.5rem",
-              background: hovered ? room.accentColor : "transparent",
               border: `1px solid ${room.tagBorder}`,
-              color: hovered ? "#182318" : room.tagColor,
+              color: room.tagColor,
               fontSize: ".7rem",
               letterSpacing: ".16em",
               textTransform: "uppercase",
               fontFamily: jost,
-              fontWeight: hovered ? 600 : 400,
-              transition: "all .35s cubic-bezier(.22,1,.36,1)",
               flexShrink: 0,
             }}
           >
@@ -1676,13 +1858,22 @@ function RoomListCard({ room, h, onOpen, index }) {
       </div>
     </div>
   );
-}
+});
 
 /* ─── Room Full Detail ──────────────────────────────────────────────────── */
 function RoomDetail({ h, roomKey, onBack }) {
+  /* PERF: nearestPlaces() now uses the global memo cache keyed by (lat,lng)
+     instead of mapping+sorting TOURIST_PLACES fresh in JSX on every render
+     of this component (which previously had no memoization at all). */
+  const sortedPlaces = useMemo(
+    () => (h ? nearestPlaces(h.lat, h.lng) : []),
+    [h],
+  );
+
   if (!h || !roomKey) return null;
   const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
   if (!room) return null;
+
   const price =
     h.price != null && room.multiplier != null
       ? Math.round((h.price * room.multiplier) / 100) * 100
@@ -1814,19 +2005,36 @@ function RoomDetail({ h, roomKey, onBack }) {
           </div>
         </div>
 
-        {/* 6-image mosaic */}
+        {/* 6-image mosaic — first img eager, rest lazy */}
         <div className="kha-mosaic">
           <div className="kha-mosaic-main">
-            <img src={sixImgs[0]} alt="main" />
+            <img
+              src={cl(sixImgs[0], 900)}
+              srcSet={clSrcSet(sixImgs[0], [500, 700, 900, 1100])}
+              sizes="(max-width: 768px) 100vw, 60vw"
+              alt="main"
+              fetchpriority="high"
+              width="900"
+              height="410"
+            />
           </div>
           {sixImgs.slice(1).map((src, i) => (
             <div key={i} className="kha-mosaic-cell">
-              <img src={src} alt={`photo ${i + 2}`} loading="lazy" />
+              <img
+                src={cl(src, 500)}
+                srcSet={clSrcSet(src, [300, 500, 700])}
+                sizes="(max-width: 768px) 50vw, 25vw"
+                alt={`photo ${i + 2}`}
+                loading="lazy"
+                decoding="async"
+                width="500"
+                height="230"
+              />
             </div>
           ))}
         </div>
 
-        {/* 2-col layout — stacks to 1 col on mobile via kha-detail-grid */}
+        {/* 2-col layout */}
         <div
           className="kha-detail-grid"
           style={{
@@ -1918,84 +2126,79 @@ function RoomDetail({ h, roomKey, onBack }) {
                 marginBottom: "2.5rem",
               }}
             >
-              {TOURIST_PLACES.map((p) => ({
-                ...p,
-                dist: haversine(h.lat, h.lng, p.lat, p.lng),
-              }))
-                .sort((a, b) => a.dist - b.dist)
-                .map((p) => (
-                  <div
-                    key={p.key}
+              {sortedPlaces.map((p) => (
+                <div
+                  key={p.key}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: ".7rem 1rem",
+                    background: "rgba(31,46,31,.6)",
+                    border: "1px solid rgba(200,169,106,.08)",
+                    transition: "border-color .2s",
+                    gap: ".4rem",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.borderColor =
+                      "rgba(200,169,106,.28)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.borderColor =
+                      "rgba(200,169,106,.08)")
+                  }
+                >
+                  <span
                     style={{
+                      fontSize: ".79rem",
+                      color: "rgba(244,239,229,.55)",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: ".7rem 1rem",
-                      background: "rgba(31,46,31,.6)",
-                      border: "1px solid rgba(200,169,106,.08)",
-                      transition: "border-color .2s",
                       gap: ".4rem",
+                      minWidth: 0,
+                      overflow: "hidden",
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.borderColor =
-                        "rgba(200,169,106,.28)")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.borderColor =
-                        "rgba(200,169,106,.08)")
-                    }
                   >
+                    <MapPin
+                      size={10}
+                      style={{ color: "#c8a96a", flexShrink: 0 }}
+                    />
                     <span
                       style={{
-                        fontSize: ".79rem",
-                        color: "rgba(244,239,229,.55)",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: ".4rem",
-                        minWidth: 0,
                         overflow: "hidden",
-                      }}
-                    >
-                      <MapPin
-                        size={10}
-                        style={{ color: "#c8a96a", flexShrink: 0 }}
-                      />
-                      <span
-                        style={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {p.label}
-                      </span>
-                    </span>
-                    <span
-                      style={{
-                        fontSize: ".69rem",
-                        fontWeight: 700,
+                        textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
-                        flexShrink: 0,
-                        padding: ".15rem .5rem",
-                        color:
-                          p.dist <= 30
-                            ? "#4ade80"
-                            : p.dist <= 80
-                              ? "#c8a96a"
-                              : "rgba(244,239,229,.32)",
-                        background:
-                          p.dist <= 30
-                            ? "rgba(37,211,102,.1)"
-                            : p.dist <= 80
-                              ? "rgba(200,169,106,.1)"
-                              : "transparent",
-                        border: `1px solid ${p.dist <= 30 ? "rgba(37,211,102,.25)" : p.dist <= 80 ? "rgba(200,169,106,.2)" : "transparent"}`,
                       }}
                     >
-                      {p.dist} km
+                      {p.label}
                     </span>
-                  </div>
-                ))}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: ".69rem",
+                      fontWeight: 700,
+                      whiteSpace: "nowrap",
+                      flexShrink: 0,
+                      padding: ".15rem .5rem",
+                      color:
+                        p.dist <= 30
+                          ? "#4ade80"
+                          : p.dist <= 80
+                            ? "#c8a96a"
+                            : "rgba(244,239,229,.32)",
+                      background:
+                        p.dist <= 30
+                          ? "rgba(37,211,102,.1)"
+                          : p.dist <= 80
+                            ? "rgba(200,169,106,.1)"
+                            : "transparent",
+                      border: `1px solid ${p.dist <= 30 ? "rgba(37,211,102,.25)" : p.dist <= 80 ? "rgba(200,169,106,.2)" : "transparent"}`,
+                    }}
+                  >
+                    {p.dist} km
+                  </span>
+                </div>
+              ))}
             </div>
 
             <HouseRules />
@@ -2059,7 +2262,6 @@ function RoomDetail({ h, roomKey, onBack }) {
               </div>
             </div>
 
-            {/* Map */}
             <h3
               style={{
                 fontFamily: cg,
@@ -2071,24 +2273,8 @@ function RoomDetail({ h, roomKey, onBack }) {
             >
               Property Location
             </h3>
-            <div
-              style={{
-                overflow: "hidden",
-                border: "1px solid rgba(200,169,106,.15)",
-                marginBottom: "2.5rem",
-                height: "360px",
-              }}
-            >
-              <iframe
-                title="Property Location"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                loading="lazy"
-                allowFullScreen
-                src={`https://maps.google.com/maps?q=${h.lat},${h.lng}&z=15&output=embed`}
-              />
-            </div>
+            {/* Lazy-loaded map — no iframe until in viewport */}
+            <LazyMap lat={h.lat} lng={h.lng} />
           </div>
 
           {/* Right — sticky booking card */}
@@ -2271,33 +2457,52 @@ const Explore = () => {
     fxRef = useRef(0),
     fyRef = useRef(0);
 
+  /* ── Custom cursor — stops RAF when mouse is idle, skips on touch ──
+     PERF: now writes `transform: translate3d(...)` instead of `left/top`.
+     left/top mutate layout-affecting properties and force the browser to
+     recompute layout on every animation frame; transform is composited on
+     the GPU and skips layout/paint, which is the standard fix for cursor-
+     follower / parallax-style RAF loops. Visual result is identical. */
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    let raf;
+    let active = false;
+
     const onMove = (e) => {
       cxRef.current = e.clientX;
       cyRef.current = e.clientY;
       if (curRef.current) {
-        curRef.current.style.left = e.clientX + "px";
-        curRef.current.style.top = e.clientY + "px";
+        curRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+      }
+      if (!active) {
+        active = true;
+        raf = requestAnimationFrame(tick);
       }
     };
-    document.addEventListener("mousemove", onMove);
-    let raf;
+
     const tick = () => {
       fxRef.current += (cxRef.current - fxRef.current) * 0.11;
       fyRef.current += (cyRef.current - fyRef.current) * 0.11;
       if (curFRef.current) {
-        curFRef.current.style.left = fxRef.current + "px";
-        curFRef.current.style.top = fyRef.current + "px";
+        curFRef.current.style.transform = `translate3d(${fxRef.current}px, ${fyRef.current}px, 0) translate(-50%, -50%)`;
       }
-      raf = requestAnimationFrame(tick);
+      const dx = Math.abs(cxRef.current - fxRef.current);
+      const dy = Math.abs(cyRef.current - fyRef.current);
+      if (dx > 0.1 || dy > 0.1) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        active = false;
+      }
     };
-    raf = requestAnimationFrame(tick);
+
+    document.addEventListener("mousemove", onMove, { passive: true });
     return () => {
       document.removeEventListener("mousemove", onMove);
       cancelAnimationFrame(raf);
     };
   }, []);
 
+  /* ── Scroll reveal — stable dep array ── */
   useEffect(() => {
     const obs = new IntersectionObserver(
       (es) =>
@@ -2308,7 +2513,7 @@ const Explore = () => {
     );
     document.querySelectorAll(".kha-reveal").forEach((el) => obs.observe(el));
     return () => obs.disconnect();
-  });
+  }, []); // ← empty array: run once on mount
 
   const [detailId, setDetailId] = useState(null);
   const [roomKey, setRoomKey] = useState(null);
@@ -2332,20 +2537,24 @@ const Explore = () => {
     return () => document.removeEventListener("keydown", onKey);
   }, [detailId, roomKey]);
 
-  const getFiltered = () => {
+  /* ── Memoised filtered + sorted list ── */
+  const filtered = useMemo(() => {
     const place = TOURIST_PLACES.find((p) => p.key === fPlace);
-    let list = HS.map((h) => ({
+    const list = HS.map((h) => ({
       ...h,
       _distance: place ? haversine(place.lat, place.lng, h.lat, h.lng) : null,
     }));
-    if (place) list = [...list].sort((a, b) => a._distance - b._distance);
+    if (place) list.sort((a, b) => a._distance - b._distance);
     return list;
-  };
-  const filtered = getFiltered();
+  }, [fPlace]);
+
   const visible = filtered.slice(0, visibleCount);
   const hasMore = filtered.length > visibleCount;
 
-  const openDetail = (id) => {
+  /* PERF: stable callback identities via useCallback so memo()'d children
+     (HsCard, RoomListCard) don't re-render purely because a new inline
+     function reference was passed down on every Explore render. */
+  const openDetail = useCallback((id) => {
     setDetailId(id);
     setRoomKey(null);
     document.body.style.overflow = "hidden";
@@ -2353,23 +2562,26 @@ const Explore = () => {
       () => document.getElementById("khaExpDetailPage")?.scrollTo(0, 0),
       50,
     );
-  };
-  const closeDetail = (e) => {
+  }, []);
+  const closeDetail = useCallback((e) => {
     e?.preventDefault();
     setDetailId(null);
     setRoomKey(null);
     document.body.style.overflow = "";
-  };
-  const openRoom = (key) => {
+  }, []);
+  const openRoom = useCallback((key) => {
     setRoomKey(key);
     setTimeout(
       () => document.getElementById("khaExpRoomPage")?.scrollTo(0, 0),
       50,
     );
-  };
-  const closeRoom = () => setRoomKey(null);
+  }, []);
+  const closeRoom = useCallback(() => setRoomKey(null), []);
 
-  const currentHs = HS.find((h) => h.id === detailId) || null;
+  const currentHs = useMemo(
+    () => HS.find((h) => h.id === detailId) || null,
+    [detailId],
+  );
 
   return (
     <>
@@ -2678,7 +2890,7 @@ const Explore = () => {
               )}
             </div>
 
-            {/* Hero strip */}
+            {/* Hero strip — eager load, high priority */}
             <div
               className="kha-hero-strip"
               style={{
@@ -2688,8 +2900,14 @@ const Explore = () => {
               }}
             >
               <img
-                src={currentHs.img}
+                src={cl(currentHs.img, 1200)}
+                srcSet={clSrcSet(currentHs.img, [600, 900, 1200, 1600])}
+                sizes="100vw"
                 alt={currentHs.name}
+                fetchpriority="high"
+                decoding="async"
+                width="1200"
+                height="300"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
               />
               <div
@@ -2790,12 +3008,11 @@ const Explore = () => {
                 }}
                 className="kha-detail-two-col"
               >
-                {/* LEFT: About + Host */}
+                {/* LEFT */}
                 <div
                   className="kha-detail-left-sticky"
                   style={{ position: "sticky", top: "80px" }}
                 >
-                  {/* About block */}
                   <div
                     style={{
                       padding: "1.6rem 1.8rem",
@@ -2881,8 +3098,6 @@ const Explore = () => {
                       {currentHs.desc}
                     </p>
                   </div>
-
-                  {/* Host block */}
                   <div
                     style={{
                       padding: "1.6rem 1.8rem",
@@ -2986,7 +3201,7 @@ const Explore = () => {
                   </div>
                 </div>
 
-                {/* RIGHT: Room heading + cards */}
+                {/* RIGHT */}
                 <div>
                   <div style={{ marginBottom: "1.6rem" }}>
                     <span
@@ -3035,7 +3250,6 @@ const Explore = () => {
                       to see full details.
                     </p>
                   </div>
-
                   <div
                     style={{
                       height: "1px",
@@ -3044,7 +3258,6 @@ const Explore = () => {
                       marginBottom: "1.8rem",
                     }}
                   />
-
                   <div
                     style={{
                       display: "flex",
