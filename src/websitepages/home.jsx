@@ -2742,20 +2742,20 @@ const Home = () => {
                 decoding="async"
               />
               <img
-                src="/image.png"
+                src="https://res.cloudinary.com/dmapa99lk/image/upload/v1782572752/image_njgxij.png"
                 alt="Government of Karnataka"
                 loading="lazy"
                 decoding="async"
               />
               <img
-                src="/gov-logo.png"
+                src="https://res.cloudinary.com/dmapa99lk/image/upload/v1782572751/gov-logo_cv0gcv.png"
                 alt="Karnataka Tourism"
                 className="w-full max-w-md mx-auto rounded-xl object-cover"
                 loading="lazy"
                 decoding="async"
               />
               <img
-                src="/mysurubrand.png"
+                src="https://res.cloudinary.com/dmapa99lk/image/upload/v1782572706/mysurubrand_epwx2a.png"
                 alt="Government of Karnataka"
                 loading="lazy"
                 decoding="async"
