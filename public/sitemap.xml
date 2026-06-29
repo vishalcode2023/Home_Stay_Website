@@ -3,15 +3,15 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <!-- HOME -->
+  <!-- HOME -->https://www.homestaysinmysore.com/
   <url>
-    <loc>https://www.mysorestayhomes.com/</loc>
+    <loc>https://www.homestaysinmysore.com/</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
 
     <image:image>
-      <image:loc>https://www.mysorestayhomes.com/og-image.jpg</image:loc>
+      <image:loc>https://www.homestaysinmysore.com/og-image.jpg</image:loc>
       <image:title>Best Homestays in Mysore Karnataka — MDHOA</image:title>
       <image:caption>Government-approved homestays across Mysore, Coorg and Kabini</image:caption>
       <image:geo_location>Mysore, Karnataka, India</image:geo_location>
@@ -21,21 +21,21 @@
   <!-- CORE PAGES -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore</loc>
+    <loc>https://www.homestaysinmysore.com/explore</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/our-story</loc>
+    <loc>https://www.homestaysinmysore.com/our-story</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/contact</loc>
+    <loc>https://www.homestaysinmysore.com/contact</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
@@ -44,42 +44,42 @@
   <!-- REGION PAGES -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/mysuru</loc>
+    <loc>https://www.homestaysinmysore.com/explore/mysuru</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/wildlife</loc>
+    <loc>https://www.homestaysinmysore.com/explore/wildlife</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/south-karnataka</loc>
+    <loc>https://www.homestaysinmysore.com/explore/south-karnataka</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/malnad</loc>
+    <loc>https://www.homestaysinmysore.com/explore/malnad</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/coastal-karnataka</loc>
+    <loc>https://www.homestaysinmysore.com/explore/coastal-karnataka</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/rural-karnataka</loc>
+    <loc>https://www.homestaysinmysore.com/explore/rural-karnataka</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.83</priority>
@@ -88,42 +88,42 @@
   <!-- DESTINATION PAGES -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/near-mysore-palace</loc>
+    <loc>https://www.homestaysinmysore.com/explore/near-mysore-palace</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/near-kabini</loc>
+    <loc>https://www.homestaysinmysore.com/explore/near-kabini</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.91</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/near-coorg</loc>
+    <loc>https://www.homestaysinmysore.com/explore/near-coorg</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.91</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/near-nagarahole</loc>
+    <loc>https://www.homestaysinmysore.com/explore/near-nagarahole</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.89</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/near-chamundi-hills</loc>
+    <loc>https://www.homestaysinmysore.com/explore/near-chamundi-hills</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
 
   <url>
-    <loc>https://www.mysorestayhomes.com/explore/near-chikmagalur</loc>
+    <loc>https://www.homestaysinmysore.com/explore/near-chikmagalur</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
@@ -132,13 +132,13 @@
   <!-- PROPERTY : KUKKESHREE -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/property/kukkeshree-homestay-mysore</loc>
+    <loc>https://www.homestaysinmysore.com/property/kukkeshree-homestay-mysore</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
 
     <image:image>
-      <image:loc>https://www.mysorestayhomes.com/images/kukkeshree-homestay.jpg</image:loc>
+      <image:loc>https://www.homestaysinmysore.com/images/kukkeshree-homestay.jpg</image:loc>
       <image:title>Kukkeshree Homestay Mysore</image:title>
       <image:caption>Family Homestay near Mysore Palace</image:caption>
       <image:geo_location>Mysore, Karnataka, India</image:geo_location>
@@ -148,13 +148,13 @@
   <!-- PROPERTY : HATTI EDEN -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/property/hatti-eden-coorg</loc>
+    <loc>https://www.homestaysinmysore.com/property/hatti-eden-coorg</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.87</priority>
 
     <image:image>
-      <image:loc>https://www.mysorestayhomes.com/images/hatti-eden-coorg.jpg</image:loc>
+      <image:loc>https://www.homestaysinmysore.com/images/hatti-eden-coorg.jpg</image:loc>
       <image:title>Hatti Eden Coorg</image:title>
       <image:caption>Coffee Estate Homestay in Coorg</image:caption>
       <image:geo_location>Coorg, Karnataka, India</image:geo_location>
@@ -164,13 +164,13 @@
   <!-- PROPERTY : KABINI KAANANA -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/property/kabini-kaanana-homestay</loc>
+    <loc>https://www.homestaysinmysore.com/property/kabini-kaanana-homestay</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
 
     <image:image>
-      <image:loc>https://www.mysorestayhomes.com/images/kabini-kaanana.jpg</image:loc>
+      <image:loc>https://www.homestaysinmysore.com/images/kabini-kaanana.jpg</image:loc>
       <image:title>Kabini Kaanana Homestay</image:title>
       <image:caption>Nature Homestay near Kabini River</image:caption>
       <image:geo_location>Kabini, Karnataka, India</image:geo_location>
@@ -180,13 +180,13 @@
   <!-- PROPERTY : MOODALAMANE -->
 
   <url>
-    <loc>https://www.mysorestayhomes.com/property/moodalamane-mysuru</loc>
+    <loc>https://www.homestaysinmysore.com/property/moodalamane-mysuru</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.83</priority>
 
     <image:image>
-      <image:loc>https://www.mysorestayhomes.com/images/moodalamane-mysuru.jpg</image:loc>
+      <image:loc>https://www.homestaysinmysore.com/images/moodalamane-mysuru.jpg</image:loc>
       <image:title>Moodalamane Homestay Mysuru</image:title>
       <image:caption>Traditional Homestay in Mysuru</image:caption>
       <image:geo_location>Mysore, Karnataka, India</image:geo_location>
