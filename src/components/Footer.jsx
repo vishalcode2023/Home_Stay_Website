@@ -194,7 +194,7 @@ const Footer = ({ cg }) => {
                   };
                   return (
                     <li key={l}>
-                      <a
+                      
                         href={linkMap[l]}
                         className="kha-footer-link transition-colors duration-300"
                         style={{
@@ -218,6 +218,24 @@ const Footer = ({ cg }) => {
           <p style={{ fontSize: ".75rem", color: "rgba(244,239,229,.3)" }}>
             © 2026 Mysuru Homestays Association. All rights reserved.
           </p>
+
+          <p
+            style={{
+              fontSize: ".75rem",
+              color: "rgba(244,239,229,.3)",
+            }}
+          >
+            Powered by{" "}
+            
+            <a  href="https://koworks.tech"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "#c8a96a", textDecoration: "none" }}
+            >
+              Koworks
+            </a>
+          </p>
+
           <p
             style={{
               color: "rgba(244,239,244,.22)",
