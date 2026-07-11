@@ -214,7 +214,7 @@ const Footer = ({ cg }) => {
         </div>
 
         {/* ── Bottom bar ── */}
-        {/* <div className="kha-footer-bottom max-w-[1200px] mx-auto mt-8">
+        <div className="kha-footer-bottom max-w-[1200px] mx-auto mt-8">
           <p style={{ fontSize: ".75rem", color: "rgba(244,239,229,.3)" }}>
             © 2026 Mysuru Homestays Association. All rights reserved.
           </p>
@@ -243,7 +243,7 @@ const Footer = ({ cg }) => {
           >
             Mysuru Tourism Affiliated
           </p>
-        </div> */}
+        </div>
       </footer>
     </>
   );
