@@ -225,8 +225,7 @@ const Footer = ({ cg }) => {
             }}
           >
             Powered by{" "}
-            <a
-              h
+            <a href="https://koworks.tech"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "#c8a96a", textDecoration: "none" }}
