@@ -1147,7 +1147,8 @@ const HS = [
       "Gourmet Culinary Serving Window",
     ],
     hasWebsite: false,
-    phone: "9444866776",
+    phone: "9448066776", // corrected to match PDF: +91 94480 66776
+    email: "1000silversfarm@gmail.com", // added per PDF
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
@@ -1165,7 +1166,7 @@ const HS = [
     ],
     type: "Farm Stay",
     location: "HD Kote Road, Mysuru • Along the HD Kote and Mysore Highway",
-    desc: "1000 Silvers Farm Stay is a tranquil, pet-friendly retreat located in the countryside of Mysore, India, specifically situated along the HD Kote and Mysore highway. It is designed as an exclusive farmhouse experience, often catering to individual groups to ensure privacy. Approved by the Tourism Department.",
+    desc: "1000 Silvers Farm Stay is a tranquil, pet-friendly retreat located in the countryside of Mysore, India, specifically situated along the HD Kote and Mysore highway. It is designed as an exclusive farmhouse experience, often catering to individual groups to ensure privacy. Approved by the Tourism Department. Choose from Nature Cottages (up to 4 guests, four-poster bed + bunk beds, AC, smart TV) or the Premium 2BHK AC Villa (up to 8 guests, 2 king beds + 4 bunker beds, full seating hall with WiFi).",
     host: {
       name: "Harsha",
       since: "Estate Owner",
@@ -1230,10 +1231,11 @@ const HS = [
       "Private Garden",
       "Outdoor Sports",
       "Bonfire",
-      "Air Conditioning",
+      // "Air Conditioning" removed — not mentioned anywhere in source PDF, only natural ventilation via verandah. Re-add only if confirmed with host.
     ],
     hasWebsite: false,
-    phone: "9480568332",
+    phone: "9480568332", // Vishu Kumar
+    phone2: "8050186332", // Sangeetha Vishu — added, was missing
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
@@ -1245,6 +1247,11 @@ const HS = [
     ],
     type: "Farm Homestay",
     location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
+    mapsLink: "https://maps.app.goo.gl/WaVFuoNGRAAdKyQP8?g_st=iw", // added
+    checkIn: "12:00 PM", // added
+    checkOut: "11:00 AM", // added
+    rooms:
+      "3 Family Rooms | 1 Queen bed + 1 sofa-cum-bed | up to 3 guests/room", // added
     desc: "Aastha Homestay is a home away from home spread across 1 acre with mango groves, coconut trees, and sapota. Securely fenced with an all-round verandah. Guests enjoy delicious home-cooked meals, outdoor sports, evening campfires, and a lush garden atmosphere.",
     host: {
       name: "Vishu Kumar B G",
@@ -1272,7 +1279,12 @@ const HS = [
       "Self Catering Kitchen",
     ],
     hasWebsite: true,
-    phone: "9448336870",
+    website: "https://www.bolakhomestay.com", // added, actual URL
+    email: "stay@bolakhomestay.com", // added
+    phone: "9448336870", // primary, matches
+    phones: ["9448336870", "9449866497", "8618064513", "9449866487"],
+    // ⚠️ Note: "9449866497" (WhatsApp list) and "9449866487" (Contact list) differ by one digit.
+    // This may be a typo in Bolak's own source PDF — confirm with Rohini before publishing both.
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
@@ -1282,7 +1294,21 @@ const HS = [
     ],
     type: "Premium Villa Homestay",
     location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
-    desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout.",
+    checkIn: "12:00 PM", // added
+    checkOut: "11:00 AM", // added
+    suites: [
+      {
+        name: "The Heritage Suite",
+        ac: true,
+        desc: "Minimalist joined platform twin beds forming a King setup on dark vitrified floors.",
+      },
+      {
+        name: "Royal Balcony Suite",
+        ac: false,
+        desc: "Hardwood wardrobe, wall-mounted Smart TV, opens to a covered terrace verandah.",
+      },
+    ], // added
+    desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout. 4 individual suites: 2 AC, 2 Non-AC.",
     host: {
       name: "Rohini Chengappa",
       since: "Host",
