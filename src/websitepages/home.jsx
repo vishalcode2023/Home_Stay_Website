@@ -39,10 +39,6 @@ import Footer from "../components/Footer";
 import Navbar from "./navbar";
 import Homerules from "./Homerules";
 
-/* PERF: Cloudinary helper + responsive srcSet generator (same pattern as
-   Explore.jsx). Cloudinary URLs get resized/format-optimized at request
-   time; non-Cloudinary URLs (local /images/*.jpg etc.) pass through
-   untouched so nothing breaks for assets that don't live on Cloudinary. */
 const cl = (url, w = 800) => {
   if (!url || !url.startsWith("https://res.cloudinary.com")) return url;
   return url.replace("/upload/", `/upload/w_${w},f_auto,q_auto,c_fill/`);
@@ -52,8 +48,6 @@ const clSrcSet = (url, widths = [400, 600, 800, 1000, 1400]) => {
   return widths.map((w) => `${cl(url, w)} ${w}w`).join(", ");
 };
 
-/* PERF: shared matchMedia hook — one listener for every RoomListCard
-   instead of each card attaching its own `resize` listener. */
 const MOBILE_QUERY = "(max-width: 768px)";
 let mqlSingleton = null;
 function getMql() {
@@ -81,7 +75,7 @@ const STYLES = `
   body {  background: #182318; color: #f4efe5; cursor: none; }
   ::-webkit-scrollbar { width: 3px; }
   ::-webkit-scrollbar-track { background: #182318; }
-  ::-webkit-scrollbar-thumb { background: #c8a96a; }
+  ::-webkit-scrollbar-thumb { background: #c8a96a; border-radius: 6px; }
 
   .kha-cur { width:9px; height:9px; background:#c8a96a; border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9999; transform:translate3d(-50%,-50%,0); }
   .kha-cuf { width:34px; height:34px; border:1px solid rgba(200,169,106,.4); border-radius:50%; position:fixed; top:0; left:0; pointer-events:none; z-index:9998; transform:translate3d(-50%,-50%,0); }
@@ -95,7 +89,7 @@ const STYLES = `
   .kha-hero-eyebrow { display:flex; align-items:center; gap:.6rem; font-size:.72rem; letter-spacing:.32em; text-transform:uppercase; color:#c8a96a; margin-bottom:.8rem; }
   .kha-hero-eyebrow::before { content:''; width:28px; height:1px; background:#c8a96a; flex-shrink:0; }
 
-  .kha-cred-block { padding:.75rem 1.2rem; background:rgba(24,35,24,.55); border:1px solid rgba(200,169,106,.2); backdrop-filter:blur(8px); margin-bottom:1.1rem; }
+  .kha-cred-block { padding:.75rem 1.2rem; background:rgba(24,35,24,.55); border:1px solid rgba(200,169,106,.2); backdrop-filter:blur(8px); margin-bottom:1.1rem; border-radius:12px; }
   .kha-cred-title { font-size:13px; font-weight:600; color:#e0c88a; text-align:center; margin-bottom:12px; line-height:1.4; }
   .kha-cred-logos { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
   .kha-cred-logos img { height:55px; width:auto; object-fit:contain; flex-shrink:0; transform: scale(1.2);  }
@@ -115,8 +109,8 @@ const STYLES = `
   .kha-m-img img { filter:saturate(.6) brightness(.8); transition:filter .5s,transform .5s; }
   .kha-m-img:hover img { filter:saturate(1) brightness(1); transform:scale(1.04); }
 
-  .kha-arch-1 { border-radius:90px 90px 6px 6px; }
-  .kha-arch-2 { border-radius:6px 6px 90px 90px; margin-top:2.5rem; }
+  .kha-arch-1 { border-radius:90px 90px 12px 12px; }
+  .kha-arch-2 { border-radius:12px 12px 90px 90px; margin-top:2.5rem; }
   .kha-arch-wrap img { transition:transform .8s ease; }
   .kha-arch-wrap:hover img { transform:scale(1.07); }
 
@@ -127,21 +121,21 @@ const STYLES = `
 
   @keyframes ctaBtnGlow { 0%,100%{box-shadow:0 4px 20px rgba(200,169,106,.3);} 50%{box-shadow:0 8px 40px rgba(200,169,106,.65);} }
   @keyframes shimmer { 0%{left:-100%;} 100%{left:160%;} }
-  .kha-cta-anim-btn { animation:ctaBtnGlow 3s ease-in-out infinite; position:relative; overflow:hidden; cursor:none; }
+  .kha-cta-anim-btn { animation:ctaBtnGlow 3s ease-in-out infinite; position:relative; overflow:hidden; cursor:none; border-radius:12px; }
   .kha-cta-anim-btn::before { content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent); animation:shimmer 3s ease-in-out infinite 1s; z-index:0; }
   .kha-cta-anim-btn:hover { background:#e0c88a !important; transform:translateY(-2px); }
   .kha-cta-anim-btn span { position:relative; z-index:1; }
 
   /* Explore cards */
-  .kha-card { transition:transform .4s,border-color .4s,box-shadow .4s; cursor:none; }
+  .kha-card { transition:transform .4s,border-color .4s,box-shadow .4s; cursor:none; border-radius:12px; }
   .kha-card:hover { transform:translateY(-7px); border-color:rgba(200,169,106,.32) !important; box-shadow:0 20px 60px rgba(0,0,0,.35); }
   .kha-card:hover .kha-card-img { transform:scale(1.09); }
   .kha-card-img { transition:transform .7s; }
-  .kha-card-img-wrap { border-radius:52px 52px 0 0; }
+  .kha-card-img-wrap { border-radius:12px 12px 0 0; }
   .kha-card:hover .kha-price-overlay { opacity:1; }
 
   /* Trust strip */
-  .kha-trust-card { display:flex; align-items:flex-start; gap:1rem; flex:1 1 260px; max-width:360px; padding:1.6rem 1.8rem; border:1px solid rgba(200,169,106,.22); background:rgba(200,169,106,.07); }
+  .kha-trust-card { display:flex; align-items:flex-start; gap:1rem; flex:1 1 260px; max-width:360px; padding:1.6rem 1.8rem; border:1px solid rgba(200,169,106,.22); background:rgba(200,169,106,.07); border-radius:12px; }
   .kha-trust-icon { width:62px; height:62px; border:1px solid rgba(200,169,106,.4); border-radius:50%; background:rgba(200,169,106,.1); overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
   .kha-trust-icon img { width:62px; height:62px; object-fit:contain; }
 
@@ -152,15 +146,11 @@ const STYLES = `
   #khaRoomPage.open { transform:translateX(0); }
 
   /* Room list cards */
-  .kha-room-card { display:flex; overflow:hidden; border:1px solid rgba(200,169,106,.12); background:#1f2e1f; transition:border-color .35s,transform .35s,box-shadow .35s; cursor:none; border-radius:4px; }
+  .kha-room-card { display:flex; overflow:hidden; border:1px solid rgba(200,169,106,.12); background:#1f2e1f; transition:border-color .35s,transform .35s,box-shadow .35s; cursor:none; border-radius:12px; }
   .kha-room-card:hover { border-color:rgba(200,169,106,.42); transform:translateY(-4px); box-shadow:0 18px 50px rgba(0,0,0,.45); }
   .kha-room-card:hover .kha-room-img { transform:scale(1.06); }
   .kha-room-img { transition:transform .7s; }
 
-  /* PERF: static hover/layout rules for RoomListCard extracted into real
-     CSS classes (identical values to the original inline styles) so the
-     browser can cache rule application instead of recomputing fresh style
-     objects on every render/hover state change. */
   .kha-rlc2 {
     display:grid;
     overflow:hidden;
@@ -170,9 +160,10 @@ const STYLES = `
     cursor:pointer;
     position:relative;
     grid-template-columns:340px 1fr;
+    border-radius:12px;
   }
   .kha-rlc2:hover { background:rgba(31,46,31,.95); transform:translateY(-5px); box-shadow:0 24px 64px rgba(0,0,0,.5); }
-  .kha-rlc2-img-wrap { position:relative; overflow:hidden; height:440px; }
+  .kha-rlc2-img-wrap { position:relative; overflow:hidden; height:440px; border-radius:12px 0 0 12px; }
   .kha-rlc2-img { width:100%; height:100%; object-fit:cover; transition:transform .8s cubic-bezier(.22,1,.36,1); transform:scale(1); }
   .kha-rlc2:hover .kha-rlc2-img { transform:scale(1.08); }
   .kha-rlc2-watermark { opacity:.12; transition:opacity .4s; }
@@ -184,26 +175,26 @@ const STYLES = `
   @media(max-width:768px){
     .kha-rlc2 { grid-template-columns:1fr; }
     .kha-rlc2:hover { transform:none; }
-    .kha-rlc2-img-wrap { height:200px; }
+    .kha-rlc2-img-wrap { height:200px; border-radius:12px 12px 0 0; }
   }
 
   /* 6-img mosaic */
-  .kha-mosaic { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:230px 180px; gap:.55rem; border-radius:4px; overflow:hidden; margin-bottom:2.4rem; }
-  .kha-mosaic-main { grid-row:1/3; overflow:hidden; }
-  .kha-mosaic-cell { overflow:hidden; }
+  .kha-mosaic { display:grid; grid-template-columns:2fr 1fr 1fr; grid-template-rows:230px 180px; gap:.55rem; border-radius:12px; overflow:hidden; margin-bottom:2.4rem; }
+  .kha-mosaic-main { grid-row:1/3; overflow:hidden; border-radius:12px 0 0 12px; }
+  .kha-mosaic-cell { overflow:hidden; border-radius:0; }
   .kha-mosaic img { width:100%; height:100%; object-fit:cover; transition:transform .6s; }
   .kha-mosaic-main:hover img,.kha-mosaic-cell:hover img { transform:scale(1.06); }
 
   /* Amenity items */
-  .kha-amen-item { display:flex; align-items:center; gap:.75rem; padding:.85rem 1.1rem; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.1); transition:border-color .3s; }
+  .kha-amen-item { display:flex; align-items:center; gap:.75rem; padding:.85rem 1.1rem; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.1); transition:border-color .3s; border-radius:12px; }
   .kha-amen-item:hover { border-color:rgba(200,169,106,.3); }
 
   /* Shared buttons */
-  .kha-back-btn { display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; color:rgba(244,239,229,.72); font-size:.76rem; letter-spacing:.2em; text-transform:uppercase; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.22); padding:.5rem 1.4rem; transition:color .3s,border-color .3s; cursor:none; }
+  .kha-back-btn { display:inline-flex; align-items:center; gap:.55rem; text-decoration:none; color:rgba(244,239,229,.72); font-size:.76rem; letter-spacing:.2em; text-transform:uppercase; background:rgba(31,46,31,.7); border:1px solid rgba(200,169,106,.22); padding:.5rem 1.4rem; transition:color .3s,border-color .3s; cursor:none; border-radius:12px; }
   .kha-back-btn:hover { color:#c8a96a; border-color:#c8a96a; }
-  .kha-btn-wa { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(37,211,102,.18); border:1px solid rgba(37,211,102,.42); color:#4ade80;  font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; }
+  .kha-btn-wa { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(37,211,102,.18); border:1px solid rgba(37,211,102,.42); color:#4ade80; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; border-radius:12px; }
   .kha-btn-wa:hover { background:rgba(37,211,102,.32); }
-  .kha-btn-web { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(200,169,106,.14); border:1px solid rgba(200,169,106,.38); color:#c8a96a; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; }
+  .kha-btn-web { display:flex; align-items:center; justify-content:center; gap:.6rem; padding:.85rem 1.6rem; background:rgba(200,169,106,.14); border:1px solid rgba(200,169,106,.38); color:#c8a96a; font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; text-decoration:none; transition:background .3s; cursor:none; border-radius:12px; }
   .kha-btn-web:hover { background:rgba(200,169,106,.28); }
 
   /* Explore cards grid */
@@ -237,30 +228,17 @@ const STYLES = `
     .kha-hero { margin-top:0 !important; padding-top:90px; box-sizing:border-box; height:auto !important; min-height:100vh; display:flex; flex-direction:column; justify-content:flex-end; }
     .kha-hero-card { position:relative !important; bottom:auto !important; left:auto !important; max-width:none !important; margin:auto 1rem 2.5rem !important; padding:1.4rem !important; }
     .kha-hero-book-btn { display:none !important; }
-
-    /* Detail page topbar */
     .dp-topbar { padding:.75rem 1.2rem !important; gap:.7rem !important; }
     .dp-topbar-name { font-size:.95rem !important; }
     .dp-topbar-ratings { display:none !important; }
-
-    /* Detail page inner padding */
     .dp-inner-wrap { padding:1.5rem 1rem 5rem !important; }
     .rdp-inner { padding:1.5rem 1rem 5rem !important; }
-
-    /* Detail two-col — stack vertically on mobile */
     .kha-detail-two-col { grid-template-columns:1fr !important; gap:1.5rem !important; }
-
-    /* Left sticky col — unstick on mobile */
     .kha-detail-left-sticky { position:static !important; top:auto !important; }
-
-    /* Room detail right col grid */
     .kha-room-detail-grid { grid-template-columns:1fr !important; gap:1.5rem !important; }
     .kha-room-booking-sticky { position:static !important; top:auto !important; }
-
-    /* Hero strip in detail */
     .kha-detail-hero-strip { height:220px !important; }
     .kha-detail-hero-bottom { left:1.2rem !important; right:1.2rem !important; bottom:1.2rem !important; }
-
     .kha-rl-card { grid-template-columns:1fr !important; }
     .kha-rl-card-img { height:200px !important; }
     .kha-cred-outer { padding:3rem 0 !important; }
@@ -268,18 +246,10 @@ const STYLES = `
     .kha-cred-logo { margin:0 auto !important; }
     .kha-cred-text { font-size:1.15rem !important; }
     .kha-browse-section { padding-left:1.2rem !important; padding-right:1.2rem !important; padding-top:4rem !important; padding-bottom:4rem !important; }
-
-    /* Mosaic on mobile */
     .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 120px !important; }
-    .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
-
-    /* Room nearby attractions — 1 col */
+    .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; border-radius:12px 12px 0 0 !important; }
     .kha-nearby-grid { grid-template-columns:1fr !important; }
-
-    /* Amenity grid */
     .kha-amen-grid { grid-template-columns:1fr !important; }
-
-    /* Booking card full width on mobile */
     .kha-booking-card { width:100% !important; }
   }
 
@@ -290,19 +260,15 @@ const STYLES = `
     .kha-browse-section { padding-left:1rem !important; padding-right:1rem !important; }
     .kha-cards-grid { grid-template-columns:repeat(2,1fr) !important; gap:1rem !important; }
     .kha-mosaic { grid-template-columns:1fr 1fr !important; grid-template-rows:160px 120px 120px !important; }
-    .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; }
+    .kha-mosaic-main { grid-row:auto !important; grid-column:1/3 !important; border-radius:12px 12px 0 0 !important; }
     .kha-rl-card { grid-template-columns:1fr !important; }
     .kha-rl-card-img { height:190px !important; }
     .kha-cred-inner { grid-template-columns:1fr !important; gap:1.2rem !important; padding:1.5rem !important; text-align:center; }
     .kha-cred-logo { margin:0 auto !important; }
     .kha-cred-text { font-size:1.05rem !important; }
-
-    /* Detail page topbar compact */
     .dp-topbar { padding:.65rem 1rem !important; }
     .dp-topbar-back-text { display:none !important; }
     .dp-topbar-back-icon { display:inline-flex !important; }
-
-    /* Inner padding tighter */
     .dp-inner-wrap { padding:1.2rem .9rem 5rem !important; }
     .rdp-inner { padding:1.2rem .9rem 5rem !important; }
   }
@@ -324,12 +290,11 @@ const STYLES = `
     .kha-cur,.kha-cuf { display:none !important; }
     .px-16 { padding-left:1rem !important; padding-right:1rem !important; }
     .kha-mosaic { grid-template-columns:1fr !important; grid-template-rows:repeat(6,150px) !important; }
-    .kha-mosaic-main { grid-row:auto !important; grid-column:auto !important; }
+    .kha-mosaic-main { grid-row:auto !important; grid-column:auto !important; border-radius:12px !important; }
     .kha-rl-card { grid-template-columns:1fr !important; }
     .kha-rl-card-img { height:180px !important; }
   }
 
-  /* Respect reduced-motion preference without altering default visuals */
   @media (prefers-reduced-motion: reduce) {
     .kha-cur, .kha-cuf { display:none; }
     .kha-reveal { transition:none; opacity:1; transform:none; }
@@ -345,27 +310,7 @@ const TOURIST_PLACES = [
   { key: "mysore_palace", label: "Mysore Palace", lat: 12.3051, lng: 76.6551 },
   { key: "krs", label: "KRS Dam / Brindavan Gdns", lat: 12.4227, lng: 76.5712 },
   { key: "chamundi", label: "Chamundi Hills", lat: 12.2724, lng: 76.6761 },
-  { key: "zoo", label: "Mysore Zoo", lat: 12.2953, lng: 76.6551 },
-  {
-    key: "nagarahole",
-    label: "Nagarahole National Park",
-    lat: 12.0473,
-    lng: 76.1144,
-  },
-  { key: "kabini", label: "Kabini Backwaters", lat: 11.9376, lng: 76.3534 },
-  { key: "coorg", label: "Coorg / Madikeri", lat: 12.4244, lng: 75.7382 },
-  { key: "ooty", label: "Ooty", lat: 11.4102, lng: 76.695 },
-  { key: "chikmagalur", label: "Chikmagalur", lat: 13.3161, lng: 75.772 },
-  { key: "hassan", label: "Hassan", lat: 13.0072, lng: 76.0962 },
-  { key: "wayanad", label: "Wayanad", lat: 11.6854, lng: 76.132 },
-  { key: "mangalore", label: "Mangalore", lat: 12.9141, lng: 74.856 },
-  { key: "sakleshpur", label: "Sakleshpur", lat: 12.9452, lng: 75.7862 },
-  {
-    key: "belur_halebidu",
-    label: "Belur / Halebidu",
-    lat: 13.1683,
-    lng: 75.868,
-  },
+  { key: "zoo", label: "Mysore Zoo", lat: 12.2953, lng: 76.6551 },  
 ];
 
 function haversine(la1, ln1, la2, ln2) {
@@ -380,18 +325,108 @@ function haversine(la1, ln1, la2, ln2) {
   return +(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(1);
 }
 
-/* PERF: module-level memoized "nearest places" lookup, shared by HsCard and
-   RoomDetail. Previously each component re-ran the full map+sort of
-   TOURIST_PLACES (14 haversine calls) on every single render with zero
-   caching. Now it's computed once per (lat,lng) and reused. */
+// Static, manually-verified road distances (km) per homestay, keyed by TOURIST_PLACES key.
+// Homestays not listed here fall back to straight-line (haversine) distance.
+const STATIC_DISTANCES = {
+  1: {
+    // Kukkeshree Homestay
+    mysore_palace: 12,
+    chamundi: 24,
+    kabini: 62,
+    wayanad: 128,
+    hassan: 106,
+    sakleshpur: 143,
+    chikmagalur: 167,
+    zoo: 12,
+    krs: 20,
+    nagarahole: 58,
+    coorg: 113,
+    ooty: 135,
+    belur_halebidu: 89,
+    mangalore: 248,
+  },
+  2: {
+    // Sky House Homestay
+    mysore_palace: 10,
+    chamundi: 21,
+    kabini: 63,
+    wayanad: 126,
+    hassan: 109,
+    sakleshpur: 146,
+    chikmagalur: 170,
+    zoo: 11,
+    krs: 21,
+    nagarahole: 62,
+    coorg: 116,
+    ooty: 131,
+    belur_halebidu: 91,
+    mangalore: 251,
+  },
+  4: {
+    // 1000 Silvers Farm Stay
+    mysore_palace: 23,
+    chamundi: 26,
+    kabini: 43,
+    wayanad: 106,
+    hassan: 124,
+    sakleshpur: 161,
+    chikmagalur: 185,
+    zoo: 22,
+    krs: 40,
+    nagarahole: 43,
+    coorg: 124,
+    ooty: 127,
+    belur_halebidu: 109,
+    mangalore: 257,
+  },
+  5: {
+    // Moodalamane Homestay
+    mysore_palace: 23,
+    chamundi: 26,
+    kabini: 43,
+    wayanad: 106,
+    hassan: 124,
+    sakleshpur: 161,
+    chikmagalur: 185,
+    zoo: 22,
+    krs: 40,
+    nagarahole: 59,
+    coorg: 119,
+    ooty: 126,
+    belur_halebidu: 93,
+    mangalore: 254,
+  },
+  8: {
+    // Kapila Riverfront
+    mysore_palace: 61,
+    chamundi: 63,
+    zoo: 59,
+    krs: 70,
+    nagarahole: 5.9,
+    kabini: 8.7,
+    coorg: 117,
+    ooty: 169,
+    wayanad: 72,
+    srirangapatna: 751,
+    bandipur: 90,
+    shravanabelagola: 127,
+    belur_halebidu: 178,
+    bylakuppe: 81,
+  },
+};
+
 const _nearestCache = new Map();
-function nearestPlaces(lat, lng) {
-  const key = `${lat},${lng}`;
+function nearestPlaces(h) {
+  const staticMap = h?.id != null ? STATIC_DISTANCES[h.id] : null;
+  const key = staticMap ? `static-${h.id}` : `${h.lat},${h.lng}`;
   let cached = _nearestCache.get(key);
   if (!cached) {
     cached = TOURIST_PLACES.map((p) => ({
       ...p,
-      dist: haversine(lat, lng, p.lat, p.lng),
+      dist:
+        staticMap && staticMap[p.key] != null
+          ? staticMap[p.key]
+          : haversine(h.lat, h.lng, p.lat, p.lng),
     })).sort((a, b) => a.dist - b.dist);
     _nearestCache.set(key, cached);
   }
@@ -416,9 +451,7 @@ const AICONS = {
   "Private Bathroom": <Bath size={17} />,
 };
 
-/* ── 3 Room types — each with its own 6 images ── */
 const ROOM_TYPES = {
-  // Kukkeshree — id: 1
   1: [
     {
       key: "deluxe",
@@ -511,18 +544,17 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Sky House — id: 2
   2: [
     {
       key: "1bhk_garden",
-      name: "1 BHK Family Room – Garden View",
+      name: "1 BHK Family Room – Garden View Accommodates up to 5 guests with air conditioning.",
       tag: "Best Value",
       tagBg: "rgba(200,169,106,.16)",
       tagBorder: "rgba(200,169,106,.4)",
       tagColor: "#c8a96a",
       accentColor: "#c8a96a",
       multiplier: 1,
+      fixedPrice: 2499,
       guests: 5,
       beds: 1,
       sqft: 320,
@@ -551,13 +583,14 @@ const ROOM_TYPES = {
     },
     {
       key: "2bhk_ac",
-      name: "2 BHK Deluxe AC Apartment",
+      name: "2 BHK Deluxe AC Apartment 4 People Stay with AC , 1 Single AC Room 2 People Stay on Per Room",
       tag: "Most Popular",
       tagBg: "rgba(122,158,110,.15)",
       tagBorder: "rgba(122,158,110,.4)",
       tagColor: "#adc49a",
       accentColor: "#7a9e6e",
       multiplier: 1.6,
+      fixedPrice: 3999,
       guests: 4,
       beds: 2,
       sqft: 480,
@@ -584,8 +617,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Kracadawna — id: 3
   3: [
     {
       key: "dragonfly",
@@ -671,7 +702,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
   4: [
     {
       key: "nature_cottage",
@@ -780,7 +810,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
   5: [
     {
       key: "second_floor_2bhk",
@@ -796,22 +825,28 @@ const ROOM_TYPES = {
       sqft: null,
       desc: "A fully furnished second-floor 2BHK designed for families seeking comfort, privacy, and convenience. Spacious and well-ventilated with a unique blend of modern and vintage charm, along with a beautiful sit-out area. Suitable for both short-term and long-term stays.",
       amenities: [
-        "2-bedroom with one attached bathroom (accessible from both rooms with safety lock)",
-        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, hot water kettle, and utensils",
-        "Solar + Gas geyser",
-        "TV & WiFi",
-        "Spacious and beautiful lounge area",
-        "AC available at additional charge",
-        "Restaurants within 5–8 min walk",
-        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+        "Air Conditioning",
+        "Full pledged kitchen with gas stove, gas cylinder & utensils",
+        "Hot water kettle",
+        "Fridge",
+        "Washing Machine",
+        "Free WiFi",
+        "Hot water (solar and geyser)",
+        "Towels",
+        "Toothpaste",
+        "Pears Liquid Body Wash",
+        "Shampoo",
+        "Coffee/Tea powder and sugar",
+        "Oven",
+        "Smart TV",
       ],
       imgs: [
-        "/images/mol.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol1_genjin.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol3_hyse65.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol4_sjmwzm.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol5_wyqgsp.png",
+        "/images/mod1.avif",
+        "/images/mod2.avif",
+        "/images/mod3.avif", 
+        "/images/mod4.avif",
+        "/images/mod5.avif",
+         
       ],
     },
     {
@@ -823,31 +858,35 @@ const ROOM_TYPES = {
       tagColor: "#adc49a",
       accentColor: "#7a9e6e",
       multiplier: 1,
+      fixedPrice: 2800,
       guests: 8,
       beds: 2,
       sqft: null,
       desc: "A bright, airy, and peaceful first-floor 2BHK homestay. Well-ventilated and naturally lit, perfect for families looking for a calm and homely stay. Located in a safe residential locality. Up to 4 additional guests can be accommodated at extra charges.",
       amenities: [
-        "2-bedroom with one attached bathroom and one common washroom",
-        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, and electric kettle",
-        "Solar + Gas geyser",
-        "TV & WiFi",
-        "Air cooler and ceiling fan in one room; ceiling and pedestal fan in other room",
-        "Restaurants within 5–8 min walk",
-        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+        "Full pledged kitchen with gas stove, gas cylinder & utensils",
+        "Hot water kettle",
+        "Fridge",
+        "Washing Machine",
+        "Free WiFi",
+        "Hot water (solar and geyser)",
+        "Towels",
+        "Toothpaste",
+        "Pears Liquid Body Soap",
+        "Shampoo",
+        "Coffee/Tea powder and sugar in the kitchen",
+        "Oven",
+        "Smart TV",
       ],
       imgs: [
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol6_vzv8sm.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol7_m1rhsg.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol8_rwuygz.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol9_vvzgz5.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol10_v4wffd.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol11_czg8q9.png",
+        "/images/mod6.avif",
+        "/images/mod7.avif",
+        "/images/mod8.avif", 
+        "/images/mod9.avif",
+        "/images/mod10.avif",
       ],
     },
   ],
-
-  // Aastha Homestay — id: 6
   6: [
     {
       key: "family_room",
@@ -884,18 +923,17 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Bolak Homestay — id: 7
   7: [
     {
       key: "heritage_suite",
-      name: "The Heritage Suite",
+      name: "Heritage Suite – AC Suite for 2 Guests (Per Day). Extra bed: ₹500 per person, per day. Children below 6 years Free.",
       tag: "AC Suite",
       tagBg: "rgba(200,169,106,.16)",
       tagBorder: "rgba(200,169,106,.4)",
       tagColor: "#c8a96a",
       accentColor: "#c8a96a",
       multiplier: 1,
+      fixedPrice: 2000,
       guests: 2,
       beds: 1,
       sqft: null,
@@ -920,7 +958,7 @@ const ROOM_TYPES = {
     },
     {
       key: "royal_balcony_suite",
-      name: "Royal Balcony Suite",
+      name: "Royal Balcony Suite – Non-AC Suite for 2 Guests (Per Day). Extra bed: ₹500 per person, per day. Children below 6 years stay free",
       tag: "Non-AC Suite",
       tagBg: "rgba(122,158,110,.15)",
       tagBorder: "rgba(122,158,110,.4)",
@@ -929,6 +967,7 @@ const ROOM_TYPES = {
       multiplier: 0.8,
       guests: 2,
       beds: 1,
+      fixedPrice: 1500,
       sqft: null,
       desc: "A non-AC suite with a sleek hardwood wardrobe and wall-mounted Smart TV, opening outwards to a wide covered terrace verandah. Positioned in a peaceful high-end block in Bogadi, close to prominent dining streets and heritage landmarks. Hosted personally by Rohini Chengappa.",
       amenities: [
@@ -950,9 +989,36 @@ const ROOM_TYPES = {
       ],
     },
   ],
+  8: [
+    {
+      key: "premium_ac_room",
+      name: "Premium Non-Smoking AC Room",
+      tag: "River / Plantation View",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 2,
+      beds: 1,
+      sqft: 200,
+      desc: "A cozy, upscale room blending rustic farm life with vintage luxury. King-size comfort bed, high-speed Wi-Fi (25+ Mbps), a TV with casting support, remote-controlled fans, and complimentary premium toiletries. Comes with a dedicated sit-out balcony facing either the river or the green plantations. Accommodates up to 3 guests with an extra mattress; extra persons charged at 50% of the standard room rent.",
+      amenities: [
+        "King-size comfort bed",
+        "High-speed WiFi (25+ Mbps)",
+        "TV with device casting",
+        "Remote-controlled fans",
+        "Complimentary premium toiletries",
+        "Private river/plantation-facing balcony",
+        "Non-Smoking, AC",
+      ],
+      imgs: [
+        // TODO: add image URLs for this room type
+      ],
+    },
+  ],
 };
 
-/* ── Homestay data ── */
 const HS = [
   {
     id: 1,
@@ -967,7 +1033,7 @@ const HS = [
     reviews: 40,
     amenities: ["Meals Included", "Private Garden", "Nature Trails", "Bonfire"],
     hasWebsite: false,
-    phone: "9480100001",
+    phone: "9739516163",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/nela2_hmycql.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela1_tcnuw9.png",
@@ -1022,12 +1088,12 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: 2800,
+    price: 2499,
     rating: 4.8,
     reviews: 32,
     amenities: ["Free WiFi", "Air Conditioning"],
     hasWebsite: false,
-    phone: "9480100003",
+    phone: "9844540739",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
@@ -1045,9 +1111,9 @@ const HS = [
     type: "Family Homestay",
     location:
       "Mysuru City • Close to Mysore Palace, Chamundi Hills & Brindavan Gardens",
-    desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms.",
+    desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms. 2499 5 people can acc there, 3999 4 peoples can acc there, 2 single ac rooms, 1 single 2 members can stay per room, 1999 2bhk photos",
     host: {
-      name: "B S Krishan Kanth",
+      name: "B S Krishna Kanth",
       since: "Host since 2023",
       avatar: "/images/hon.png",
       desc: "A welcoming Mysuru family offering a true home-away-from-home experience for all guests.",
@@ -1147,8 +1213,8 @@ const HS = [
       "Gourmet Culinary Serving Window",
     ],
     hasWebsite: false,
-    phone: "9448066776", // corrected to match PDF: +91 94480 66776
-    email: "1000silversfarm@gmail.com", // added per PDF
+    phone: "9448066776",
+    email: "1000silversfarm@gmail.com",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
@@ -1165,7 +1231,8 @@ const HS = [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event3_xcptfw.png",
     ],
     type: "Farm Stay",
-    location: "HD Kote Road, Mysuru • Along the HD Kote and Mysore Highway",
+    location:
+      "Sy No 113, Mahadevpura, Manandwadi Road, jayapura hobli, Mysore Taluk 570008",
     desc: "1000 Silvers Farm Stay is a tranquil, pet-friendly retreat located in the countryside of Mysore, India, specifically situated along the HD Kote and Mysore highway. It is designed as an exclusive farmhouse experience, often catering to individual groups to ensure privacy. Approved by the Tourism Department. Choose from Nature Cottages (up to 4 guests, four-poster bed + bunk beds, AC, smart TV) or the Premium 2BHK AC Villa (up to 8 guests, 2 king beds + 4 bunker beds, full seating hall with WiFi).",
     host: {
       name: "Harsha",
@@ -1183,25 +1250,24 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: null,
+    price: 2700,
     rating: null,
     reviews: null,
     amenities: ["Free WiFi", "TV", "Fully Equipped Kitchen", "Solar Geyser"],
     hasWebsite: false,
     phone: null,
-    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
+    img: "/images/mod1.avif",
     imgs: [
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol1_genjin.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol3_hyse65.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol4_sjmwzm.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol5_wyqgsp.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol6_vzv8sm.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol7_m1rhsg.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol8_rwuygz.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol9_vvzgz5.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol10_v4wffd.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol11_czg8q9.png",
+      "/images/mod1.avif",
+      "/images/mod2.avif",
+      "/images/mod3.avif",
+      "/images/mod4.avif",
+      "/images/mod5.avif",
+      "/images/mod6.avif",
+      "/images/mod7.avif",
+      "/images/mod8.avif",
+      "/images/mod9.avif",
+      "/images/mod10.avif",
     ],
     type: "Family Homestay",
     location:
@@ -1223,7 +1289,7 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: null,
+    price: 2800,
     rating: 5.0,
     reviews: 124,
     amenities: [
@@ -1231,11 +1297,10 @@ const HS = [
       "Private Garden",
       "Outdoor Sports",
       "Bonfire",
-      // "Air Conditioning" removed — not mentioned anywhere in source PDF, only natural ventilation via verandah. Re-add only if confirmed with host.
     ],
     hasWebsite: false,
-    phone: "9480568332", // Vishu Kumar
-    phone2: "8050186332", // Sangeetha Vishu — added, was missing
+    phone: "9480568332",
+    phone2: "8050186332",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
@@ -1247,11 +1312,11 @@ const HS = [
     ],
     type: "Farm Homestay",
     location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
-    mapsLink: "https://maps.app.goo.gl/WaVFuoNGRAAdKyQP8?g_st=iw", // added
-    checkIn: "12:00 PM", // added
-    checkOut: "11:00 AM", // added
+    mapsLink: "https://maps.app.goo.gl/WaVFuoNGRAAdKyQP8?g_st=iw",
+    checkIn: "12:00 PM",
+    checkOut: "11:00 AM",
     rooms:
-      "3 Family Rooms | 1 Queen bed + 1 sofa-cum-bed | up to 3 guests/room", // added
+      "3 Family Rooms | 1 Queen bed + 1 sofa-cum-bed | up to 3 guests/room",
     desc: "Aastha Homestay is a home away from home spread across 1 acre with mango groves, coconut trees, and sapota. Securely fenced with an all-round verandah. Guests enjoy delicious home-cooked meals, outdoor sports, evening campfires, and a lush garden atmosphere.",
     host: {
       name: "Vishu Kumar B G",
@@ -1279,23 +1344,25 @@ const HS = [
       "Self Catering Kitchen",
     ],
     hasWebsite: true,
-    website: "https://www.bolakhomestay.com", // added, actual URL
-    email: "stay@bolakhomestay.com", // added
-    phone: "9448336870", // primary, matches
-    phones: ["9448336870", "9449866497", "8618064513", "9449866487"],
-    // ⚠️ Note: "9449866497" (WhatsApp list) and "9449866487" (Contact list) differ by one digit.
-    // This may be a typo in Bolak's own source PDF — confirm with Rohini before publishing both.
-    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+    website: "https://www.bolakhomestay.com",
+    email: "stay@bolakhomestay.com",
+    phone: "9448336870",
+    phones: ["8618064513", "9448336870", "9449866487"],
+    img: "/images/bolak1.avif",
     imgs: [
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
+      "/images/bolak1.avif",
+      "/images/bolak2.avif",
+      "/images/bolak3.avif",
+      "/images/bolak4.avif",
+      "/images/bolak5.avif",
+      "/images/bolak6.avif",
+      "/images/bolak7.avif",
+      "/images/bolak8.avif",
     ],
     type: "Premium Villa Homestay",
     location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
-    checkIn: "12:00 PM", // added
-    checkOut: "11:00 AM", // added
+    checkIn: "12:00 PM",
+    checkOut: "11:00 AM",
     suites: [
       {
         name: "The Heritage Suite",
@@ -1307,13 +1374,115 @@ const HS = [
         ac: false,
         desc: "Hardwood wardrobe, wall-mounted Smart TV, opens to a covered terrace verandah.",
       },
-    ], // added
+    ],
     desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout. 4 individual suites: 2 AC, 2 Non-AC.",
     host: {
       name: "Rohini Chengappa",
       since: "Host",
       avatar: null,
       desc: "Rohini personally manages the property, ensuring professional and caring hospitality for every guest.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 8,
+    lat: null, // TODO: add exact coordinates for Kapila Riverfront
+    lng: null,
+    name: "Kapila Riverfront",
+    taluk: "Nanjangud",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 11000,
+    rating: null,
+    reviews: null,
+    amenities: [
+      "5 Premium Non-Smoking AC Rooms",
+      "River/Plantation-Facing Balconies",
+      "High-Speed WiFi",
+      "Pet-Friendly (charges apply)",
+      "Candlelight River Dinners",
+      "Areca Nut Plantation Walks",
+      "River-to-Table Barbecue",
+    ],
+    hasWebsite: false,
+    phone: "9606654482",
+    phones: ["08214001100", "9606654482", "9980944650"],
+    email: "info@kapilariverfront.com",
+    img: "/images/kapila1.avif",
+    imgs: [
+      "/images/kapila1.avif",
+      "/images/kapila2.avif",
+      "/images/kapila3.avif",
+      "/images/kapila4.avif",
+      "/images/kapila5.avif",
+      "/images/kapila6.avif",
+      "/images/kapila7.avif",
+      "/images/kapila8.avif",
+      "/images/kapila9.avif",
+      "/images/kapila10.avif",
+    ],
+    type: "Riverfront Farm Villa",
+    location:
+      "Kapila Riverfront, 193/1, Chikkayyana Chhatra Hobli, Hatwalu Katte Road, Rampura, Nanjangud TQ, Mysore - 571314 • ~40 minutes from Mysore City",
+    checkIn: "1:00 PM",
+    checkOut: "11:00 AM",
+    desc: "Kapila Riverfront features 5 Premium Non-Smoking AC Rooms tailored for a cozy, upscale stay, seamlessly blending rustic farm life with vintage luxury. Groups can book all 5 rooms together for a full villa buyout — ideal for private parties, family reunions, small weddings, or corporate retreats. Close to Hullahalli Dam, with custom candlelight dinners by the river, areca nut plantation walks, and on-demand freshly sourced river-to-table barbecue.",
+    tariffs: [
+      {
+        plan: "MAP Plan",
+        price: 11000,
+        unit: "per night",
+        inclusions: "Room Stay + Breakfast + Lunch or Dinner",
+      },
+      {
+        plan: "AP Plan",
+        price: 12000,
+        unit: "per night",
+        inclusions: "Room Stay + All Meals (Breakfast, Lunch & Dinner)",
+      },
+      {
+        plan: "Weekday Price",
+        price: 12000,
+        unit: "per night",
+        inclusions: "Standard base rate (Monday – Thursday)",
+      },
+      {
+        plan: "Weekend Price",
+        price: 14000,
+        unit: "per night",
+        inclusions: "Standard base rate (Friday – Sunday)",
+      },
+      {
+        plan: "Day Outing (Veg)",
+        price: 1500,
+        unit: "net per person",
+        inclusions:
+          "Welcome drinks, Veg Lunch, Evening Tea/Snacks + Activity Access",
+      },
+      {
+        plan: "Day Outing (Non-Veg)",
+        price: 1800,
+        unit: "net per person",
+        inclusions:
+          "Welcome drinks, Non-Veg Lunch, Evening Tea/Snacks + Activity Access",
+      },
+      {
+        plan: "Pet Charges",
+        price: 2000,
+        unit: "per day",
+        inclusions: "Property is completely pet-friendly",
+      },
+    ],
+    extraGuestPolicy: "Extra persons charged at 50% of the standard room rent",
+    bookingOffice: {
+      phones: ["0821-4001100", "+91 96066 54482", "+91 99809 44650"],
+      email: "info@kapilariverfront.com",
+    },
+    host: {
+      name: "Prashanth B. S.",
+      since: "Registered Promoter",
+      avatar: null,
+      desc: "Property registered under/associated with Prashanth B. S. Bookings and management are handled by Spice Trip.",
     },
     guestReviews: [],
   },
@@ -1332,7 +1501,6 @@ const MARQUEE_IMGS = [
   "/images/mad1.png",
 ];
 
-/* ─── Helpers ─────────────────────────────────────────────────────────────── */
 const Stars = memo(function Stars({ rating, sz = 14 }) {
   if (!rating) return null;
   return (
@@ -1355,6 +1523,7 @@ function Badge({ children, bg, border, color }) {
         background: bg,
         border: `1px solid ${border}`,
         color,
+        borderRadius: "8px",
       }}
     >
       {children}
@@ -1362,14 +1531,8 @@ function Badge({ children, bg, border, color }) {
   );
 }
 
-/* ─── Explore Card ─────────────────────────────────────────────────────────── */
 const HsCard = memo(function HsCard({ h, onOpen }) {
-  /* PERF: top-2 nearest places via the shared memoized lookup instead of
-     mapping + sorting all 14 TOURIST_PLACES fresh on every render. */
-  const top2 = useMemo(
-    () => nearestPlaces(h.lat, h.lng).slice(0, 2),
-    [h.lat, h.lng],
-  );
+  const top2 = useMemo(() => nearestPlaces(h).slice(0, 2), [h]);
   const handleClick = useCallback(() => onOpen(h.id), [onOpen, h.id]);
   const srcSet = useMemo(() => clSrcSet(h.img), [h.img]);
 
@@ -1484,6 +1647,7 @@ const HsCard = memo(function HsCard({ h, onOpen }) {
               letterSpacing: ".2em",
               textTransform: "uppercase",
               fontWeight: 600,
+              borderRadius: "8px",
             }}
           >
             View Rooms <ChevronRight size={14} />
@@ -1572,11 +1736,7 @@ const HsCard = memo(function HsCard({ h, onOpen }) {
                 {p.label}
               </span>
               <span
-                style={{
-                  fontSize: ".7rem",
-                  color: "#c8a96a",
-                  fontWeight: 600,
-                }}
+                style={{ fontSize: ".7rem", color: "#c8a96a", fontWeight: 600 }}
               >
                 {p.dist} km
               </span>
@@ -1588,14 +1748,14 @@ const HsCard = memo(function HsCard({ h, onOpen }) {
   );
 });
 
-/* ─── Room list card (inside detail slide) ─────────────────────────────────── */
 const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
   const price =
-    h.price != null
-      ? Math.round((h.price * room.multiplier) / 100) * 100
-      : null;
+    room.fixedPrice != null
+      ? room.fixedPrice
+      : h.price != null
+        ? Math.round((h.price * room.multiplier) / 100) * 100
+        : null;
   const [hovered, setHovered] = useState(false);
-  /* PERF: shared matchMedia hook instead of a per-card `resize` listener. */
   const isMobile = useIsMobile();
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
@@ -1616,7 +1776,7 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
         border: `1px solid ${hovered ? room.tagBorder : "rgba(200,169,106,.14)"}`,
       }}
     >
-      {/* Left accent bar — top bar on mobile */}
+      {/* Left / top accent bar */}
       <div
         style={{
           position: "absolute",
@@ -1630,10 +1790,11 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
           opacity: hovered ? 1 : 0.6,
           transition: "opacity .4s",
           zIndex: 2,
+          borderRadius: isMobile ? "12px 12px 0 0" : "12px 0 0 12px",
         }}
       />
 
-      {/* ── Image ── */}
+      {/* Image */}
       <div className="kha-rlc2-img-wrap">
         <img
           src={cl(imgSrc, 680)}
@@ -1695,6 +1856,7 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
               border: `1px solid ${room.tagBorder}`,
               color: room.tagColor,
               backdropFilter: "blur(8px)",
+              borderRadius: "8px",
             }}
           >
             {index === 2 && <Star size={9} style={{ fill: room.tagColor }} />}
@@ -1739,7 +1901,7 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
         </div>
       </div>
 
-      {/* ── Content ── */}
+      {/* Content */}
       <div
         style={{
           padding: isMobile
@@ -1798,6 +1960,7 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
                       : "rgba(200,169,106,.05)",
                     border: `1px solid ${hovered ? "rgba(200,169,106,.22)" : "rgba(200,169,106,.1)"}`,
                     transition: "all .3s",
+                    borderRadius: "8px",
                   }}
                 >
                   <span style={{ color: room.accentColor, opacity: 0.85 }}>
@@ -1808,8 +1971,6 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
               ))}
           </div>
         </div>
-
-        {/* Bottom CTA */}
         <div
           className="kha-rlc2-tagrow"
           style={{
@@ -1837,6 +1998,7 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
               fontWeight: hovered ? 600 : 400,
               transition: "all .35s cubic-bezier(.22,1,.36,1)",
               flexShrink: 0,
+              borderRadius: "8px",
             }}
           >
             View Room <ChevronRight size={12} />
@@ -1847,21 +2009,18 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
   );
 });
 
-/* ─── Room Full Detail ────────────────────────────────────────────────────── */
 function RoomDetail({ h, roomKey, onBack }) {
-  /* PERF: nearest-places lookup now comes from the shared memo cache. */
-  const sortedPlaces = useMemo(
-    () => (h ? nearestPlaces(h.lat, h.lng) : []),
-    [h],
-  );
+  const sortedPlaces = useMemo(() => (h ? nearestPlaces(h) : []), [h]);
 
   if (!h || !roomKey) return null;
   const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
   if (!room) return null;
   const price =
-    h.price != null
-      ? Math.round((h.price * room.multiplier) / 100) * 100
-      : null;
+    room.fixedPrice != null
+      ? room.fixedPrice
+      : h.price != null
+        ? Math.round((h.price * room.multiplier) / 100) * 100
+        : null;
   const wa = `https://wa.me/91${h.phone}?text=Hello%2C%20I%20found%20${encodeURIComponent(h.name)}%20on%20KHA%20and%20would%20like%20to%20book%20the%20${encodeURIComponent(room.name)}.%20Please%20share%20availability.`;
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
@@ -1870,7 +2029,7 @@ function RoomDetail({ h, roomKey, onBack }) {
 
   return (
     <div id="khaRoomPage" className={roomKey ? "open" : ""}>
-      {/* ── Top bar ── */}
+      {/* Top bar */}
       <div
         className="dp-topbar"
         style={{
@@ -1930,7 +2089,7 @@ function RoomDetail({ h, roomKey, onBack }) {
               background: room.tagBg,
               border: `1px solid ${room.tagBorder}`,
               color: room.tagColor,
-              borderRadius: "2px",
+              borderRadius: "8px",
             }}
           >
             {room.tag}
@@ -1938,12 +2097,11 @@ function RoomDetail({ h, roomKey, onBack }) {
         </div>
       </div>
 
-      {/* ── Content ── */}
+      {/* Content */}
       <div
         className="rdp-inner"
         style={{ maxWidth: "1160px", margin: "0 auto" }}
       >
-        {/* Heading block */}
         <div style={{ marginBottom: "2rem" }}>
           <div
             style={{
@@ -1985,7 +2143,7 @@ function RoomDetail({ h, roomKey, onBack }) {
           </div>
         </div>
 
-        {/* Mosaic — first image eager + high priority, rest lazy */}
+        {/* Mosaic */}
         <div className="kha-mosaic">
           <div className="kha-mosaic-main">
             <img
@@ -2015,7 +2173,7 @@ function RoomDetail({ h, roomKey, onBack }) {
           ))}
         </div>
 
-        {/* 2-col layout — stacks on mobile via CSS class */}
+        {/* 2-col layout */}
         <div
           className="kha-room-detail-grid"
           style={{
@@ -2118,6 +2276,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                     background: "rgba(31,46,31,.6)",
                     border: "1px solid rgba(200,169,106,.08)",
                     transition: "border-color .2s",
+                    borderRadius: "12px",
                   }}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.borderColor =
@@ -2167,6 +2326,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                             ? "rgba(200,169,106,.1)"
                             : "transparent",
                       border: `1px solid ${p.dist <= 30 ? "rgba(37,211,102,.25)" : p.dist <= 80 ? "rgba(200,169,106,.2)" : "transparent"}`,
+                      borderRadius: "6px",
                     }}
                   >
                     {p.dist} km
@@ -2197,6 +2357,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                 background: "rgba(31,46,31,.65)",
                 border: "1px solid rgba(200,169,106,.12)",
                 marginBottom: "2.5rem",
+                borderRadius: "12px",
               }}
             >
               <div
@@ -2301,6 +2462,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                 border: "1px solid rgba(200,169,106,.24)",
                 backdropFilter: "blur(20px)",
                 padding: "1.8rem 2rem",
+                borderRadius: "12px",
               }}
             >
               <div
@@ -2429,6 +2591,7 @@ function RoomDetail({ h, roomKey, onBack }) {
                   padding: ".85rem 1rem",
                   background: "rgba(200,169,106,.07)",
                   border: "1px solid rgba(200,169,106,.15)",
+                  borderRadius: "12px",
                 }}
               >
                 <Award size={17} style={{ color: "#c8a96a", flexShrink: 0 }} />
@@ -2462,10 +2625,6 @@ function RoomDetail({ h, roomKey, onBack }) {
   );
 }
 
-/* PERF: map embed deferred until the container is actually scrolled near
-   the viewport, via IntersectionObserver — previously the iframe was
-   created unconditionally the instant RoomDetail mounted, loading Google's
-   heavy embed regardless of whether the user ever scrolled that far. */
 function LazyMap({ lat, lng }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
@@ -2492,6 +2651,7 @@ function LazyMap({ lat, lng }) {
         border: "1px solid rgba(200,169,106,.15)",
         marginBottom: "2.5rem",
         height: "320px",
+        borderRadius: "12px",
       }}
     >
       {visible && (
@@ -2509,7 +2669,6 @@ function LazyMap({ lat, lng }) {
   );
 }
 
-/* ─── Main Component ─────────────────────────────────────────────────────── */
 const Home = () => {
   const curRef = useRef(null),
     curFRef = useRef(null);
@@ -2518,44 +2677,33 @@ const Home = () => {
     fxRef = useRef(0),
     fyRef = useRef(0);
 
-  /* PERF: cursor-follower RAF now idles when the mouse stops moving instead
-     of running forever, and writes `transform: translate3d()` instead of
-     `left/top` so each frame is GPU-composited rather than forcing a
-     layout recalculation. Also skipped entirely on touch devices, matching
-     the Explore page's behavior (and matching the CSS rule further down
-     that already hides the cursor dots under 900px). */
   useEffect(() => {
     if (window.matchMedia("(pointer: coarse)").matches) return;
-    let raf;
-    let active = false;
-
+    let raf,
+      active = false;
     const mv = (e) => {
       cxRef.current = e.clientX;
       cyRef.current = e.clientY;
-      if (curRef.current) {
+      if (curRef.current)
         curRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-      }
       if (!active) {
         active = true;
         raf = requestAnimationFrame(tick);
       }
     };
-
     const tick = () => {
       fxRef.current += (cxRef.current - fxRef.current) * 0.11;
       fyRef.current += (cyRef.current - fyRef.current) * 0.11;
-      if (curFRef.current) {
+      if (curFRef.current)
         curFRef.current.style.transform = `translate3d(${fxRef.current}px, ${fyRef.current}px, 0) translate(-50%, -50%)`;
-      }
-      const dx = Math.abs(cxRef.current - fxRef.current);
-      const dy = Math.abs(cyRef.current - fyRef.current);
+      const dx = Math.abs(cxRef.current - fxRef.current),
+        dy = Math.abs(cyRef.current - fyRef.current);
       if (dx > 0.1 || dy > 0.1) {
         raf = requestAnimationFrame(tick);
       } else {
         active = false;
       }
     };
-
     document.addEventListener("mousemove", mv, { passive: true });
     return () => {
       document.removeEventListener("mousemove", mv);
@@ -2563,9 +2711,6 @@ const Home = () => {
     };
   }, []);
 
-  /* PERF: this effect previously had NO dependency array, so it ran after
-     every single render — re-querying the DOM and creating + immediately
-     discarding an IntersectionObserver each time. Empty deps = run once. */
   useEffect(() => {
     const obs = new IntersectionObserver(
       (es) =>
@@ -2578,10 +2723,6 @@ const Home = () => {
     return () => obs.disconnect();
   }, []);
 
-  /* PERF: parallax scroll handler now reads layout via rAF-batched scroll
-     instead of synchronously on every native scroll event, and is marked
-     passive. Same visual motion, far fewer forced layout reads per second
-     during fast scrolling. */
   useEffect(() => {
     let raf = null;
     const fn = () => {
@@ -2649,7 +2790,6 @@ const Home = () => {
     () => HS.find((h) => h.id === hsId) || null,
     [hsId],
   );
-
   const scrollToBrowse = (e) => {
     e.preventDefault();
     document.getElementById("browse")?.scrollIntoView({ behavior: "smooth" });
@@ -2699,17 +2839,13 @@ const Home = () => {
       <Navbar />
       <FloatBookButton />
 
-      {/* ════ HERO ════ */}
+      {/* HERO */}
       <section
         className="kha-hero relative w-full h-screen overflow-hidden"
         id="hero"
         style={{ marginTop: "90px" }}
       >
         <div className="absolute inset-0 w-full h-full overflow-hidden">
-          {/* PERF: preload="metadata" lets the browser fetch just enough to
-              know dimensions/duration without downloading the full video
-              before first paint; autoplay/muted/loop/playsInline unchanged
-              so behavior is identical once it does load. */}
           <video
             autoPlay
             muted
@@ -2734,6 +2870,7 @@ const Home = () => {
             background: "rgba(24,35,24,.5)",
             backdropFilter: "blur(28px) saturate(1.5)",
             border: "1px solid rgba(200,169,106,.28)",
+            borderRadius: "20px",
             maxWidth: "510px",
           }}
         >
@@ -2761,14 +2898,14 @@ const Home = () => {
               Homestays"
             </p>
             <div className="kha-cred-logos">
-              <img
-                src="https://res.cloudinary.com/dmapa99lk/image/upload/v1781418996/mha_g5sluu.png"
+              <img className="rounded-full"
+                src="/images/Mah.avif"
                 alt="MDHOA Logo"
                 loading="eager"
                 decoding="async"
               />
               <img
-                src="https://res.cloudinary.com/dmapa99lk/image/upload/v1782572752/image_njgxij.png"
+                src="/images/mysurubrand.avif"
                 alt="Government of Karnataka"
                 loading="lazy"
                 decoding="async"
@@ -2781,7 +2918,7 @@ const Home = () => {
                 decoding="async"
               />
               <img
-                src="https://res.cloudinary.com/dmapa99lk/image/upload/v1782572706/mysurubrand_epwx2a.png"
+                src="/images/mysurubrand.avif"
                 alt="Government of Karnataka"
                 loading="lazy"
                 decoding="async"
@@ -2811,14 +2948,15 @@ const Home = () => {
               color: "#182318",
               fontFamily: jost,
               fontSize: ".76rem",
-              letterSpacing: ".22em",
+              letterSpacing: ".12em",
               textTransform: "uppercase",
               textDecoration: "none",
               border: "1px solid rgba(255,255,255,.1)",
               cursor: "none",
+              borderRadius: "20px",
             }}
           >
-            <span>🏡 Click Here to Book a Homestay In Mysuru</span>
+            <span>Click Here to Book a Homestay In Mysuru</span>
           </a>
           <a href="#browse" className="kha-hero-cta" onClick={scrollToBrowse}>
             Browse All Homestays In Mysuru
@@ -2839,7 +2977,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ════ TRUST STRIP ════ */}
+      {/* TRUST STRIP */}
       <div
         className="kha-reveal px-16 py-10"
         style={{
@@ -2866,7 +3004,7 @@ const Home = () => {
               desc: "All homestays are personally inspected by association office bearers before going live on this platform.",
             },
           ].map((ts) => (
-            <div key={ts.title} className="kha-trust-card">
+            <div key={ts.title} className="kha-trust-card rounded-lg">
               <div className="kha-trust-icon">
                 <img
                   src={ts.icon}
@@ -2905,7 +3043,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ════ CREDENTIALS ════ */}
+      {/* CREDENTIALS */}
       <div
         className="kha-reveal bg-[#1f2e1f] kha-cred-outer"
         style={{
@@ -2926,6 +3064,7 @@ const Home = () => {
               padding: "2.2rem 2.8rem",
               background: "rgba(200,169,106,.06)",
               border: "1px solid rgba(200,169,106,.32)",
+              borderRadius: "12px",
             }}
           >
             <div
@@ -2937,6 +3076,7 @@ const Home = () => {
                 height: "2px",
                 background:
                   "linear-gradient(90deg,transparent,#c8a96a,transparent)",
+                borderRadius: "12px 12px 0 0",
               }}
             ></div>
             <div
@@ -2945,7 +3085,7 @@ const Home = () => {
                 width: "88px",
                 height: "88px",
                 borderRadius: "50%",
-                border: "2px solid rgba(200,169,106,.5)",
+                border: "2px solid rgba(200,169,106,.5)`",
                 background: "rgba(200,169,106,.08)",
                 display: "flex",
                 flexDirection: "column",
@@ -2993,6 +3133,7 @@ const Home = () => {
                   color: "#c8a96a",
                   background: "rgba(200,169,106,.1)",
                   border: "1px solid rgba(200,169,106,.25)",
+                  borderRadius: "8px",
                 }}
               >
                 Primary Recognition
@@ -3016,7 +3157,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ════ EXPLORE ════ */}
+      {/* EXPLORE */}
       <section
         className="kha-browse-section px-16 py-[6rem] bg-[#182318]"
         id="browse"
@@ -3053,7 +3194,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ════ CTA ════ */}
+      {/* CTA */}
       <div
         className="kha-reveal text-center py-[2.8rem] px-16"
         style={{
@@ -3093,7 +3234,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ════ ABOUT ════ */}
+      {/* ABOUT */}
       <section className="px-16 py-[6rem] bg-[#1f2e1f]" id="about">
         <div
           className="kha-about-grid max-w-[1200px] mx-auto grid gap-20 items-center"
@@ -3125,6 +3266,7 @@ const Home = () => {
                     color: "#e0c88a",
                     background: "rgba(24,35,24,.65)",
                     backdropFilter: "blur(8px)",
+                    borderRadius: "8px",
                   }}
                 >
                   {label}
@@ -3250,7 +3392,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ════ PARALLAX QUOTE ════ */}
+      {/* PARALLAX QUOTE */}
       <div
         className="relative flex items-center overflow-hidden"
         style={{ minHeight: "82vh" }}
@@ -3359,14 +3501,14 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ════ MARQUEE ════ */}
+      {/* MARQUEE */}
       <div className="bg-[#182318] py-14 overflow-hidden">
         <div className="kha-marquee">
           {[...MARQUEE_IMGS, ...MARQUEE_IMGS].map((src, i) => (
             <div
               key={i}
               className="kha-m-img flex-shrink-0 overflow-hidden"
-              style={{ width: "270px", height: "175px" }}
+              style={{ width: "270px", height: "175px", borderRadius: "12px" }}
             >
               <img
                 src={src}
@@ -3384,7 +3526,7 @@ const Home = () => {
 
       <Footer />
 
-      {/* ════ DETAIL SLIDE — Room list ════ */}
+      {/* DETAIL SLIDE */}
       <div id="khaDetailPage" className={hsId ? "open" : ""}>
         {currentHs && (
           <>
@@ -3564,13 +3706,10 @@ const Home = () => {
               </div>
             </div>
 
-            {/* ════ ROOM LIST BODY ════ */}
+            {/* ROOM LIST BODY */}
             <div
               className="dp-inner-wrap"
-              style={{
-                maxWidth: "1350px",
-                margin: "0 auto",
-              }}
+              style={{ maxWidth: "1350px", margin: "0 auto" }}
             >
               <div
                 className="kha-detail-two-col"
@@ -3581,7 +3720,7 @@ const Home = () => {
                   alignItems: "start",
                 }}
               >
-                {/* ── LEFT: About + Host ── */}
+                {/* LEFT: About + Host */}
                 <div
                   className="kha-detail-left-sticky"
                   style={{ position: "sticky", top: "80px" }}
@@ -3593,6 +3732,7 @@ const Home = () => {
                       background: "rgba(31,46,31,.5)",
                       border: "1px solid rgba(200,169,106,.12)",
                       marginBottom: "1.4rem",
+                      borderRadius: "12px",
                     }}
                   >
                     <span
@@ -3680,6 +3820,7 @@ const Home = () => {
                       padding: "1.6rem 1.8rem",
                       background: "rgba(31,46,31,.65)",
                       border: "1px solid rgba(200,169,106,.12)",
+                      borderRadius: "12px",
                     }}
                   >
                     <span
@@ -3797,6 +3938,7 @@ const Home = () => {
                           padding: ".7rem 1rem",
                           background: "rgba(200,169,106,.07)",
                           border: "1px solid rgba(200,169,106,.14)",
+                          borderRadius: "8px",
                         }}
                       >
                         <Stars rating={currentHs.rating} sz={14} />
@@ -3814,7 +3956,7 @@ const Home = () => {
                   </div>
                 </div>
 
-                {/* ── RIGHT: Room heading + cards ── */}
+                {/* RIGHT: Room heading + cards */}
                 <div>
                   <div style={{ marginBottom: "1.6rem" }}>
                     <span
@@ -3863,7 +4005,6 @@ const Home = () => {
                       details.
                     </p>
                   </div>
-
                   <div
                     style={{
                       height: "1px",
@@ -3872,7 +4013,6 @@ const Home = () => {
                       marginBottom: "1.8rem",
                     }}
                   ></div>
-
                   <div
                     style={{
                       display: "flex",
@@ -3897,7 +4037,7 @@ const Home = () => {
         )}
       </div>
 
-      {/* ════ ROOM FULL DETAIL ════ */}
+      {/* ROOM FULL DETAIL */}
       <RoomDetail h={currentHs} roomKey={roomKey} onBack={closeRoom} />
     </>
   );

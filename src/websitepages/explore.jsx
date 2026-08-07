@@ -352,6 +352,41 @@ function nearestPlaces(lat, lng) {
   return cached;
 }
 
+/* Manual nearby-distance overrides, keyed by homestay id → place key.
+   Used when a property's lat/lng aren't available (or need a manual
+   correction) so nearby distances can still be shown. */
+const NEARBY_OVERRIDES = {
+  8: {
+    mysore_palace: 61,
+    chamundi: 63,
+    zoo: 59,
+    krs: 70,
+    nagarahole: 5.9,
+    kabini: 8.7,
+    coorg: 117,
+    ooty: 169,
+    wayanad: 72,
+    srirangapatna: 751,
+    bandipur: 90,
+    shravanabelagola: 127,
+    belur_halebidu: 178,
+    bylakuppe: 81,
+  },
+};
+
+/* Resolves the nearby-places list for a homestay: uses a manual override
+   table when present (e.g. properties without lat/lng), otherwise falls
+   back to the live haversine-based nearestPlaces() calculation. */
+function resolveNearbyPlaces(h) {
+  const override = NEARBY_OVERRIDES[h.id];
+  if (override) {
+    return TOURIST_PLACES.map((p) => ({ ...p, dist: override[p.key] }))
+      .filter((p) => p.dist != null)
+      .sort((a, b) => a.dist - b.dist);
+  }
+  return nearestPlaces(h.lat, h.lng);
+}
+
 /* ─── Amenity icons ─────────────────────────────────────────────────────── */
 const AICONS = {
   "Meals Included": <UtensilsCrossed size={17} />,
@@ -377,7 +412,6 @@ const AICONS = {
    w_N,f_auto,q_auto at render time so we keep full-res here.
 ──────────────────────────────────────────────────────────────────────── */
 const ROOM_TYPES = {
-  // Kukkeshree — id: 1
   1: [
     {
       key: "deluxe",
@@ -391,7 +425,7 @@ const ROOM_TYPES = {
       guests: 2,
       beds: 2,
       sqft: 280,
-      desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK with an Italian-style kitchen, two bedrooms, solar geyser, Smart TV & WiFi, and covered parking. A true home-away-from-home in a quiet residential neighbourhood.",
+      desc: "ನೆಲಮಳಿಗೆ is a fully furnished ground floor 2BHK...",
       amenities: [
         "Fully equipped Italian-style kitchen",
         "2 bedrooms with one attached Toilet & Common bathroom",
@@ -422,7 +456,7 @@ const ROOM_TYPES = {
       guests: 4,
       beds: 2,
       sqft: 420,
-      desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay ideal for families. Fully equipped kitchen, two bedrooms with attached bathrooms, solar/geyser hot water, Smart TV & WiFi, and covered parking.",
+      desc: "ಮಹಡಿಮನೆ is a first floor 2BHK homestay...",
       amenities: [
         "Fully equipped kitchen",
         "2 bedrooms with attached bathrooms",
@@ -452,7 +486,7 @@ const ROOM_TYPES = {
       guests: 2,
       beds: 1,
       sqft: 520,
-      desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor with an induction kitchen, private bathroom with solar/geyser, Smart TV & WiFi, and covered parking.",
+      desc: "ತಾರಸಿಮನೆ is a compact studio apartment on the top floor...",
       amenities: [
         "Compact kitchen with induction stove",
         "Indian toilet / Bathroom with solar / geyser hot water",
@@ -470,18 +504,17 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Sky House — id: 2
   2: [
     {
       key: "1bhk_garden",
-      name: "1 BHK Family Room – Garden View",
+      name: "1 BHK Family Room – Garden View Accommodates up to 5 guests with air conditioning.",
       tag: "Best Value",
       tagBg: "rgba(200,169,106,.16)",
       tagBorder: "rgba(200,169,106,.4)",
       tagColor: "#c8a96a",
       accentColor: "#c8a96a",
       multiplier: 1,
+      fixedPrice: 2499,
       guests: 5,
       beds: 1,
       sqft: 320,
@@ -510,13 +543,14 @@ const ROOM_TYPES = {
     },
     {
       key: "2bhk_ac",
-      name: "2 BHK Deluxe AC Apartment",
+      name: "2 BHK Deluxe AC Apartment 4 People Stay with AC , 1 Single AC Room 2 People Stay on Per Room",
       tag: "Most Popular",
       tagBg: "rgba(122,158,110,.15)",
       tagBorder: "rgba(122,158,110,.4)",
       tagColor: "#adc49a",
       accentColor: "#7a9e6e",
       multiplier: 1.6,
+      fixedPrice: 3999,
       guests: 4,
       beds: 2,
       sqft: 480,
@@ -543,8 +577,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Kracadawna — id: 3
   3: [
     {
       key: "dragonfly",
@@ -630,8 +662,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // 1000 Silvers — id: 4
   4: [
     {
       key: "nature_cottage",
@@ -740,8 +770,6 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Moodalamane — id: 5
   5: [
     {
       key: "second_floor_2bhk",
@@ -757,22 +785,28 @@ const ROOM_TYPES = {
       sqft: null,
       desc: "A fully furnished second-floor 2BHK designed for families seeking comfort, privacy, and convenience. Spacious and well-ventilated with a unique blend of modern and vintage charm, along with a beautiful sit-out area. Suitable for both short-term and long-term stays.",
       amenities: [
-        "2-bedroom with one attached bathroom (accessible from both rooms with safety lock)",
-        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, hot water kettle, and utensils",
-        "Solar + Gas geyser",
-        "TV & WiFi",
-        "Spacious and beautiful lounge area",
-        "AC available at additional charge",
-        "Restaurants within 5–8 min walk",
-        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+        "Air Conditioning",
+        "Full pledged kitchen with gas stove, gas cylinder & utensils",
+        "Hot water kettle",
+        "Fridge",
+        "Washing Machine",
+        "Free WiFi",
+        "Hot water (solar and geyser)",
+        "Towels",
+        "Toothpaste",
+        "Pears Liquid Body Wash",
+        "Shampoo",
+        "Coffee/Tea powder and sugar",
+        "Oven",
+        "Smart TV",
       ],
       imgs: [
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol1_genjin.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol3_hyse65.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol4_sjmwzm.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol5_wyqgsp.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol6_vzv8sm.png",
+        "/images/mod1.avif",
+        "/images/mod2.avif",
+        "/images/mod3.avif",  
+        "/images/mod4.avif",
+        "/images/mod5.avif",
+      
       ],
     },
     {
@@ -784,31 +818,36 @@ const ROOM_TYPES = {
       tagColor: "#adc49a",
       accentColor: "#7a9e6e",
       multiplier: 1,
+      fixedPrice: 2800,
       guests: 8,
       beds: 2,
       sqft: null,
       desc: "A bright, airy, and peaceful first-floor 2BHK homestay. Well-ventilated and naturally lit, perfect for families looking for a calm and homely stay. Located in a safe residential locality. Up to 4 additional guests can be accommodated at extra charges.",
       amenities: [
-        "2-bedroom with one attached bathroom and one common washroom",
-        "Fully equipped kitchen with oven, gas stove & cylinder, refrigerator, and electric kettle",
-        "Solar + Gas geyser",
-        "TV & WiFi",
-        "Air cooler and ceiling fan in one room; ceiling and pedestal fan in other room",
-        "Restaurants within 5–8 min walk",
-        "Swiggy, Zomato, Blinkit, Zepto, Ola, and Uber accessible",
+        "Full pledged kitchen with gas stove, gas cylinder & utensils",
+        "Hot water kettle",
+        "Fridge",
+        "Washing Machine",
+        "Free WiFi",
+        "Hot water (solar and geyser)",
+        "Towels",
+        "Toothpaste",
+        "Pears Liquid Body Soap",
+        "Shampoo",
+        "Coffee/Tea powder and sugar in the kitchen",
+        "Oven",
+        "Smart TV",
       ],
       imgs: [
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol7_m1rhsg.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol8_rwuygz.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol9_vvzgz5.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol10_v4wffd.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol11_czg8q9.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
+        "/images/mod6.avif",
+        "/images/mod7.avif",
+        "/images/mod8.avif",
+        "/images/mod9.avif",
+        "/images/mod10.avif",
+        "/images/mod11.avif",
       ],
     },
   ],
-
-  // Aastha Homestay — id: 6
   6: [
     {
       key: "family_room",
@@ -845,18 +884,17 @@ const ROOM_TYPES = {
       ],
     },
   ],
-
-  // Bolak Homestay — id: 7
   7: [
     {
       key: "heritage_suite",
-      name: "The Heritage Suite",
+      name: "Heritage Suite – AC Suite for 2 Guests (Per Day). Extra bed: ₹500 per person, per day. Children below 6 years Free.",
       tag: "AC Suite",
       tagBg: "rgba(200,169,106,.16)",
       tagBorder: "rgba(200,169,106,.4)",
       tagColor: "#c8a96a",
       accentColor: "#c8a96a",
       multiplier: 1,
+      fixedPrice: 2000,
       guests: 2,
       beds: 1,
       sqft: null,
@@ -877,12 +915,11 @@ const ROOM_TYPES = {
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
       ],
     },
     {
       key: "royal_balcony_suite",
-      name: "Royal Balcony Suite",
+      name: "Royal Balcony Suite – Non-AC Suite for 2 Guests (Per Day). Extra bed: ₹500 per person, per day. Children below 6 years stay free",
       tag: "Non-AC Suite",
       tagBg: "rgba(122,158,110,.15)",
       tagBorder: "rgba(122,158,110,.4)",
@@ -891,6 +928,7 @@ const ROOM_TYPES = {
       multiplier: 0.8,
       guests: 2,
       beds: 1,
+      fixedPrice: 1500,
       sqft: null,
       desc: "A non-AC suite with a sleek hardwood wardrobe and wall-mounted Smart TV, opening outwards to a wide covered terrace verandah. Positioned in a peaceful high-end block in Bogadi, close to prominent dining streets and heritage landmarks. Hosted personally by Rohini Chengappa.",
       amenities: [
@@ -904,18 +942,44 @@ const ROOM_TYPES = {
         "Near Mysuru Palace (8.6 km), Chamundi Hills (14.0 km), Devaraja Bazaar (7.8 km)",
       ],
       imgs: [
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
         "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
+        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+      ],
+    },
+  ],
+  8: [
+    {
+      key: "premium_ac_room",
+      name: "Premium Non-Smoking AC Room",
+      tag: "River / Plantation View",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 2,
+      beds: 1,
+      sqft: 200,
+      desc: "A cozy, upscale room blending rustic farm life with vintage luxury. King-size comfort bed, high-speed Wi-Fi (25+ Mbps), a TV with casting support, remote-controlled fans, and complimentary premium toiletries. Comes with a dedicated sit-out balcony facing either the river or the green plantations. Accommodates up to 3 guests with an extra mattress; extra persons charged at 50% of the standard room rent.",
+      amenities: [
+        "King-size comfort bed",
+        "High-speed WiFi (25+ Mbps)",
+        "TV with device casting",
+        "Remote-controlled fans",
+        "Complimentary premium toiletries",
+        "Private river/plantation-facing balcony",
+        "Non-Smoking, AC",
+      ],
+      imgs: [
+        // TODO: add image URLs for this room type
       ],
     },
   ],
 };
 
-/* ─── HS data ────────────────────────────────────────────────────────────── */
 const HS = [
   {
     id: 1,
@@ -930,7 +994,7 @@ const HS = [
     reviews: 40,
     amenities: ["Meals Included", "Private Garden", "Nature Trails", "Bonfire"],
     hasWebsite: false,
-    phone: "9480100001",
+    phone: "9739516163",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/nela2_hmycql.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568052/nela1_tcnuw9.png",
@@ -985,12 +1049,12 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: 2800,
+    price: 2499,
     rating: 4.8,
     reviews: 32,
     amenities: ["Free WiFi", "Air Conditioning"],
     hasWebsite: false,
-    phone: "9480100003",
+    phone: "9844540739",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568054/skyhouse-1bhk-2_iljusy.jpg",
@@ -1008,9 +1072,9 @@ const HS = [
     type: "Family Homestay",
     location:
       "Mysuru City • Close to Mysore Palace, Chamundi Hills & Brindavan Gardens",
-    desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms.",
+    desc: "Sky House Homestay offers a warm, homely atmosphere with modern comforts at an affordable price. Ideal for families, couples, corporate travelers, and small groups visiting Mysore. Choose from a garden-view ground floor 1BHK or a premium 2BHK AC apartment with a private sit-out balcony. Free parking, 24-hour hot water, and complimentary Wi-Fi included across all rooms. 2499 5 people can acc there, 3999 4 peoples can acc there, 2 single ac rooms, 1 single 2 members can stay per room, 1999 2bhk photos",
     host: {
-      name: "B S Krishan Kanth",
+      name: "B S Krishna Kanth",
       since: "Host since 2023",
       avatar: "/images/hon.png",
       desc: "A welcoming Mysuru family offering a true home-away-from-home experience for all guests.",
@@ -1110,8 +1174,8 @@ const HS = [
       "Gourmet Culinary Serving Window",
     ],
     hasWebsite: false,
-    phone: "9448066776", // corrected to match PDF: +91 94480 66776
-    email: "1000silversfarm@gmail.com", // added per PDF
+    phone: "9448066776",
+    email: "1000silversfarm@gmail.com",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568060/Sliverhomestay1_xmyixc.png",
@@ -1128,7 +1192,8 @@ const HS = [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568033/event3_xcptfw.png",
     ],
     type: "Farm Stay",
-    location: "HD Kote Road, Mysuru • Along the HD Kote and Mysore Highway",
+    location:
+      "Sy No 113, Mahadevpura, Manandwadi Road, jayapura hobli, Mysore Taluk 570008",
     desc: "1000 Silvers Farm Stay is a tranquil, pet-friendly retreat located in the countryside of Mysore, India, specifically situated along the HD Kote and Mysore highway. It is designed as an exclusive farmhouse experience, often catering to individual groups to ensure privacy. Approved by the Tourism Department. Choose from Nature Cottages (up to 4 guests, four-poster bed + bunk beds, AC, smart TV) or the Premium 2BHK AC Villa (up to 8 guests, 2 king beds + 4 bunker beds, full seating hall with WiFi).",
     host: {
       name: "Harsha",
@@ -1146,25 +1211,25 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: null,
+    price: 2700,
     rating: null,
     reviews: null,
     amenities: ["Free WiFi", "TV", "Fully Equipped Kitchen", "Solar Geyser"],
     hasWebsite: false,
     phone: null,
-    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
+    img: "/images/mod1.avif",
     imgs: [
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol1_genjin.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol2_ts3l8h.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol3_hyse65.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568049/mol4_sjmwzm.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol5_wyqgsp.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol6_vzv8sm.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol7_m1rhsg.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol8_rwuygz.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568050/mol9_vvzgz5.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol10_v4wffd.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568051/mol11_czg8q9.png",
+      "/images/mod1.avif",
+      "/images/mod2.avif",
+      "/images/mod3.avif",
+      "/images/mod4.avif",
+      "/images/mod5.avif",
+      "/images/mod6.avif",
+      "/images/mod7.avif",
+      "/images/mod8.avif",
+      "/images/mod9.avif",
+      "/images/mod10.avif",
+     
     ],
     type: "Family Homestay",
     location:
@@ -1186,7 +1251,7 @@ const HS = [
     taluk: "Mysuru",
     district: "Mysuru",
     region: "mysuru",
-    price: null,
+    price: 2800,
     rating: 5.0,
     reviews: 124,
     amenities: [
@@ -1194,11 +1259,10 @@ const HS = [
       "Private Garden",
       "Outdoor Sports",
       "Bonfire",
-      // "Air Conditioning" removed — not mentioned anywhere in source PDF, only natural ventilation via verandah. Re-add only if confirmed with host.
     ],
     hasWebsite: false,
-    phone: "9480568332", // Vishu Kumar
-    phone2: "8050186332", // Sangeetha Vishu — added, was missing
+    phone: "9480568332",
+    phone2: "8050186332",
     img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
     imgs: [
       "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568028/ask_r0zha5.png",
@@ -1210,11 +1274,11 @@ const HS = [
     ],
     type: "Farm Homestay",
     location: "Mananthavadi Rd, Salundi, Mysuru, Karnataka 570008",
-    mapsLink: "https://maps.app.goo.gl/WaVFuoNGRAAdKyQP8?g_st=iw", // added
-    checkIn: "12:00 PM", // added
-    checkOut: "11:00 AM", // added
+    mapsLink: "https://maps.app.goo.gl/WaVFuoNGRAAdKyQP8?g_st=iw",
+    checkIn: "12:00 PM",
+    checkOut: "11:00 AM",
     rooms:
-      "3 Family Rooms | 1 Queen bed + 1 sofa-cum-bed | up to 3 guests/room", // added
+      "3 Family Rooms | 1 Queen bed + 1 sofa-cum-bed | up to 3 guests/room",
     desc: "Aastha Homestay is a home away from home spread across 1 acre with mango groves, coconut trees, and sapota. Securely fenced with an all-round verandah. Guests enjoy delicious home-cooked meals, outdoor sports, evening campfires, and a lush garden atmosphere.",
     host: {
       name: "Vishu Kumar B G",
@@ -1242,23 +1306,25 @@ const HS = [
       "Self Catering Kitchen",
     ],
     hasWebsite: true,
-    website: "https://www.bolakhomestay.com", // added, actual URL
-    email: "stay@bolakhomestay.com", // added
-    phone: "9448336870", // primary, matches
-    phones: ["9448336870", "9449866497", "8618064513", "9449866487"],
-    // ⚠️ Note: "9449866497" (WhatsApp list) and "9449866487" (Contact list) differ by one digit.
-    // This may be a typo in Bolak's own source PDF — confirm with Rohini before publishing both.
-    img: "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+    website: "https://www.bolakhomestay.com",
+    email: "stay@bolakhomestay.com",
+    phone: "9448336870",
+    phones: ["8618064513", "9448336870", "9449866487"],
+    img: "/images/bolak1.avif",
     imgs: [
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
-      "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
+      "/images/bolak1.avif",
+      "/images/bolak2.avif",
+      "/images/bolak3.avif",
+      "/images/bolak4.avif",
+      "/images/bolak5.avif",
+      "/images/bolak6.avif",
+      "/images/bolak7.avif",
+      "/images/bolak8.avif",
     ],
     type: "Premium Villa Homestay",
     location: "Bogadi Sector, Tree-Lined Residential Zone, Mysuru, Karnataka",
-    checkIn: "12:00 PM", // added
-    checkOut: "11:00 AM", // added
+    checkIn: "12:00 PM",
+    checkOut: "11:00 AM",
     suites: [
       {
         name: "The Heritage Suite",
@@ -1270,13 +1336,116 @@ const HS = [
         ac: false,
         desc: "Hardwood wardrobe, wall-mounted Smart TV, opens to a covered terrace verandah.",
       },
-    ], // added
+    ],
     desc: "Bolak Homestay is a premium independent multi-level villa sanctuary in the peaceful upscale residential hub of heritage Mysuru. Hosted personally by Rohini Chengappa, it combines complete independent seclusion with professional concierge support. Large open casement layouts maximize natural daylight and fresh air throughout. 4 individual suites: 2 AC, 2 Non-AC.",
     host: {
       name: "Rohini Chengappa",
       since: "Host",
       avatar: null,
       desc: "Rohini personally manages the property, ensuring professional and caring hospitality for every guest.",
+    },
+    guestReviews: [],
+  },
+  {
+    id: 8,
+    lat: null, // TODO: add exact coordinates for Kapila Riverfront
+    lng: null,
+    name: "Kapila Riverfront",
+    taluk: "Nanjangud",
+    district: "Mysuru",
+    region: "mysuru",
+    price: 11000,
+    rating: null,
+    reviews: null,
+    amenities: [
+      "5 Premium Non-Smoking AC Rooms",
+      "River/Plantation-Facing Balconies",
+      "High-Speed WiFi",
+      "Pet-Friendly (charges apply)",
+      "Candlelight River Dinners",
+      "Areca Nut Plantation Walks",
+      "River-to-Table Barbecue",
+    ],
+    hasWebsite: false,
+    phone: "9606654482",
+    phones: ["08214001100", "9606654482", "9980944650"],
+    email: "info@kapilariverfront.com",
+    img: "/images/kapila1.avif",
+           
+    imgs: [
+      "/images/kapila1.avif",
+      "/images/kapila2.avif",
+      "/images/kapila3.avif",
+      "/images/kapila4.avif",
+      "/images/kapila5.avif",
+      "/images/kapila6.avif",
+      "/images/kapila7.avif",
+      "/images/kapila8.avif",
+      "/images/kapila9.avif",
+      "/images/kapila10.avif",
+    ],
+    type: "Riverfront Farm Villa",
+    location:
+      "Kapila Riverfront, 193/1, Chikkayyana Chhatra Hobli, Hatwalu Katte Road, Rampura, Nanjangud TQ, Mysore - 571314 • ~40 minutes from Mysore City",
+    checkIn: "1:00 PM",
+    checkOut: "11:00 AM",
+    desc: "Kapila Riverfront features 5 Premium Non-Smoking AC Rooms tailored for a cozy, upscale stay, seamlessly blending rustic farm life with vintage luxury. Groups can book all 5 rooms together for a full villa buyout — ideal for private parties, family reunions, small weddings, or corporate retreats. Close to Hullahalli Dam, with custom candlelight dinners by the river, areca nut plantation walks, and on-demand freshly sourced river-to-table barbecue.",
+    tariffs: [
+      {
+        plan: "MAP Plan",
+        price: 11000,
+        unit: "per night",
+        inclusions: "Room Stay + Breakfast + Lunch or Dinner",
+      },
+      {
+        plan: "AP Plan",
+        price: 12000,
+        unit: "per night",
+        inclusions: "Room Stay + All Meals (Breakfast, Lunch & Dinner)",
+      },
+      {
+        plan: "Weekday Price",
+        price: 12000,
+        unit: "per night",
+        inclusions: "Standard base rate (Monday – Thursday)",
+      },
+      {
+        plan: "Weekend Price",
+        price: 14000,
+        unit: "per night",
+        inclusions: "Standard base rate (Friday – Sunday)",
+      },
+      {
+        plan: "Day Outing (Veg)",
+        price: 1500,
+        unit: "net per person",
+        inclusions:
+          "Welcome drinks, Veg Lunch, Evening Tea/Snacks + Activity Access",
+      },
+      {
+        plan: "Day Outing (Non-Veg)",
+        price: 1800,
+        unit: "net per person",
+        inclusions:
+          "Welcome drinks, Non-Veg Lunch, Evening Tea/Snacks + Activity Access",
+      },
+      {
+        plan: "Pet Charges",
+        price: 2000,
+        unit: "per day",
+        inclusions: "Property is completely pet-friendly",
+      },
+    ],
+    extraGuestPolicy: "Extra persons charged at 50% of the standard room rent",
+    bookingOffice: {
+      phones: ["0821-4001100", "+91 96066 54482", "+91 99809 44650"],
+      email: "info@kapilariverfront.com",
+    },
+    host: {
+      name: "Prashanth B. S.",
+      since: "Registered Promoter",
+      avatar: null,
+      desc: "Property registered under/associated with Prashanth B. S. Bookings and management are handled by Spice Trip.",
     },
     guestReviews: [],
   },
@@ -1403,10 +1572,12 @@ function LazyMap({ lat, lng }) {
 const HsCard = memo(function HsCard({ h, onOpen, distance }) {
   /* PERF: nearestPlaces() is now globally memoized by (lat,lng) key, so this
      useMemo just slices the top 3 — no recompute of the full haversine pass
-     when multiple components need the same property's distances. */
+     when multiple components need the same property's distances. Uses
+     resolveNearbyPlaces() so properties with a manual override (e.g. no
+     lat/lng) still get correct nearby distances. */
   const nearbyPlaces = useMemo(
-    () => nearestPlaces(h.lat, h.lng).slice(0, 3),
-    [h.lat, h.lng],
+    () => resolveNearbyPlaces(h).slice(0, 3),
+    [h],
   );
 
   const handleClick = useCallback(() => onOpen(h.id), [onOpen, h.id]);
@@ -1891,9 +2062,11 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
 function RoomDetail({ h, roomKey, onBack }) {
   /* PERF: nearestPlaces() now uses the global memo cache keyed by (lat,lng)
      instead of mapping+sorting TOURIST_PLACES fresh in JSX on every render
-     of this component (which previously had no memoization at all). */
+     of this component (which previously had no memoization at all). Uses
+     resolveNearbyPlaces() so properties with a manual override (e.g. no
+     lat/lng) still get correct nearby distances. */
   const sortedPlaces = useMemo(
-    () => (h ? nearestPlaces(h.lat, h.lng) : []),
+    () => (h ? resolveNearbyPlaces(h) : []),
     [h],
   );
 

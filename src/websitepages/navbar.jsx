@@ -286,9 +286,9 @@ const Navbar = () => {
           {/* Logo */}
           <a href="/" className="flex items-center gap-3 no-underline">
             <img
-              src="https://res.cloudinary.com/dmapa99lk/image/upload/v1781418996/mha_g5sluu.png"
+              src="/images/Mah.avif"
               alt="MHA Logo"
-              className="kha-logo-img w-[65px] h-[65px] object-contain shrink-0"
+              className="kha-logo-img w-[65px] h-[65px] object-contain shrink-0 rounded-full"
             />
             <div className="flex flex-col">
               <span
