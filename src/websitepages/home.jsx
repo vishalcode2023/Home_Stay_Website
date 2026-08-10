@@ -310,7 +310,7 @@ const TOURIST_PLACES = [
   { key: "mysore_palace", label: "Mysore Palace", lat: 12.3051, lng: 76.6551 },
   { key: "krs", label: "KRS Dam / Brindavan Gdns", lat: 12.4227, lng: 76.5712 },
   { key: "chamundi", label: "Chamundi Hills", lat: 12.2724, lng: 76.6761 },
-  { key: "zoo", label: "Mysore Zoo", lat: 12.2953, lng: 76.6551 },  
+  { key: "zoo", label: "Mysore Zoo", lat: 12.2953, lng: 76.6551 },
 ];
 
 function haversine(la1, ln1, la2, ln2) {
@@ -413,6 +413,20 @@ const STATIC_DISTANCES = {
     belur_halebidu: 178,
     bylakuppe: 81,
   },
+  9:{
+    mysore_palace: 69,
+    chamundi : 72,
+    zoo: 68,
+    krs: 82,
+    nagarahole: 62,
+    kabini: 18,
+    coorg: 125,
+    ooty: 270,
+    wayanad: 159,
+    srirangapatna: 83,
+    bandipur: 75,
+    bylakuppe: 90,
+  }
 };
 
 const _nearestCache = new Map();
@@ -843,10 +857,9 @@ const ROOM_TYPES = {
       imgs: [
         "/images/mod1.avif",
         "/images/mod2.avif",
-        "/images/mod3.avif", 
+        "/images/mod3.avif",
         "/images/mod4.avif",
         "/images/mod5.avif",
-         
       ],
     },
     {
@@ -881,7 +894,7 @@ const ROOM_TYPES = {
       imgs: [
         "/images/mod6.avif",
         "/images/mod7.avif",
-        "/images/mod8.avif", 
+        "/images/mod8.avif",
         "/images/mod9.avif",
         "/images/mod10.avif",
       ],
@@ -949,11 +962,13 @@ const ROOM_TYPES = {
         "WiFi",
       ],
       imgs: [
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+        "/images/bolak3.avif",
+        "/images/bolak1.avif",
+        "/images/bolak2.avif",
+        "/images/bolak4.avif",
+        "/images/bolak5.avif",
+        "/images/bolak6.avif",
+        "/images/bolak7.avif",
       ],
     },
     {
@@ -1014,6 +1029,122 @@ const ROOM_TYPES = {
       ],
       imgs: [
         // TODO: add image URLs for this room type
+      ],
+    },
+  ],
+  id: 9,
+  name: "Dhumbi Homestay",
+  taluk: "H.D. Kote",
+  district: "Mysuru",
+  region: "mysuru",
+  price: null,
+  rating: 4.9,
+  reviews: null,
+  amenities: [
+    "Meals Included",
+    "Swimming Pool",
+    "Nature Trails",
+    "Bonfire",
+    "Wildlife Zone",
+    "Stargazing Deck",
+  ],
+  hasWebsite: true,
+  website: "https://www.Dhumbi.in",
+  phone: "9901994472",
+  img: "/images/dhumbi1.avif",
+  imgs: [
+    "/images/dhumbi1.avif",
+    "/images/dhumbi3.avif",
+    "/images/dhumbi4.avif",
+    "/images/dhumbi5.avif",
+    "/images/dhumbi6.avif",
+    "/images/dhumbi7.avif",
+    "/images/dhumbi8.avif",
+  ],
+  type: "Nature Retreat",
+  location: "Nugu Backwaters, Near Bandipur Tiger Reserve, Karnataka, India",
+  checkIn: "12:30 PM",
+  checkOut: "11:00 AM",
+  desc: "Dhumbi is a nature-focused wooden retreat on the shores of the Nugu Backwaters, near Bandipur Tiger Reserve. Guests wake to mist rising off the water, spend afternoons drifting with the breeze, and end each day around a campfire under some of Karnataka's clearest night skies. Meals are home-cooked with fresh, local ingredients — no rush, no television, just the rhythm of nature. The property runs on solar energy and practices quiet, low-impact tourism.",
+  host: {
+    name: "Mahesh Chand",
+    since: "Host",
+    avatar: null,
+    desc: "Mahesh personally welcomes guests to Dhumbi, offering a warm, home-cooked, slow-travel experience on the Nugu Backwaters.",
+  },
+  guestReviews: [
+    {
+      name: "Guest Review",
+      stars: 5,
+      date: "2026",
+      text: "Some places give you a stay. Dhumbi gave us memories that still linger long after we returned home.",
+    },
+    {
+      name: "Guest Review",
+      stars: 5,
+      date: "2026",
+      text: "The silence here isn't empty. It's filled with birdsong, fresh air, and a peace we didn't know we needed.",
+    },
+  ],
+  9: [
+    {
+      key: "wooden_retreat",
+      name: "The Wooden Retreat",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 2,
+      sqft: null,
+      desc: "Crafted with care and designed for rest — every corner reflects thoughtful craftsmanship, from handcrafted wooden furniture to textured finishes. Large windows invite abundant natural light and frame serene views of the Nugu Backwaters. Warm interiors, earthy tones, and cozy textures create a calming, welcoming atmosphere.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Private Bathroom",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Stargazing Deck",
+      ],
+      imgs: [
+        "/images/dhumbi3.avif",
+        "/images/dhumbi4.avif",
+        "/images/dhumbi5.avif",
+        "/images/dhumbi6.avif",
+        "/images/dhumbi7.avif",
+        "/images/dhumbi8.avif",
+        "/images/dhumbi9.avif",
+      ],
+    },
+    {
+      key: "the_loft",
+      name: "The Loft",
+      tag: "Premium",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: 1.4,
+      guests: 2,
+      beds: 1,
+      sqft: null,
+      desc: "Perched at the highest corner of the Wooden Retreat, wrapped in warm wood and framed by a grand view of the Nugu Backwaters. An intimate space for losing yourself in a good book, following the dance of clouds, or staying up for a sky full of stars. Guests often come up for a moment and end up spending hours.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Stargazing Deck",
+        "Mountain View",
+        "River Access",
+      ],
+      imgs: [
+        "/images/dhumbi11.avif",
+        "/images/dhumbi10.avif",
+        "/images/dhumbi12.avif",
+        "/images/dhumbi13.avif",
+        "/images/dhumbi14.avif",
+        "/images/dhumbi15.avif",
       ],
     },
   ],
@@ -1348,7 +1479,7 @@ const HS = [
     email: "stay@bolakhomestay.com",
     phone: "9448336870",
     phones: ["8618064513", "9448336870", "9449866487"],
-    img: "/images/bolak1.avif",
+    img: "/images/bolak3.avif",
     imgs: [
       "/images/bolak1.avif",
       "/images/bolak2.avif",
@@ -1379,7 +1510,7 @@ const HS = [
     host: {
       name: "Rohini Chengappa",
       since: "Host",
-      avatar: null,
+      avatar: "/images/img.avif",
       desc: "Rohini personally manages the property, ensuring professional and caring hospitality for every guest.",
     },
     guestReviews: [],
@@ -1485,6 +1616,64 @@ const HS = [
       desc: "Property registered under/associated with Prashanth B. S. Bookings and management are handled by Spice Trip.",
     },
     guestReviews: [],
+  },
+  {
+    id: 9,
+    lat: null, // TODO: add exact coordinates for Dhumbi Homestay
+    lng: null,
+    name: "Dhumbi Homestay",
+    taluk: "H.D. Kote",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: 4.9,
+    reviews: null,
+    amenities: [
+      "Meals Included",
+      "Swimming Pool",
+      "Nature Trails",
+      "Bonfire",
+      "Wildlife Zone",
+      "Stargazing Deck",
+    ],
+    hasWebsite: true,
+    website: "https://www.Dhumbi.in",
+    phone: "9901994472",
+    img: "/images/dhumbi2.avif",
+    imgs: [
+      "/images/dhumbi2.avif",
+      "/images/dhumbi3.avif",
+      "/images/dhumbi4.avif",
+      "/images/dhumbi5.avif",
+      "/images/dhumbi6.avif",
+      "/images/dhumbi7.avif",
+      "/images/dhumbi8.avif",
+    ],
+    type: "Nature Retreat",
+    location: "Nugu Backwaters, Near Bandipur Tiger Reserve, Karnataka, India",
+    checkIn: "12:30 PM",
+    checkOut: "11:00 AM",
+    desc: "Dhumbi is a nature-focused wooden retreat on the shores of the Nugu Backwaters, near Bandipur Tiger Reserve. Guests wake to mist rising off the water, spend afternoons drifting with the breeze, and end each day around a campfire under some of Karnataka's clearest night skies. Meals are home-cooked with fresh, local ingredients — no rush, no television, just the rhythm of nature. The property runs on solar energy and practices quiet, low-impact tourism.",
+    host: {
+      name: "Mahesh Chand",
+      since: "Host",
+      avatar: null,
+      desc: "Mahesh personally welcomes guests to Dhumbi, offering a warm, home-cooked, slow-travel experience on the Nugu Backwaters.",
+    },
+    guestReviews: [
+      {
+        name: "Guest Review",
+        stars: 5,
+        date: "2026",
+        text: "Some places give you a stay. Dhumbi gave us memories that still linger long after we returned home.",
+      },
+      {
+        name: "Guest Review",
+        stars: 5,
+        date: "2026",
+        text: "The silence here isn't empty. It's filled with birdsong, fresh air, and a peace we didn't know we needed.",
+      },
+    ],
   },
 ];
 
@@ -1759,8 +1948,8 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
   const isMobile = useIsMobile();
 
   const roomImgs = room.imgs && room.imgs.length > 0 ? room.imgs : h.imgs;
-  const imgSrc = roomImgs[0] || h.img;
-  const srcSet = useMemo(() => clSrcSet(imgSrc), [imgSrc]);
+  const sixImgs = roomImgs.length > 0 ? roomImgs.slice(0, 6) : [h.img];
+  const srcSet = useMemo(() => clSrcSet(sixImgs[0]), [sixImgs[0]]);
 
   const handleClick = useCallback(() => onOpen(room.key), [onOpen, room.key]);
   const onEnter = useCallback(() => setHovered(true), []);
@@ -1797,7 +1986,7 @@ const RoomListCard = memo(function RoomListCard({ room, h, onOpen, index }) {
       {/* Image */}
       <div className="kha-rlc2-img-wrap">
         <img
-          src={cl(imgSrc, 680)}
+          src={cl(sixImgs[0], 680)}
           srcSet={srcSet}
           sizes="(max-width: 768px) 100vw, 340px"
           alt={room.name}
@@ -2898,7 +3087,8 @@ const Home = () => {
               Homestays"
             </p>
             <div className="kha-cred-logos">
-              <img className="rounded-full"
+              <img
+                className="rounded-full"
                 src="/images/Mah.avif"
                 alt="MDHOA Logo"
                 loading="eager"

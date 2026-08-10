@@ -356,7 +356,76 @@ function nearestPlaces(lat, lng) {
    Used when a property's lat/lng aren't available (or need a manual
    correction) so nearby distances can still be shown. */
 const NEARBY_OVERRIDES = {
+  1: {
+    // Kukkeshree Homestay
+    mysore_palace: 12,
+    chamundi: 24,
+    kabini: 62,
+    wayanad: 128,
+    hassan: 106,
+    sakleshpur: 143,
+    chikmagalur: 167,
+    zoo: 12,
+    krs: 20,
+    nagarahole: 58,
+    coorg: 113,
+    ooty: 135,
+    belur_halebidu: 89,
+    mangalore: 248,
+  },
+  2: {
+    // Sky House Homestay
+    mysore_palace: 10,
+    chamundi: 21,
+    kabini: 63,
+    wayanad: 126,
+    hassan: 109,
+    sakleshpur: 146,
+    chikmagalur: 170,
+    zoo: 11,
+    krs: 21,
+    nagarahole: 62,
+    coorg: 116,
+    ooty: 131,
+    belur_halebidu: 91,
+    mangalore: 251,
+  },
+  4: {
+    // 1000 Silvers Farm Stay
+    mysore_palace: 23,
+    chamundi: 26,
+    kabini: 43,
+    wayanad: 106,
+    hassan: 124,
+    sakleshpur: 161,
+    chikmagalur: 185,
+    zoo: 22,
+    krs: 40,
+    nagarahole: 43,
+    coorg: 124,
+    ooty: 127,
+    belur_halebidu: 109,
+    mangalore: 257,
+  },
+  5: {
+    // Moodalamane Homestay
+    mysore_palace: 23,
+    chamundi: 26,
+    kabini: 43,
+    wayanad: 106,
+    hassan: 124,
+    sakleshpur: 161,
+    chikmagalur: 185,
+    zoo: 22,
+    krs: 40,
+    nagarahole: 59,
+    coorg: 119,
+    ooty: 126,
+    belur_halebidu: 93,
+    mangalore: 254,
+  },
   8: {
+    // Kapila Riverfront
     mysore_palace: 61,
     chamundi: 63,
     zoo: 59,
@@ -371,6 +440,20 @@ const NEARBY_OVERRIDES = {
     shravanabelagola: 127,
     belur_halebidu: 178,
     bylakuppe: 81,
+  },
+  9: {
+    mysore_palace: 69,
+    chamundi: 72,
+    zoo: 68,
+    krs: 82,
+    nagarahole: 62,
+    kabini: 18,
+    coorg: 125,
+    ooty: 270,
+    wayanad: 159,
+    srirangapatna: 83,
+    bandipur: 75,
+    bylakuppe: 90,
   },
 };
 
@@ -803,10 +886,9 @@ const ROOM_TYPES = {
       imgs: [
         "/images/mod1.avif",
         "/images/mod2.avif",
-        "/images/mod3.avif",  
+        "/images/mod3.avif",
         "/images/mod4.avif",
         "/images/mod5.avif",
-      
       ],
     },
     {
@@ -844,7 +926,6 @@ const ROOM_TYPES = {
         "/images/mod8.avif",
         "/images/mod9.avif",
         "/images/mod10.avif",
-        "/images/mod11.avif",
       ],
     },
   ],
@@ -910,11 +991,13 @@ const ROOM_TYPES = {
         "WiFi",
       ],
       imgs: [
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol1_yqcxw5.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568030/bol2_femzvk.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol3_aenoam.png",
-        "https://res.cloudinary.com/dmapa99lk/image/upload/v1782568031/bol_jgonwe.png",
+        "/images/bolak3.avif",
+        "/images/bolak1.avif",
+        "/images/bolak2.avif",
+        "/images/bolak4.avif",
+        "/images/bolak5.avif",
+        "/images/bolak6.avif",
+        "/images/bolak7.avif",
       ],
     },
     {
@@ -975,6 +1058,122 @@ const ROOM_TYPES = {
       ],
       imgs: [
         // TODO: add image URLs for this room type
+      ],
+    },
+  ],
+  id: 9,
+  name: "Dhumbi Homestay",
+  taluk: "H.D. Kote",
+  district: "Mysuru",
+  region: "mysuru",
+  price: null,
+  rating: 4.9,
+  reviews: null,
+  amenities: [
+    "Meals Included",
+    "Swimming Pool",
+    "Nature Trails",
+    "Bonfire",
+    "Wildlife Zone",
+    "Stargazing Deck",
+  ],
+  hasWebsite: true,
+  website: "https://www.Dhumbi.in",
+  phone: "9901994472",
+  img: "/images/dhumbi1.avif",
+  imgs: [
+    "/images/dhumbi1.avif",
+    "/images/dhumbi3.avif",
+    "/images/dhumbi4.avif",
+    "/images/dhumbi5.avif",
+    "/images/dhumbi6.avif",
+    "/images/dhumbi7.avif",
+    "/images/dhumbi8.avif",
+  ],
+  type: "Nature Retreat",
+  location: "Nugu Backwaters, Near Bandipur Tiger Reserve, Karnataka, India",
+  checkIn: "12:30 PM",
+  checkOut: "11:00 AM",
+  desc: "Dhumbi is a nature-focused wooden retreat on the shores of the Nugu Backwaters, near Bandipur Tiger Reserve. Guests wake to mist rising off the water, spend afternoons drifting with the breeze, and end each day around a campfire under some of Karnataka's clearest night skies. Meals are home-cooked with fresh, local ingredients — no rush, no television, just the rhythm of nature. The property runs on solar energy and practices quiet, low-impact tourism.",
+  host: {
+    name: "Mahesh Chand",
+    since: "Host",
+    avatar: null,
+    desc: "Mahesh personally welcomes guests to Dhumbi, offering a warm, home-cooked, slow-travel experience on the Nugu Backwaters.",
+  },
+  guestReviews: [
+    {
+      name: "Guest Review",
+      stars: 5,
+      date: "2026",
+      text: "Some places give you a stay. Dhumbi gave us memories that still linger long after we returned home.",
+    },
+    {
+      name: "Guest Review",
+      stars: 5,
+      date: "2026",
+      text: "The silence here isn't empty. It's filled with birdsong, fresh air, and a peace we didn't know we needed.",
+    },
+  ],
+  9: [
+    {
+      key: "wooden_retreat",
+      name: "The Wooden Retreat",
+      tag: "Most Popular",
+      tagBg: "rgba(200,169,106,.16)",
+      tagBorder: "rgba(200,169,106,.4)",
+      tagColor: "#c8a96a",
+      accentColor: "#c8a96a",
+      multiplier: 1,
+      guests: 4,
+      beds: 2,
+      sqft: null,
+      desc: "Crafted with care and designed for rest — every corner reflects thoughtful craftsmanship, from handcrafted wooden furniture to textured finishes. Large windows invite abundant natural light and frame serene views of the Nugu Backwaters. Warm interiors, earthy tones, and cozy textures create a calming, welcoming atmosphere.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Private Bathroom",
+        "Nature Trails",
+        "Wildlife Zone",
+        "Stargazing Deck",
+      ],
+      imgs: [
+        "/images/dhumbi3.avif",
+        "/images/dhumbi4.avif",
+        "/images/dhumbi5.avif",
+        "/images/dhumbi6.avif",
+        "/images/dhumbi7.avif",
+        "/images/dhumbi8.avif",
+        "/images/dhumbi9.avif",
+      ],
+    },
+    {
+      key: "the_loft",
+      name: "The Loft",
+      tag: "Premium",
+      tagBg: "rgba(200,169,106,.28)",
+      tagBorder: "#c8a96a",
+      tagColor: "#fdfaf4",
+      accentColor: "#e0c88a",
+      multiplier: 1.4,
+      guests: 2,
+      beds: 1,
+      sqft: null,
+      desc: "Perched at the highest corner of the Wooden Retreat, wrapped in warm wood and framed by a grand view of the Nugu Backwaters. An intimate space for losing yourself in a good book, following the dance of clouds, or staying up for a sky full of stars. Guests often come up for a moment and end up spending hours.",
+      amenities: [
+        "Meals Included",
+        "Free WiFi",
+        "Stargazing Deck",
+        "Mountain View",
+        "River Access",
+      ],
+      imgs: [
+        "/images/dhumbi11.avif",
+        "/images/dhumbi10.avif",
+        "/images/dhumbi12.avif",
+        "/images/dhumbi13.avif",
+        "/images/dhumbi14.avif",
+        "/images/dhumbi15.avif",
       ],
     },
   ],
@@ -1229,7 +1428,6 @@ const HS = [
       "/images/mod8.avif",
       "/images/mod9.avif",
       "/images/mod10.avif",
-     
     ],
     type: "Family Homestay",
     location:
@@ -1310,7 +1508,7 @@ const HS = [
     email: "stay@bolakhomestay.com",
     phone: "9448336870",
     phones: ["8618064513", "9448336870", "9449866487"],
-    img: "/images/bolak1.avif",
+    img: "/images/bolak3.avif",
     imgs: [
       "/images/bolak1.avif",
       "/images/bolak2.avif",
@@ -1341,7 +1539,7 @@ const HS = [
     host: {
       name: "Rohini Chengappa",
       since: "Host",
-      avatar: null,
+      avatar: "/images/img.avif",
       desc: "Rohini personally manages the property, ensuring professional and caring hospitality for every guest.",
     },
     guestReviews: [],
@@ -1371,7 +1569,6 @@ const HS = [
     phones: ["08214001100", "9606654482", "9980944650"],
     email: "info@kapilariverfront.com",
     img: "/images/kapila1.avif",
-           
     imgs: [
       "/images/kapila1.avif",
       "/images/kapila2.avif",
@@ -1448,6 +1645,64 @@ const HS = [
       desc: "Property registered under/associated with Prashanth B. S. Bookings and management are handled by Spice Trip.",
     },
     guestReviews: [],
+  },
+  {
+    id: 9,
+    lat: null, // TODO: add exact coordinates for Dhumbi Homestay
+    lng: null,
+    name: "Dhumbi Homestay",
+    taluk: "H.D. Kote",
+    district: "Mysuru",
+    region: "mysuru",
+    price: null,
+    rating: 4.9,
+    reviews: null,
+    amenities: [
+      "Meals Included",
+      "Swimming Pool",
+      "Nature Trails",
+      "Bonfire",
+      "Wildlife Zone",
+      "Stargazing Deck",
+    ],
+    hasWebsite: true,
+    website: "https://www.Dhumbi.in",
+    phone: "9901994472",
+    img: "/images/dhumbi2.avif",
+    imgs: [
+      "/images/dhumbi2.avif",
+      "/images/dhumbi3.avif",
+      "/images/dhumbi4.avif",
+      "/images/dhumbi5.avif",
+      "/images/dhumbi6.avif",
+      "/images/dhumbi7.avif",
+      "/images/dhumbi8.avif",
+    ],
+    type: "Nature Retreat",
+    location: "Nugu Backwaters, Near Bandipur Tiger Reserve, Karnataka, India",
+    checkIn: "12:30 PM",
+    checkOut: "11:00 AM",
+    desc: "Dhumbi is a nature-focused wooden retreat on the shores of the Nugu Backwaters, near Bandipur Tiger Reserve. Guests wake to mist rising off the water, spend afternoons drifting with the breeze, and end each day around a campfire under some of Karnataka's clearest night skies. Meals are home-cooked with fresh, local ingredients — no rush, no television, just the rhythm of nature. The property runs on solar energy and practices quiet, low-impact tourism.",
+    host: {
+      name: "Mahesh Chand",
+      since: "Host",
+      avatar: null,
+      desc: "Mahesh personally welcomes guests to Dhumbi, offering a warm, home-cooked, slow-travel experience on the Nugu Backwaters.",
+    },
+    guestReviews: [
+      {
+        name: "Guest Review",
+        stars: 5,
+        date: "2026",
+        text: "Some places give you a stay. Dhumbi gave us memories that still linger long after we returned home.",
+      },
+      {
+        name: "Guest Review",
+        stars: 5,
+        date: "2026",
+        text: "The silence here isn't empty. It's filled with birdsong, fresh air, and a peace we didn't know we needed.",
+      },
+    ],
   },
 ];
 
@@ -1575,10 +1830,7 @@ const HsCard = memo(function HsCard({ h, onOpen, distance }) {
      when multiple components need the same property's distances. Uses
      resolveNearbyPlaces() so properties with a manual override (e.g. no
      lat/lng) still get correct nearby distances. */
-  const nearbyPlaces = useMemo(
-    () => resolveNearbyPlaces(h).slice(0, 3),
-    [h],
-  );
+  const nearbyPlaces = useMemo(() => resolveNearbyPlaces(h).slice(0, 3), [h]);
 
   const handleClick = useCallback(() => onOpen(h.id), [onOpen, h.id]);
   const srcSet = useMemo(() => clSrcSet(h.img), [h.img]);
@@ -2065,10 +2317,7 @@ function RoomDetail({ h, roomKey, onBack }) {
      of this component (which previously had no memoization at all). Uses
      resolveNearbyPlaces() so properties with a manual override (e.g. no
      lat/lng) still get correct nearby distances. */
-  const sortedPlaces = useMemo(
-    () => (h ? resolveNearbyPlaces(h) : []),
-    [h],
-  );
+  const sortedPlaces = useMemo(() => (h ? resolveNearbyPlaces(h) : []), [h]);
 
   if (!h || !roomKey) return null;
   const room = ROOM_TYPES[h.id]?.find((r) => r.key === roomKey);
