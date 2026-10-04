@@ -1727,6 +1727,7 @@ const HsCard = memo(function HsCard({ h, onOpen }) {
 
   return (
     <div
+      id={h.id === 8 ? "kapila-riverfront" : undefined}
       className="kha-card bg-[#1f2e1f] overflow-hidden kha-reveal"
       style={{ border: "1px solid rgba(200,169,106,.1)" }}
       onClick={handleClick}
@@ -3381,6 +3382,56 @@ const Home = () => {
           {HS.map((h) => (
             <HsCard key={h.id} h={h} onOpen={openHs} />
           ))}
+        </div>
+      </section>
+
+      {/* HOMESTAY GUIDE */}
+      <section
+        className="px-16 py-[4.5rem] bg-[#1f2e1f]"
+        aria-labelledby="mysuru-stay-guide-title"
+      >
+        <div className="max-w-[1100px] mx-auto">
+          <span className="kha-eyebrow">Plan Your Stay</span>
+          <h2
+            id="mysuru-stay-guide-title"
+            style={{
+              fontFamily: cg,
+              fontSize: "2.2rem",
+              fontWeight: 300,
+              color: "#f4efe5",
+              lineHeight: 1.2,
+            }}
+          >
+            Homestays in Mysuru and nearby countryside
+          </h2>
+          <p
+            style={{
+              maxWidth: "820px",
+              fontSize: ".95rem",
+              lineHeight: 1.85,
+              color: "rgba(244,239,229,.68)",
+              marginTop: ".9rem",
+            }}
+          >
+            Choose a family homestay in Mysuru for city sightseeing, or look
+            beyond the city for farm and riverfront stays across Mysuru
+            district. MDHOA listings let you compare locations, facilities and
+            available booking options, then contact each host directly. For a
+            countryside break in Nanjangud, explore Kapila Riverfront, a
+            five-room riverfront farm villa with air-conditioned rooms and
+            meal-plan options.
+          </p>
+          <div className="flex flex-wrap gap-6 mt-6">
+            <a
+              href="#kapila-riverfront"
+              style={{ color: "#e0c88a", textDecoration: "underline" }}
+            >
+              View Kapila Riverfront details
+            </a>
+            <a href="/explore" style={{ color: "#e0c88a" }}>
+              Browse all homestays
+            </a>
+          </div>
         </div>
       </section>
 

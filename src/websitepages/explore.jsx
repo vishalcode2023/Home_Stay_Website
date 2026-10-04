@@ -1837,6 +1837,7 @@ const HsCard = memo(function HsCard({ h, onOpen, distance }) {
 
   return (
     <div
+      id={h.id === 8 ? "kapila-riverfront" : undefined}
       className="kha-card kha-reveal bg-[#1f2e1f] overflow-hidden"
       style={{ border: "1px solid rgba(200,169,106,.1)" }}
       onClick={handleClick}
@@ -3140,6 +3141,57 @@ const Explore = () => {
             </button>
           </div>
         )}
+      </section>
+
+      <section
+        className="px-16 py-[4.5rem] bg-[#1f2e1f]"
+        aria-labelledby="kapila-riverfront-guide"
+      >
+        <div className="max-w-[1100px] mx-auto">
+          <span className="kha-eyebrow">Nanjangud · Mysuru District</span>
+          <h2
+            id="kapila-riverfront-guide"
+            style={{
+              fontFamily: cg,
+              fontSize: "2.2rem",
+              fontWeight: 300,
+              color: "#f4efe5",
+              lineHeight: 1.2,
+            }}
+          >
+            Kapila Riverfront, a farm stay near Mysuru
+          </h2>
+          <p
+            style={{
+              maxWidth: "850px",
+              fontSize: ".95rem",
+              lineHeight: 1.85,
+              color: "rgba(244,239,229,.68)",
+              marginTop: ".9rem",
+            }}
+          >
+            Looking beyond city homestays? Kapila Riverfront is a five-room,
+            non-smoking AC farm villa in Rampura, Nanjangud, around 40 minutes
+            from Mysore city as stated in its listing. Its listed features
+            include river- or plantation-facing balconies, meal plans,
+            candlelight river dinners, areca nut plantation walks, and
+            river-to-table barbecue on request. The listing shows MAP from
+            ₹11,000 per night and AP from ₹12,000; weekday and weekend rates
+            are listed separately, so contact the host to confirm the current
+            plan and price.
+          </p>
+          <a
+            href="#kapila-riverfront"
+            style={{
+              display: "inline-flex",
+              marginTop: "1.2rem",
+              color: "#e0c88a",
+              textDecoration: "underline",
+            }}
+          >
+            Find Kapila Riverfront in the homestay listings
+          </a>
+        </div>
       </section>
 
       {/* ════ PROMO BAND ════ */}

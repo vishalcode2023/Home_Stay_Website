@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────
 # robots.txt — Mysore Homestays (MDHOA)
-# https://www.mysorestayhomes.com/robots.txt
+# https://www.homestaysinmysore.com/robots.txt
 # ─────────────────────────────────────────
 
 User-agent: *
@@ -31,4 +31,4 @@ User-agent: *
 Crawl-delay: 2
 
 # Sitemap location
-Sitemap: https://www.mysorestayhomes.com/sitemap.xml
+Sitemap: https://www.homestaysinmysore.com/sitemap.xml

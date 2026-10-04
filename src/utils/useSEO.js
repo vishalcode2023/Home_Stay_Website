@@ -12,7 +12,7 @@
  *   useEffect(() => { if (detail) setPropertySEO(detail); }, [detail]);
  */
 
-const BASE_URL   = 'https://www.mysorestayhomes.com';
+const BASE_URL   = 'https://www.homestaysinmysore.com';
 const SITE_NAME  = 'Mysore Homestays — MDHOA';
 const OG_IMAGE   = `${BASE_URL}/og-image.jpg`;
 
@@ -63,17 +63,17 @@ const PAGE_SEO = {
     canonical: `${BASE_URL}/explore`,
     keywords: 'explore mysore homestays, book rooms karnataka, filter homestays by price, stays near kabini, coorg coffee estate stay, chikmagalur nature resort',
   },
-  'our-story': {
+  about: {
     title: 'About MDHOA — Mysore District Homestay Owners Association | Verified Stays Karnataka',
     description: 'MDHOA is the official registered body for homestay owners in Mysore. Government-approved by the Department of Tourism, Karnataka since 2010.',
-    canonical: `${BASE_URL}/our-story`,
+    canonical: `${BASE_URL}/about`,
     keywords: 'MDHOA, mysore homestay association, government approved homestay karnataka, about mysore stays',
   },
-  contact: {
-    title: 'Contact MDHOA | Book a Homestay in Mysore | Direct WhatsApp Booking Karnataka',
-    description: 'Contact the Mysore District Homestay Owners Association to list or book a verified homestay. Direct WhatsApp and email enquiries welcome.',
-    canonical: `${BASE_URL}/contact`,
-    keywords: 'contact mysore homestay, book homestay karnataka, mdhoa contact, whatsapp room booking mysore',
+  'tourist-places': {
+    title: 'Tourist Places in Mysuru | Plan Your Karnataka Visit | MDHOA',
+    description: 'Explore popular tourist places in Mysuru and discover verified homestays across Mysuru district through MDHOA.',
+    canonical: `${BASE_URL}/touristpage`,
+    keywords: 'tourist places in mysuru, places to visit in mysore, mysuru tourism, mysore homestays',
   },
 };
 
@@ -106,7 +106,7 @@ export function setPageSEO(page = 'home') {
 export function setPropertySEO(property) {
   const {
     name, taluk, district, type, price, rating, reviews,
-    desc, img, lat, lng, amenities = [], hasWebsite, phone,
+    desc, img, lat, lng, amenities = [], phone,
   } = property;
 
   const slug   = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');

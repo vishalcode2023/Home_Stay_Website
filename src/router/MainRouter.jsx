@@ -1,5 +1,6 @@
-import { Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { setPageSEO } from "../utils/useSEO";
 
 // Lazy-load all pages — only the home page is needed on first load
 // Other routes load their JS only when navigated to
@@ -34,6 +35,19 @@ const PageLoader = () => (
 );
 
 const MainRouter = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const seoPage = {
+      "/": "home",
+      "/about": "about",
+      "/explore": "explore",
+      "/touristpage": "tourist-places",
+    }[pathname];
+
+    if (seoPage) setPageSEO(seoPage);
+  }, [pathname]);
+
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
